@@ -10,11 +10,12 @@
 
 Wikipedia is a free, collaborative encyclopedia written in over 300 languages by volunteers around the world.
 
-<font color="gray">**全世界的知识荟萃**
+**全世界的知识荟萃**
 
-维基百科是一个自由的、协作的百科全书，由世界各地的志愿者用 300 多种语言编写。</font>
+维基百科是一个自由的、协作的百科全书，由世界各地的志愿者用 300 多种语言编写。
 
 ### 123
+
 - [Wikibooks <font color="gray">维基教科书</font>](https://www.wikibooks.org/)（**E-book textbooks and annotated texts** -- Wikibooks aims to build a collection of free e-book resources including textbooks, annotated texts, instructional guides, and manuals. <font color="gray">**电子教科书与注释文本**——维基教科书旨在构建一个自由的电子书资源库，其中包括教科书、注释文本、教学指南及手册。</font>）
 - [Wiktionary <font color="gray">维基词典</font>](https://www.wiktionary.org/)（**A dictionary for over 170 languages** -- Wiktionary is a free multilingual dictionary. The project aims to describe all words of all languages. It includes language resources such as a thesaurus, rhyme guide, and language statistics. <font color="gray">**一部涵盖 170 多种语言的词典**——维基词典是一本免费的多语言词典，该项目旨在解释所有语言的所有单词，包括同义词库、韵律指南和语言统计等诸多语言资源。</font>）
 - [Wikiquote <font color="gray">维基词库</font>](https://www.wikiquote.org/)（**Find quotes across your favorite books, movies, authors and more** -- Wikiquote is an online collection of sourced quotations from notable people and creative works in over 75 languages. It also includes proverbs, mnemonics and slogans. <font color="gray">**查找你喜欢的书籍、电影、作者等的名言**——维基语录是一个在线合集，收录了超过 75 种语言的知名人士之引言和创意作品，除此以外还包括各种谚语、助记(?)和口号。</font>）
