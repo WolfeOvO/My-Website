@@ -1,5 +1,5 @@
 {
-  "name": "My-Websites",
+  "name": "My-Website"，
   "version": "1.0.0",
   "scripts": {
     "docs:build": "vitepress build docs",
