@@ -4,6 +4,7 @@ export default defineConfig({
   base: '/My-Website/',
   title: "Wolfeの储物间",
   description: "在这里写描述",
+  ignoreDeadLinks: true,
   
   themeConfig: {
     // 1. 顶部导航栏
