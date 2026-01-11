@@ -6,26 +6,67 @@
 
 [https://www.wikipedia.org/](https://www.wikipedia.org/)
 
-**All the world’s knowledge**
+**All the world’s knowledge 全世界的知识荟萃**
 
-Wikipedia is a free, collaborative encyclopedia written in over 300 languages by volunteers around the world.
+Wikipedia is a free, collaborative encyclopedia written in over 300 languages by volunteers around the world. 维基百科是一个自由的、协作的百科全书，由世界各地的志愿者用 300 多种语言编写。
 
-**全世界的知识荟萃**
+### Wikibooks <font color="gray">维基教科书</font>
 
-维基百科是一个自由的、协作的百科全书，由世界各地的志愿者用 300 多种语言编写。
+[https://www.wikibooks.org/](https://www.wikibooks.org/)
 
-### 123
+**E-book textbooks and annotated texts 电子教科书与注释文本**
 
-- [Wikibooks <font color="gray">维基教科书</font>](https://www.wikibooks.org/)（**E-book textbooks and annotated texts** -- Wikibooks aims to build a collection of free e-book resources including textbooks, annotated texts, instructional guides, and manuals. <font color="gray">**电子教科书与注释文本**——维基教科书旨在构建一个自由的电子书资源库，其中包括教科书、注释文本、教学指南及手册。</font>）
-- [Wiktionary <font color="gray">维基词典</font>](https://www.wiktionary.org/)（**A dictionary for over 170 languages** -- Wiktionary is a free multilingual dictionary. The project aims to describe all words of all languages. It includes language resources such as a thesaurus, rhyme guide, and language statistics. <font color="gray">**一部涵盖 170 多种语言的词典**——维基词典是一本免费的多语言词典，该项目旨在解释所有语言的所有单词，包括同义词库、韵律指南和语言统计等诸多语言资源。</font>）
-- [Wikiquote <font color="gray">维基词库</font>](https://www.wikiquote.org/)（**Find quotes across your favorite books, movies, authors and more** -- Wikiquote is an online collection of sourced quotations from notable people and creative works in over 75 languages. It also includes proverbs, mnemonics and slogans. <font color="gray">**查找你喜欢的书籍、电影、作者等的名言**——维基语录是一个在线合集，收录了超过 75 种语言的知名人士之引言和创意作品，除此以外还包括各种谚语、助记(?)和口号。</font>）
+Wikibooks aims to build a collection of free e-book resources including textbooks, annotated texts, instructional guides, and manuals. 维基教科书旨在构建一个自由的电子书资源库，其中包括教科书、注释文本、教学指南及手册。
+
+### Wiktionary <font color="gray">维基词典</font>
+
+[https://www.wiktionary.org/](https://www.wiktionary.org/)
+
+**A dictionary for over 170 languages 一部涵盖 170 多种语言的词典**
+
+Wiktionary is a free multilingual dictionary. The project aims to describe all words of all languages. It includes language resources such as a thesaurus, rhyme guide, and language statistics. 维基词典是一本免费的多语言词典，该项目旨在解释所有语言的所有单词，包括同义词库、韵律指南和语言统计等诸多语言资源。
+
+### Wikiquote <font color="gray">维基词库</font>
+
+[https://www.wikiquote.org/](https://www.wikiquote.org/)
+
+**Find quotes across your favorite books, movies, authors and more 查找你喜欢的书籍、电影、作者等的名言**
+
+Wikiquote is an online collection of sourced quotations from notable people and creative works in over 75 languages. It also includes proverbs, mnemonics and slogans. 维基语录是一个在线合集，收录了超过 75 种语言的知名人士之引言和创意作品，除此以外还包括各种谚语、助记(?)和口号。
 
 ## 11.2 - Collections（收藏集）
 
-- [Wikimedia Commons <font color="gray">维基共享资源</font>](https://commons.wikimedia.org/)（**(Over) 114 million images, photographs, videos and music files and counting** -- Wikimedia Commons is the world’s largest free-to-use library of illustrations, photos, drawings, videos, and music. <font color="gray">**收录（超过）1.14 亿个图像、照片、视频和音乐文件，且数量持续增长中**——维基共享资源是世界上最大的「自由使用」媒体库，汇集了各类插图、照片、绘图、视频以及音乐。</font>）
-- [Wikisource <font color="gray">维基文库</font>](https://wikisource.org/)（**The free library** -- Wikisource is a library of freely-licensed source texts and historical documents, including poetry, government documents, constitutions of many countries, and general literature. <font color="gray">**自由的图书馆**——维基文库是一个包含自由版权原始文本和历史文档的图书馆，内容涵盖诗歌、政府公文、多国宪法以及普通文学作品。</font>）
-- [Wikiversity <font color="gray">维基学院</font>](https://www.wikiversity.org/)（**Access learning resources, projects and research at any level of study** -- Wikiversity is devoted to learning resources, learning projects, and research for use in all levels, types, and styles of education. <font color="gray">**获取各级学习资源、项目和研究**——维基学院致力于提供适用于各级、各类和各种教育风格的学习资源、学习项目及研究。</font>）
-- [Wikispecies <font color="gray">维基物种</font>](https://species.wikimedia.org/)（**The free species directory** -- Wikispecies is a species database for taxonomy that covers living and fossil representatives of Animalia, Plantae, Fungi, Bacteria, Archaea, Protista and all other forms of life. <font color="gray">**自由的物种目录**——维基物种是一个分类学物种数据库，涵盖了动物界、植物界、真菌界、细菌界、古菌界、原生生物界及所有其他生命形式的现存和化石代表。</font>）
+### Wikimedia Commons <font color="gray">维基共享资源</font>
+
+[https://commons.wikimedia.org/](https://commons.wikimedia.org/)
+
+**(Over) 114 million images, photographs, videos and music files and counting 收录（超过）1.14 亿个图像、照片、视频和音乐文件，且数量持续增长中**
+
+Wikimedia Commons is the world’s largest free-to-use library of illustrations, photos, drawings, videos, and music. 维基共享资源是世界上最大的「自由使用」媒体库，汇集了各类插图、照片、绘图、视频以及音乐。
+
+### Wikisource <font color="gray">维基文库</font>
+
+[https://wikisource.org/](https://wikisource.org/)
+
+**The free library 自由的图书馆**
+
+Wikisource is a library of freely-licensed source texts and historical documents, including poetry, government documents, constitutions of many countries, and general literature. 维基文库是一个包含自由版权原始文本和历史文档的图书馆，内容涵盖诗歌、政府公文、多国宪法以及普通文学作品。
+
+### Wikiversity <font color="gray">维基学院</font>
+
+[https://www.wikiversity.org/](https://www.wikiversity.org/)
+
+**Access learning resources, projects and research at any level of study 获取各级学习资源、项目和研究**
+
+Wikiversity is devoted to learning resources, learning projects, and research for use in all levels, types, and styles of education. 维基学院致力于提供适用于各级、各类和各种教育风格的学习资源、学习项目及研究。
+
+### Wikispecies <font color="gray">维基物种</font>
+
+[https://species.wikimedia.org/](https://species.wikimedia.org/)
+
+**The free species directory 自由的物种目录**
+
+Wikispecies is a species database for taxonomy that covers living and fossil representatives of Animalia, Plantae, Fungi, Bacteria, Archaea, Protista and all other forms of life. 维基物种是一个分类学物种数据库，涵盖了动物界、植物界、真菌界、细菌界、古菌界、原生生物界及所有其他生命形式的现存和化石代表。
 
 ## 11.3 - Technology（技术）
 
