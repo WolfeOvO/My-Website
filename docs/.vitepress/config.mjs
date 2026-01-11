@@ -1,6 +1,7 @@
 import { defineConfig } from 'vitepress'
 
 export default defineConfig({
+  base: '/My-Website/',
   title: "我的文档站", // 你的网站标题
   description: "在这里写描述",
   
