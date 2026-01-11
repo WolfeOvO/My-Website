@@ -21,7 +21,6 @@ export default defineConfig({
           text: '储物间',
           items: [
             { text: '索引', link: '/storage/home' },
-            { text: '储物间', link: '/storage/home' },
             { text: '搜索引擎', link: '/storage/search' },
             { text: '问答导航', link: '/storage/q&a' },
             { text: '百科全书', link: '/storage/encyclopedia' },
@@ -50,7 +49,7 @@ export default defineConfig({
 
     // 3. 社交链接 (可选)
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/' }
+      { icon: 'github', link: 'https://github.com/WolfeOvO' }
     ]
   }
 })
