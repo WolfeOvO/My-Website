@@ -7,6 +7,6 @@
 7. [社交平台](social.md)
 8. [图书馆](library.md)
 9. [图片资源](photo.md)
-10. [网页浏览器](broswer.md)
+10. [网页浏览器](browser.md)
 11. [维基媒体](wikimedia.md)
 12. [工具箱](toolbox.md)
