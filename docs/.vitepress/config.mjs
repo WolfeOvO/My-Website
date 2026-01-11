@@ -17,6 +17,10 @@ export default defineConfig({
   },
   
   themeConfig: {
+     outline: {
+      level: 'deep', 
+      label: '大纲' 
+    },
     nav: [
       { text: '首页', link: '/' },
       { text: '储物间', link: '/storage/contents.md' },
