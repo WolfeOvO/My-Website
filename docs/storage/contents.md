@@ -1,5 +1,11 @@
 # 储物间
 
+<font color="darkblue">**储物间暂未建成，内容会较快更新！**</font>
+
+<font color="darkblue">**储物间内可能部分内容或叙述已过时，请以实际为准。**</font>
+
+**符号说明**：链接前「✅」代表链接有效可访问，「❌」代表链接无效不可访问或需要使用代理访问。<font color="red">（结果仅供参考，切勿过度依赖！）</font>
+
 1. [搜索引擎](search.md)
 2. [问答导航](q&a.md)
 3. [百科全书](encyclopedia.md)
