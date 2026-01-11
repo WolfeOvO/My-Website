@@ -10,6 +10,7 @@ export default defineConfig({
     // 1. 顶部导航栏
     nav: [
       { text: '首页', link: '/' },
+      { text: '储物间', link: '/storage/home' },
       { text: '墙外指南', link: '/gfw-guide/basic' }
     ],
 
@@ -30,7 +31,7 @@ export default defineConfig({
             { text: '社交平台', link: '/storage/social' },
             { text: '图书馆', link: '/storage/library' },
             { text: '图片资源', link: '/storage/photo' },
-            { text: '网页浏览器', link: '/storage/broswer' },
+            { text: '网页浏览器', link: '/storage/browser' },
             { text: '维基媒体', link: '/storage/wikimedia' },
             { text: '工具箱', link: '/storage/toolbox' },
           ]
