@@ -1,0 +1,39 @@
+# 5 网盘服务
+
+## 5.1 - 国内网盘
+
+- ✅ [百度网盘](https://pan.baidu.com/)
+- ✅ [百度网盘青春版](https://pan.baidu.com/youth/pan/main)
+- ✅ [腾讯微云](https://www.weiyun.com/)
+- ✅ [115 网盘](https://115.com/)
+- ✅ [坚果云](https://www.jianguoyun.com/)
+- ✅ [蓝奏·云存储👍](https://www.lanzou.com/)
+- ✅ [阿里云盘](https://www.alipan.com/)
+- ✅ [中国移动云盘](https://yun.139.com/)（运营商网盘）
+- ✅ [联通云盘](https://pan.wo.cn/)（运营商网盘）
+- ✅ [天翼云盘](https://cloud.189.cn/web/login.html)（运营商网盘）
+- [迅雷云盘](https://pan.xunlei.com/)
+- ✅ [123 云盘👍](https://www.123pan.com/)
+- ✅ [夸克网盘](https://pan.quark.cn/)
+- ✅ [小米云服务](https://i.mi.com/)（手机厂商私有云服务）
+- ✅ [华为云空间](https://cloud.huawei.com/)（手机厂商私有云服务）
+- ✅ [WPS 云空间](https://drive.wps.cn/)
+- ✅ [永硕 E 盘👍](http://www.ys168.com/)（非常复古的网盘存储服务，至今有还有很多人用）
+- ✅ [360 云盘](https://yunpan.360.cn/)
+- ✅ [文叔叔👍](https://www.wenshushu.cn/)
+- ✅ [城通网盘](https://www.ctfile.com/)
+
+## 5.2 - 国外网盘👍
+
+- ✅ [Google Drive <font color="gray">云端硬盘</font>](https://drive.google.com/drive)
+- **OneDrive**
+  - ✅ [个人版](https://onedrive.live.com/)
+  - ✅ [企业版](https://www.microsoft.com/zh-cn/microsoft-365/onedrive/onedrive-for-business)
+- ✅ [Dropbox](https://www.dropbox.com/zh_CN/)
+- ✅ [Apple iCloud](https://www.icloud.com/iclouddrive)（苹果私有云服务）
+- ✅ [PikPak](https://mypikpak.com/zh-CN)
+- ❌ [Box Drive](https://www.box.com/drive)
+- ✅ [MEGA](https://mega.io/)
+- ✅ [Amazon Cloud Drive](https://www.amazon.com/clouddrive/all)
+- ✅ [pCloud](https://www.pcloud.com/)
+- ✅ [MediaFire](https://www.mediafire.com/)
