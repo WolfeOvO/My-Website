@@ -5,6 +5,7 @@ export default defineConfig({
   title: "Wolfeの储物间",
   description: "在这里写描述",
   ignoreDeadLinks: true,
+  lastUpdated: true,
 
   markdown: {
     container: {
