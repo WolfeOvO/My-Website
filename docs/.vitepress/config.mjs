@@ -5,16 +5,24 @@ export default defineConfig({
   title: "Wolfeの储物间",
   description: "在这里写描述",
   ignoreDeadLinks: true,
+
+  markdown: {
+    container: {
+      tipLabel: '⚠️注意/提示',
+      warningLabel: '❗️警告',
+      dangerLabel: '🚨危险',
+      infoLabel: '信息',
+      detailsLabel: '详细信息'
+    }
+  },
   
   themeConfig: {
-    // 1. 顶部导航栏
     nav: [
       { text: '首页', link: '/' },
       { text: '储物间', link: '/storage/contents.md' },
       { text: '墙外指南', link: '/gfw-guide/contents.md' }
     ],
 
-    // 2. 侧边栏 (多侧边栏配置 - 对象格式)
     sidebar: {
       '/storage/': [
         {
@@ -48,7 +56,6 @@ export default defineConfig({
       ]
     },
 
-    // 3. 社交链接 (可选)
     socialLinks: [
       { icon: 'github', link: 'https://github.com/WolfeOvO' }
     ]
