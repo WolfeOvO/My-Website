@@ -67,10 +67,10 @@
 ### 4.2.3 - 手机应用
 
 - ✅ [迅雷 (Android)👍](https://www.lanzoux.com/iXBNv138kwkf)（安卓迅雷纯净版，去广告、去升级，不限速下载）
-- ✅ [‎迅雷 (iOS)👍](https://apps.apple.com/cn/app/id1503466530)（无法在 APP 内直接添加磁力，可以用网页版代替）
+- ✅ [迅雷 (iOS)👍](https://apps.apple.com/cn/app/id1503466530)（无法在 APP 内直接添加磁力，可以用网页版代替）
 - **PikPak👍**
   - ✅ [Android](https://www.lanzouv.com/b07mpx2vg)
-  - ✅ [‎iOS](https://apps.apple.com/cn/app/pikpak-private-cloud-saver/id1616861537)
+  - ✅ [iOS](https://apps.apple.com/cn/app/pikpak-private-cloud-saver/id1616861537)
 - ✅ [奇妙搜索](https://www.lanzout.com/s/magicalsearch)（聚合了 30+ 资源站点的聚合搜索应用，但没有下载功能）
 
 ### 4.2.4 - Tracker
