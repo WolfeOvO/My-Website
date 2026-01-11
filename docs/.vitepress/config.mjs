@@ -16,7 +16,7 @@ export default defineConfig({
     sidebar: {
       '/storage/': [
         {
-          text: '储物间'，
+          text: '储物间',
           items: [
             { text: '索引', link: '/storage/home' },
             { text: '储物间', link: '/storage/home' },
