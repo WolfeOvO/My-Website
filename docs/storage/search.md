@@ -47,7 +47,7 @@
 
 - ✅ [iTab 新标签页](https://go.itab.link/)
 - ✅ [CSDN 搜索](https://so.csdn.net/)
-- ✅ [‎Infinity Tab](https://inftab.com/)
+- ✅ [Infinity Tab](https://inftab.com/)
 
 ## 1.4 - 特色搜索
 
