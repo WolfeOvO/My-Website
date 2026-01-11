@@ -1,0 +1,90 @@
+# 6 音乐导航
+
+纯路人，想听下架的《只因你太美》怎么办？
+
+**来源：✅ [https://www.runningcheese.cn/s17](https://www.runningcheese.cn/s17)**
+
+## 6.1 - 主流音乐平台
+
+### 6.1.1 - 国内平台
+
+- ✅ [网易云音乐](https://music.163.com/)
+- ✅ [QQ 音乐](https://y.qq.com/)
+- ✅ [酷狗音乐](https://www.kugou.com/)
+- ✅ [酷我音乐](https://www.kuwo.cn/)
+
+### 6.1.2 - 国外平台
+
+- ✅ [Spotify👍](https://open.spotify.com/)
+- ✅ [SoundCloud👍](https://soundcloud.com/)
+- ✅ [Apple Music](https://music.apple.com/)
+- ✅ [KKBOX](https://www.kkbox.com/)
+- ✅ [JOOX](https://www.joox.com/)
+
+## 6.2 - 音乐搜索
+
+### 6.2.1 - 国外网站
+
+- ✅ [Free Mp3 Cloud👍](https://freemp3cloud.com/)
+- ✅ [SLDR](https://sldr.su/)
+- ✅ [MP3Paw👍](https://v2.mp3paw.link/)
+
+### 6.2.2 - 国内网站
+
+- ✅ [枫叶音乐盒👍](https://mu-jie.cc/musicBox/)
+- ❌ [种子音乐](https://zz123.com/)
+- ✅ [铜钟音乐](https://tonzhon.com/)
+- ✅ [歌曲宝👍](https://www.gequbao.com/)
+- ✅ [放屁网👍](https://www.fangpi.net/)
+- ✅ [在线音乐](https://music.cpp-prog.com/)
+- ✅ [音乐搜索器](https://www.yyssq.cn/)
+- ✅ [悦听音乐网](https://www.yueting.net/)
+- ✅ [GD 音乐台](https://music.gdstudio.xyz/)
+
+## 6.3 - 听歌应用
+
+- ✅ [洛雪音乐 <font color="gray">GitHub - lyswhut/lx-music-desktop</font>👍](https://github.com/lyswhut/lx-music-desktop)（音乐搜索软件，基于 Electron + Vue 开发，支持版权音乐）
+  - ✅ [洛雪音乐脚本](https://greasyfork.org/zh-CN/scripts/438148)（从网页端一键调用洛雪音乐来播放「灰色」音乐）
+- ✅ [Listen 1👍](https://listen1.github.io/listen1/)（多平台聚合音乐播放）
+- ✅ [Cider Collective](https://cider.sh/)（**Apple Music** 第三方客户端）
+- ✅ [酷我音乐 PC 版](https://423down.lanzouo.com/iAYaX0nd8icf)（酷我音乐 PC 去广告豪华版，由 423Down 维护）
+- ✅ [TuneFreeNext👍](https://tunefree.fun/)
+
+## 6.4 - 音乐播放器
+
+### 6.4.1 - Windows
+
+- ✅ [MPC-HC <font color="gray">GitHub - clsid2/mpc-hc: Media Player Classic</font>](https://github.com/clsid2/mpc-hc)（纯碎的、小巧的、极致快速的音乐播放器，MPC-HC 的 Fork 版本）
+- ✅ [MPC-BE <font color="gray">GitHub - Aleksoid1978/MPC-BE: MPC-BE – универсальный проигрыватель аудио и видеофайлов для операционной системы Windows.</font>](https://github.com/Aleksoid1978/MPC-BE)（同上，MPC-HC 的 BE 版本）
+- ✅ [Foobar2000👍](https://www.foobar2000.org/)（插件丰富，支持高度定制化的音乐播放器，推荐配置 ✅ [Foobox](https://github.com/dream7180/foobox-cn)）
+- ✅ [VLC👍](https://www.videolan.org/index.zh.html)（开源的多媒体播放器，支持几乎所有音视频格式，全平台支持）
+- ✅ [AIMP](http://www.aimp.ru/)（来自俄罗斯的一款闭源多媒体播放器，支持 Win、安卓）
+- ✅ [Winamp](https://www.winamp.com/)（化石级播放器，现已重新回归，并拥有了全新的设计，仅支持 Windows）
+
+### 6.4.2 - MacOS
+
+- **Foobar2000👍**（支持高度定制化的音乐播放器，现在也支持 Mac 版本了）
+- ✅ [IINA👍](https://iina.io/)（可能是 Mac 最受欢迎的多媒体播放器，开源免费，简洁美观）
+- ✅ [LyricsX <font color="gray">GitHub - ddddxxx/LyricsX: 🎶 Ultimate lyrics app for macOS.</font>](https://github.com/ddddxxx/LyricsX)（Mac 下的歌词辅助工具，支持搜索和滚动显示歌词，支持本地任何播放器）
+
+## 6.5 - 无损音乐👎
+
+- ✅ [下歌吧](https://xiageba.com/)
+- ✅ [23ape.net](http://www.23ape.net/)
+- ✅ [我爱无损音乐网](http://www.52wusun.com/)
+- ❌ [无损音乐](http://www.ape-flac.com/)
+- ✅ [享乐音乐论坛](https://www.xlebbs.com/)
+
+## 6.6 - 白噪音
+
+### 6.6.1 - 下雨音效
+
+- ✅ [Raining FM](https://raining.fm/)
+- ✅ [Rainyscope](https://rainyscope.com/)
+- ✅ [Rainy Mood](https://www.rainymood.com/)
+
+### 6.6.2 - 自然音效
+
+- ✅ [Tree FM](https://www.tree.fm/)
+- ✅ [Earth FM](https://earth.fm/)
+- ✅ [Virtual Ocean](https://virtocean.com/#)
