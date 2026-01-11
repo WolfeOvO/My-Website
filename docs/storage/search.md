@@ -1,6 +1,6 @@
 # 1 搜索引擎
 
-最全搜索引擎合集，最全，没有之一？</font>
+最全搜索引擎合集，最全，没有之一？
 
 **来源：✅ [https://www.runningcheese.cn/s02](https://www.runningcheese.cn/s02)**
 
@@ -63,11 +63,7 @@
 
 ### 1.4.2 - 元搜索引擎
 
-<div style="background-color: #f2f2f2; padding: 10px; border: 1px solid #ccc; border-radius: 8px;">
-
-<font color="#1e88e5">整合多个搜索引擎的结果，然后再将返回给用户。</font>
-
-</div>
+整合多个搜索引擎的结果，然后再将返回给用户。
 
 - ✅ [Infospace👍](https://infospace.com/)
 - ✅ [WebCrawler Search](https://www.webcrawler.com/)
@@ -80,11 +76,7 @@
 
 ### 1.4.4 - 儿童搜索
 
-<div style="background-color: #f2f2f2; padding: 10px; border: 1px solid #ccc; border-radius: 8px;">
-
-<font color="#1e88e5">会过滤掉不适合儿童访问的内容。</font>
-
-</div>
+会过滤掉不适合儿童访问的内容。
 
 - ✅ [Kiddle](https://www.kiddle.co/)
 - ✅ [KidRex](https://www.alarms.org/kidrex/)
