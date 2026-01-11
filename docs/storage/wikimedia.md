@@ -70,18 +70,57 @@ Wikispecies is a species database for taxonomy that covers living and fossil rep
 
 ## 11.3 - Technology（技术）
 
-- [Wikidata <font color="gray">维基数据</font>](https://www.wikidata.org/)（**The database of structured information collaboratively edited** -- Wikidata acts as central storage of structured data for Wikimedia projects. Structuring data into a machine-readable format makes it easier to view, search, edit, curate, use and re-use files. <font color="gray">**协同编辑的结构化信息数据库**——维基数据充当维基媒体项目的结构化数据中央存储库。将数据结构化为机器可读格式，使其更易于查看、搜索、编辑、策展、使用和重复使用文件。</font>）
-- [Wikifunctions <font color="gray">维基函数</font>](https://www.wikifunctions.org/)（**The library of code functions anyone can edit** -- Wikifunctions allows everyone to collaboratively create and maintain code functions that can be used to answer questions, such as how many days have passed between two dates, or the distance between two cities. <font color="gray">**人人皆可编辑的代码函数库**——维基函数允许所有人协同创建和维护代码函数，这些函数可用于回答问题，例如两个日期之间过去了多少天，或两个城市之间的距离。</font>）
-- [MediaWiki <font color="gray">MediaWiki</font>](https://www.mediawiki.org/)（**The software platform that makes Wikipedia possible** -- MediaWiki is free and open source wiki software that anyone can use and develop. It is the platform on which Wikimedia projects are built. <font color="gray">**成就维基百科的软件平台**——MediaWiki 是任何人都可以使用和开发的免费开源 Wiki 软件。它是构建维基媒体项目的平台。</font>）
+### Wikidata <font color="gray">维基数据</font>
+
+[https://www.wikidata.org/](https://www.wikidata.org/)
+
+**The database of structured information collaboratively edited 协同编辑的结构化信息数据库**
+
+Wikidata acts as central storage of structured data for Wikimedia projects. Structuring data into a machine-readable format makes it easier to view, search, edit, curate, use and re-use files. 维基数据充当维基媒体项目的结构化数据中央存储库。将数据结构化为机器可读格式，使其更易于查看、搜索、编辑、策展、使用和重复使用文件。
+
+### Wikifunctions <font color="gray">维基函数</font>
+
+[https://www.wikifunctions.org/](https://www.wikifunctions.org/)
+
+**The library of code functions anyone can edit 人人皆可编辑的代码函数库**
+
+Wikifunctions allows everyone to collaboratively create and maintain code functions that can be used to answer questions, such as how many days have passed between two dates, or the distance between two cities. 维基函数允许所有人协同创建和维护代码函数，这些函数可用于回答问题，例如两个日期之间过去了多少天，或两个城市之间的距离。
+
+### MediaWiki
+
+[https://www.mediawiki.org/](https://www.mediawiki.org/)
+
+**The software platform that makes Wikipedia possible 成就维基百科的软件平台**
+
+MediaWiki is free and open source wiki software that anyone can use and develop. It is the platform on which Wikimedia projects are built. 「MediaWiki」是任何人都可以使用和开发的免费开源 Wiki 软件。它是构建维基媒体项目的平台。
 
 ## 11.4 - Guides（指南）
 
-- [Wikivoyage <font color="gray">维基导游</font>](https://www.wikivoyage.org/)（**The ultimate travel guide** -- Wikivoyage aims to create the world’s largest free, complete and up-to-date worldwide travel guide. <font color="gray">**终极旅游指南**——维基导游旨在创建世界上最大的免费、完整且最新的全球旅游指南。</font>）
-- [Wikinews <font color="gray">维基新闻</font>](https://www.wikinews.org/)（**The free news source** -- Wikinews provides a free content alternative to commercial news sites with articles that are fact-checked and peer reviewed. <font color="gray">**自由的新闻源**——维基新闻提供了一种替代商业新闻网站的免费内容选择，其文章均经过事实核查和同行评审。</font>）
+### Wikivoyage <font color="gray">维基导游</font>
+
+[https://www.wikivoyage.org/](https://www.wikivoyage.org/)
+
+**The ultimate travel guide 终极旅游指南**
+
+Wikivoyage aims to create the world’s largest free, complete and up-to-date worldwide travel guide. 维基导游旨在创建世界上最大的免费、完整且最新的全球旅游指南。
+
+### Wikinews <font color="gray">维基新闻</font>
+
+[https://www.wikinews.org/](https://www.wikinews.org/)
+
+**The free news source 自由的新闻源**
+
+Wikinews provides a free content alternative to commercial news sites with articles that are fact-checked and peer reviewed. 维基新闻提供了一种替代商业新闻网站的免费内容选择，其文章均经过事实核查和同行评审。
 
 ## 11.5 - Collaboration（协作）
 
-- [Meta-Wiki <font color="gray">元维基</font>](https://meta.wikimedia.org/wiki/Main_Page)（**Project coordination software tool for global collaboration** -- Meta-Wiki is a project used as a central hub for various coordination and organization tasks, such as discussions affecting multiple wikis or planning upcoming events. <font color="gray">**全球协作的项目协调工具**——元维基是一个用于各种协调和组织任务的中心枢纽项目，例如涉及多个维基的讨论或规划即将举行的活动。</font>）
+### Meta-Wiki <font color="gray">元维基</font>
+
+[https://meta.wikimedia.org/wiki/Main_Page](https://meta.wikimedia.org/wiki/Main_Page)
+
+**Project coordination software tool for global collaboration 全球协作的项目协调工具**
+
+Meta-Wiki is a project used as a central hub for various coordination and organization tasks, such as discussions affecting multiple wikis or planning upcoming events. 元维基是一个用于各种协调和组织任务的中心枢纽项目，例如涉及多个维基的讨论或规划即将举行的活动。
 
 ## 11.8 - Wikipedia 镜像
 - ✅ [🔥国内可用镜像 1](https://kfd.me/)
