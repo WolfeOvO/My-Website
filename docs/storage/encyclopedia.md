@@ -18,7 +18,7 @@
 - ✅ [360 百科](https://baike.so.com/)<font color="#D3D3D3">（都已经 2025 年了还有人会看这种啥也没有的百科么……）</font>
 - ✅ [微信百科](https://baike.weixin.qq.com/)（微信内「百科」搜索页，数据来源于**搜狗百科**，详见下图）
 
-<img src="https://ghfast.top/https://raw.githubusercontent.com/WolfeOvO/cdn-files/main/Screenshot_20251130_141803.jpg"
+<img src="https://github.com/WolfeOvO/wolfeovo.github.io/blob/main/media/photo/Screenshot_20251130_141803.jpg"
 style="zoom:50%">
 
 ▲微信使用「百科」搜索「台湾」的结果
