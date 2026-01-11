@@ -1,0 +1,21 @@
+# 8 我的书库
+
+关于此处内容，推荐阅读《✅ [全网的 PDF 电子书任你下载【2025 最新】](https://xiaoshuai.link/2024/05/06/%E5%85%A8%E7%BD%91%E7%9A%84pdf%E7%94%B5%E5%AD%90%E4%B9%A6%E4%BB%BB%E4%BD%A0%E4%B8%8B%E8%BD%BD%E3%80%902025%E6%9C%80%E6%96%B0%E3%80%91/)》一文内容，密码：``9527``。
+
+**部分内容来源：✅ [https://www.runningcheese.cn/s22](https://www.runningcheese.cn/s22)**
+
+## 8.1 - Z-Library👍
+
+- ❌ [英文官网](https://z-lib.fm/)
+- ❌ [中文官网](https://zh.z-lib.fm/)
+
+## 8.2 - 其他小站
+
+- ✅ [安娜的档案](https://zh.annas-archive.org/)
+- ✅ [读秀](https://edu.duxiu.com/)（🔒 需账号）
+- ✅ [超星](https://www.sslibrary.com/)（🔒 需账号）
+  - ✅ [找书网](https://findbooks.eu.org/)<font color="gray">（**超星**搜索引擎，💰 需付费）</font>
+- ❌ [WeLib](https://zh.welib.org/)
+- ✅ [开放图书馆](https://openlibrary.org/)
+- ✅ [Google 图书](https://books.google.com/)
+- ✅ [owllook](https://www.owlook.com.cn/)（小说搜索引擎）
