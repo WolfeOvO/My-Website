@@ -1,0 +1,72 @@
+# 3 百科全书
+
+拥有像「自来水」一般的知识宝库！
+
+**部分来源：✅ [https://www.runningcheese.cn/s15](https://www.runningcheese.cn/s15)**
+
+## 3.1 - 主流百科
+
+- ✅ [Wikipedia-ZH <font color="gray">中文维基百科</font>](https://zh.wikipedia.org/)（最大、最自由的百科全书）
+  - ✅ [Kiwix](https://kiwix.org/en/)（维基百科离线版，下载 Zim 格式的✅ [内容库文件](https://library.kiwix.org/#lang=zho&category=wikipedia)即可离线查看。）
+  - ✅ [Wikiwand](https://www.wikiwand.com/)（现代化排版的维基百科）
+  - ✅ [Detailed Pedia](https://www.detailedpedia.com/)（英文维基百科镜像，但国内依旧不能使用）
+- ✅ [百度百科](https://baike.baidu.com/)（百度旗下百科产品，国内最大百科全书）
+- ✅ [求闻百科](https://www.qiuwenbaike.cn/)（维基百科的国内「阉割版」）<font color="gray">【至于与维基百科间差距的详细信息请参看✅ [《求闻百科绝非维基百科的镜像》](https://mp.weixin.qq.com/s/CzwQ_sEwQ31PfGJS7GxXZw)和✅ [《何谓“中国价值观基础上的客观观点”？简谈维基式“中立”的虚伪》](https://www.qiuwenbaike.cn/wiki/Qiuwen:%E4%BD%95%E8%B0%93%E2%80%9C%E4%B8%AD%E5%9B%BD%E4%BB%B7%E5%80%BC%E8%A7%82%E5%9F%BA%E7%A1%80%E4%B8%8A%E7%9A%84%E5%AE%A2%E8%A7%82%E8%A7%82%E7%82%B9%E2%80%9D%EF%BC%9F%E7%AE%80%E8%B0%88%E7%BB%B4%E5%9F%BA%E5%BC%8F%E2%80%9C%E4%B8%AD%E7%AB%8B%E2%80%9D%E7%9A%84%E8%99%9A%E4%BC%AA)】</font>
+- ✅ [抖音百科](https://www.baike.com/)（又名「快懂百科」，原「互动百科」，现被字节跳动收购成为抖音旗下产品）
+- ✅ [搜狗百科](https://baike.sogou.com/)（搜狗旗下百科产品，现属于腾讯旗下）
+  - ✅ [搜狗科学百科](https://wuli.wiki/sogou)（由搜狗推出的科学领域专业百科产品，与搜狗百科为两个独立产品）<font color="gray">【已于 2022 年 11 月 11 日✅ [停止运营](https://finance.sina.com.cn/tech/internet/2022-10-23/doc-imqmmthc1818519.shtml)，此为**小时百科**镜像】</font>
+- ✅ [360 百科](https://baike.so.com/)<font color="#D3D3D3">（都已经 2025 年了还有人会看这种啥也没有的百科么……）</font>
+- ✅ [微信百科](https://baike.weixin.qq.com/)（微信内「百科」搜索页，数据来源于**搜狗百科**，详见下图）
+
+<img src="https://ghfast.top/https://raw.githubusercontent.com/WolfeOvO/cdn-files/main/Screenshot_20251130_141803.jpg"
+style="zoom:50%">
+
+▲微信使用「百科」搜索「台湾」的结果
+
+- ✅ [Symbl <font color="gray">字符百科</font>](https://symbl.cc/cn/)
+- ✅ [Emojipedia](https://emojipedia.org/zh)
+- ✅ [WikiHow](https://zh.wikihow.com/%E9%A6%96%E9%A1%B5)（互联网百科全书、生活指南、万事指南）
+- ✅ [Encyclopedia Britannica <font color="gray">大英百科全书</font>](https://www.britannica.com/)
+- ✅ [Encyclopedia <font color="gray">美国百科全书</font>](https://www.encyclopedia.com/)
+
+## 3.2 - 小众百科
+
+- ✅ [萌娘百科](https://zh.moegirl.org.cn/)（ACG 百科，专注二次元领域）
+- ✅ [MBA 智库百科](https://wiki.mbalib.com/wiki/%E9%A6%96%E9%A1%B5)（专注经济管理领域）
+- ✅ [Data Viz Project](https://datavizproject.com/)（数据百科，专注于数据可视化）
+- ✅ [小时百科](https://wuli.wiki/book/)（数理百科，专注数学和物理领域的知识）
+- ✅ [ColorWiki](https://www.colorwiki.com/wiki/ColorWiki_Home)（色彩百科）
+- ❌ [World Food Atlas](https://www.tasteatlas.com/search)（美食百科）
+- ✅ [MuscleWiki](https://musclewiki.com/)（健身百科）
+- ✅ [Examine](https://examine.com/)（营养百科）
+- ✅ [汽车百科](https://car.autohome.com.cn/baike)（汽车知识大全）
+- ✅ [WheelsAge](https://zh.wheelsage.org/)（汽车车型百科）
+- ✅ [Hpoi 手办维基](https://www.hpoi.net/)
+- ✅ [SudokuWiki](https://www.sudokuwiki.org/)（数独百科）
+- ❌ [WikiArt.org](https://www.wikiart.org/)（艺术百科）
+- ✅ [MusicBrainz](https://musicbrainz.org/)（音乐百科）
+- ✅ [QQ 音乐百科](https://wiki.y.qq.com/)
+- ❌ [ChoralWiki](https://www.cpdl.org/wiki/index.php/Main_Page)（合唱音乐百科）
+- ✅ [IMCDb.org](https://www.imcdb.org/)（影视汽车百科）
+- ❌ [IMFDB](https://www.imfdb.org/wiki/Main_Page)（影视武器百科）
+
+### 3.2.1 - 中国官方权威百科
+
+- ✅ [中国百科网 <font color="gray">兼 中国大百科全书第三版</font>](https://www.zgbk.com/)
+- ✅ [中国大百科全书数据库](https://h.bkzx.cn/)
+- ✅ [中国军事百科](https://js.bkzx.cn/items)
+- ✅ [中国色](https://zhongguose.com/)
+
+## 3.3 - 垂直百科
+
+- ❌ [生命大百科](https://eol.org/zh-CN)
+- ✅ [About Animals](https://www.aboutanimals.com/)（动物百科）
+- ✅ [Marine Life](https://oceana.org/marine-life/)（海洋百科）
+- ✅ [A+医学百科](http://www.a-hospital.com/)
+- ✅ [医学微视](https://www.mvyxws.com/)
+- ✅ [Drugs.com](https://www.drugs.com/)（医药百科）
+
+## 3.4 - 其他百科
+
+- ✅ [后室 The Backrooms](https://backrooms-wiki-cn.wikidot.com/)
+- ✅ [SCP 基金会](https://scp-wiki-cn.wikidot.com/)
