@@ -1,40 +1,49 @@
 import { defineConfig } from 'vitepress'
 
-// 你的网站配置
 export default defineConfig({
-  title: "Wolfeの储物间",  // 网站左上角的标题
-  description: "存资料的地方",
+  title: "我的文档站", // 你的网站标题
+  description: "在这里写描述",
   
-  // 主题配置
   themeConfig: {
-    // 顶部导航栏
+    // 1. 顶部导航栏
     nav: [
-      { text: '储物间', link: '/storage' },
-      { text: '墙外指南', link: '/gfw-guide' }
-    ]，
-
-    // 左侧侧边栏 (这里代替了原来的 SUMMARY.md)
-    sidebar: [
-      {
-        text: '储物间',
-        items: [
-          { text: '1', link: '/storage/1' },
-          { text: '2', link: '/storage/2' }
-        ]
-      }
+      { text: '首页', link: '/' },
+      // 注意：这里的 link 最好指向该分类下的第一篇文章
+      { text: '储物间', link: '/storage/1' },
+      { text: '墙外指南', link: '/gfw-guide/basic' }
     ],
 
-    // 开启本地搜索 (Ctrl + K)
-    search: {
-      provider: 'local'
+    // 2. 侧边栏 (多侧边栏配置 - 对象格式)
+    sidebar: {
+      // 当用户在 "/storage/" 目录下时，显示这个侧边栏
+      '/storage/': [
+        {
+          text: '我的储物间',
+          items: [
+            // 这里的链接对应 docs/storage/1.md
+            { text: '第一篇', link: '/storage/1' },
+            { text: '第二篇', link: '/storage/2' }
+          ]
+        }
+      ],
+
+      // 当用户在 "/gfw-guide/" 目录下时，显示这个侧边栏
+      '/gfw-guide/': [
+        {
+          text: '墙外指南',
+          items: [
+            // 这里的链接对应 docs/gfw-guide/basic.md
+            { text: '基础篇', link: '/gfw-guide/basic' },
+            { text: '进阶篇', link: '/gfw-guide/advanced' }
+          ]
+        }
+      ]
     },
 
-    // 右侧大纲标题
-    outlineTitle: '本页目录',
-    
-    // 社交链接
+    // 3. 社交链接 (可选)
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/你的用户名/仓库名' }
+      // 记得把下面的链接换成你自己的 GitHub 仓库地址
+      { icon: 'github', link: 'https://github.com/' }
     ]
   }
 })
