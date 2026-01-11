@@ -1,12 +1,8 @@
 # 1 搜索引擎
 
-<div style="background-color: #f2f2f2; padding: 10px; border: 1px solid #ccc; border-radius: 8px;">
-
-<font color="#1e88e5">最全搜索引擎合集，最全，没有之一？</font>
+最全搜索引擎合集，最全，没有之一？</font>
 
 **来源：✅ [https://www.runningcheese.cn/s02](https://www.runningcheese.cn/s02)**
-
-</div>
 
 ## 1.1 - 搜索指导
 
