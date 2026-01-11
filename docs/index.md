@@ -3,13 +3,13 @@
 layout: home
 
 hero:
-  name: "我的文档站"
-  text: "个人知识库"
-  tagline: 这里的副标题可以随便写
+  name: "Wolfe"
+  text: "の储物间"
+  tagline: 嗨，别来无恙啊👋
   actions:
     - theme: brand
-      text: 进储物间看看
-      link: /storage/1
+      text: 立即进入
+      link: /home/home
     - theme: alt
       text: 访问 GitHub
       link: https://github.com/WolfeOvO/My-Website
