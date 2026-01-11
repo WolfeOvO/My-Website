@@ -1,7 +1,6 @@
 import { defineConfig } from 'vitepress'
 
 export default defineConfig({
-  base: '/My-Website/',
   title: "Wolfeの储物间",
   description: "在这里写描述",
   ignoreDeadLinks: true,
