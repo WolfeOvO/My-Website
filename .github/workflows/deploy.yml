@@ -2,7 +2,7 @@ name: Auto Deploy GitBook
 on:
   push:
     branches:
-      - main  # 如果你的默认分支叫 master，请把这里改为 master
+      - main
 
 permissions:
   contents: write
@@ -17,7 +17,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
 
       - name: Install HonKit
         run: npm install -g honkit
