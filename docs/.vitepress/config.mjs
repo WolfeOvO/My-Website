@@ -9,20 +9,6 @@ export default defineConfig({
     // 1. 顶部导航栏
     nav: [
       { text: '首页', link: '/' },
-      // 注意：这里的 link 最好指向该分类下的第一篇文章
-      { text: '储物间', link: '/storage/home' },
-      { text: '搜索引擎'，search.md)
-2. [问答导航](q&a.md)
-3. [百科全书](encyclopedia.md)
-4. [BT 导航](bt.md)
-5. [网盘服务](cloud.md)
-6. [音乐导航](music.md)
-7. [社交平台](social.md)
-8. [图书馆](library.md)
-9. [图片资源](photo.md)
-10. [网页浏览器](broswer.md)
-11. [维基媒体](wikimedia.md)
-12. [工具箱](toolbox.md)
       { text: '墙外指南', link: '/gfw-guide/basic' }
     ],
 
@@ -33,8 +19,19 @@ export default defineConfig({
           text: '储物间'，
           items: [
             { text: '索引', link: '/storage/home' },
-            { text: '1 搜索引擎', link: '/storage/1' },
-            { text: '第二篇', link: '/storage/2' }
+            { text: '储物间', link: '/storage/home' },
+            { text: '搜索引擎', link: '/storage/search' },
+            { text: '问答导航', link: '/storage/q&a' },
+            { text: '百科全书', link: '/storage/encyclopedia' },
+            { text: 'BT 导航', link: '/storage/bt' },
+            { text: '网盘服务', link: '/storage/cloud' },
+            { text: '音乐导航', link: '/storage/music' },
+            { text: '社交平台', link: '/storage/social' },
+            { text: '图书馆', link: '/storage/library' },
+            { text: '图片资源', link: '/storage/photo' },
+            { text: '网页浏览器', link: '/storage/broswer' },
+            { text: '维基媒体', link: '/storage/wikimedia' },
+            { text: '工具箱', link: '/storage/toolbox' },
           ]
         }
       ],
