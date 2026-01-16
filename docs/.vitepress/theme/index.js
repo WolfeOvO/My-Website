@@ -4,7 +4,7 @@ import Spoiler from '../components/Spoiler.vue'
 import { enhanceAppWithTabs } from 'vitepress-plugin-tabs/client'
 import GitHubRelease from '../components/GitHubRelease.vue'
 import SubSidebar from '../components/SubSidebar.vue'
-import { Tabs, Tab, IconTabs, IconTab, Alert, Button } from './components/vitepress-tabs'
+import { Tabs, Tab, IconTabs, IconTab, Alert, Button } from '../components/vitepress-tabs'
 
 export default {
   extends: DefaultTheme,
