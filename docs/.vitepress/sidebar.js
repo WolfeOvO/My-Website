@@ -23,9 +23,21 @@ export const sidebar = {
         {
           text: '墙外指南',
           items: [
-            { text: '目录', link: '/墙外指南/墙外指南目录.md' },
-            { text: '', link: '/' },
-            { text: '', link: '/' }
+            { text: '目录', link: '/墙外指南/墙外指南目录.md' }
+          ]
+        },
+        {
+           text: '推荐机场',
+           collapsed: false,
+           items: [
+            { text: 'Telegram 频道推荐', link: '/墙外指南/推荐机场/Telegram 频道推荐.md' }
+          ]
+        },
+        {
+          text: '客户端下载',
+          items: [
+            { text: '123', link: '/墙外指南/客户端下载/合集.md' },
+
           ]
         }
       ]
