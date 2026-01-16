@@ -1,5 +1,6 @@
 import { defineConfig } from 'vitepress'
 import { sidebar } from './sidebar'
+import { defineConfig } from 'vitepress'
 
 export default defineConfig({
   title: "Wolfeの储物间",
@@ -33,6 +34,10 @@ export default defineConfig({
 
     socialLinks: [
       { icon: 'github', link: 'https://github.com/WolfeOvO' }
-    ]
+    ],
+
+    search: {
+    provider: 'local'
+    }
   }
 })
