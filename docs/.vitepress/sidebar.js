@@ -30,7 +30,14 @@ export const sidebar = {
            text: '推荐机场',
            collapsed: false,
            items: [
-            { text: 'Telegram 频道推荐', link: '/墙外指南/推荐机场/Telegram 频道推荐.md' }
+            { text: 'Telegram 频道推荐', link: '/墙外指南/推荐机场/Telegram 频道推荐.md' },
+            {
+              text: '2026 年',
+              collapsed: false,
+              items: [
+                {text: '1 月', link: '/墙外指南/推荐机场/2026 年/1 月.md' }
+              ]
+            }
           ]
         },
         {
