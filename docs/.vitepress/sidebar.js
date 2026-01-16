@@ -15,7 +15,7 @@ export const sidebar = {
             { text: '9 - 图片资源', link: '/储物间/9 - 图片资源.md' },
             { text: '10 - 网页浏览器', link: '/储物间/10 - 网页浏览器.md' },
             { text: '11 - 维基媒体', link: '/储物间/11 - 维基媒体.md' },
-            { text: '12 - 工具箱', link: '/储物间/12 - 工具箱.md' },
+            { text: '12 - 工具箱', link: '/储物间/12 - 工具箱.md' }
           ]
         }
       ],
@@ -23,7 +23,7 @@ export const sidebar = {
         {
           text: '墙外指南',
           items: [
-            { text: '目录', link: '/' },
+            { text: '目录', link: '/墙外指南/墙外指南目录.md' },
             { text: '', link: '/' },
             { text: '', link: '/' }
           ]
