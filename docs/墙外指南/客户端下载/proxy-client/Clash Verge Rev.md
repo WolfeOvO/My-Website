@@ -17,7 +17,14 @@
 
 | 系统架构 | 下载地址 |
 | :---: | :---: |
-| x64 | <VPButton type="primary" tag="x64">安装包</VPButton> |
+| x64 | <GitHubRelease 
+  owner="clash-verge-rev" 
+  repo="clash-verge-rev" 
+  mode="button" 
+  label="安装包" 
+  arch="x64" 
+  match="x64-setup.exe" 
+/> |
 
 </IconTab>
 <IconTab label="WinGet">
