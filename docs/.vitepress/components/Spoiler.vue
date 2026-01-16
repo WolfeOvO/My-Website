@@ -7,17 +7,6 @@ const toggleReveal = () => {
 }
 </script>
 
-<template>
-  <span 
-    class="spoiler-ink" 
-    :class="{ revealed: isRevealed }"
-    @click="toggleReveal"
-    title="点击或悬浮查看隐藏内容"
-  >
-    <slot />
-  </span>
-</template>
-
 <style scoped>
 .spoiler-ink {
   /* 
@@ -35,8 +24,7 @@ const toggleReveal = () => {
   
   border-radius: 4px;
   padding: 0 4px;
-  transition: all 0.3s ease;
-  cursor: help; /* 鼠标变成问号，提示可交互 */
+  transition: all 0.3s ease
 }
 
 /* 
