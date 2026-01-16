@@ -10,7 +10,6 @@ const normalizeLink = (url) => {
   const decoded = decodeURIComponent(url)
   return withBase(decoded.replace(/\.md$/, '.html'))
 }
-// -----------------------
 
 const items = computed(() => {
   const sidebar = theme.value.sidebar
@@ -68,7 +67,6 @@ const items = computed(() => {
 </template>
 
 <style scoped>
-/* 原有样式保留 */
 .local-sidebar-list { margin-top: 2rem; padding: 1rem; border: 1px solid var(--vp-c-divider); border-radius: 8px; background-color: var(--vp-c-bg-soft); }
 .root-list { list-style: none !important; margin: 0 !important; padding: 0 !important; }
 .root-item { margin-bottom: 1.5rem; }
@@ -78,7 +76,6 @@ const items = computed(() => {
 .link-item:hover { color: var(--vp-c-brand-dark); text-decoration: underline; }
 .empty-tip { color: red; font-weight: bold; }
 
-/* 新增样式支持多级 */
 .sub-group { margin-top: 8px; margin-bottom: 8px; }
 .sub-group-title { font-weight: 600; color: var(--vp-c-text-2); font-size: 0.95em; }
 .sub-sub-list { list-style: none !important; padding-left: 1rem !important; margin-top: 4px !important; border-left: 1px solid var(--vp-c-divider); }

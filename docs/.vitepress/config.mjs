@@ -7,16 +7,7 @@ export default defineConfig({
   ignoreDeadLinks: true,
   lastUpdated: true,
 
-  footer: {
-      message: 'Released under the MIT License. 根据 MIT 协议发布。',
-      copyright: 'Copyright © 2026-present Wolfe'
-    },
-
   markdown: {
-    anchor: {
-      level: [2, 3, 4, 5, 6]
-    },
-    
     container: {
       tipLabel: '⚠️注意',
       warningLabel: '❗️警告',
@@ -27,6 +18,11 @@ export default defineConfig({
   },
 
   themeConfig: {
+  footer: {
+      message: 'Released under the MIT License. 根据 MIT 协议发布。',
+      copyright: 'Copyright © 2026-present Wolfe'
+    },
+
     outline: {
       level: 'deep', 
       label: '大纲' 
