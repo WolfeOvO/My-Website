@@ -21,4 +21,4 @@
             </IconTab>
         </IconTabs>
     </IconTab>
-</IconTab>
+</IconTabs>
