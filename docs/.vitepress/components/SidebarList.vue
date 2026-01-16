@@ -11,7 +11,7 @@ const items = computed(() => {
   
   // 2. 获取当前路径，并一定要进行解码（解决中文路径匹配失败的关键！）
   // 同时去掉末尾的 .html 以防万一
-  const currentPath = decodeURIComponent(route.path).replace(/.md$/, '')
+  const currentPath = decodeURIComponent(route.path)
 
   // 情况 A: 侧边栏是全站统一的简单数组
   if (Array.isArray(sidebar)) {
