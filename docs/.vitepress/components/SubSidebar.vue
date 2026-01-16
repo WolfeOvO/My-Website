@@ -19,7 +19,7 @@ const normalizePath = (path) => {
         .replace(/\/$/, '')
 }
 
-// 收集一个项目下所有有子级的项目的子级内容
+// 收集一个数组中所有有子级的项目
 const collectAllChildrenFromSiblings = (siblings) => {
     const allChildren = []
     for (const sibling of siblings) {
@@ -35,66 +35,76 @@ const collectAllChildrenFromSiblings = (siblings) => {
     return allChildren
 }
 
-// 递归查找当前页面所属的父级项目及其子内容
-const findCurrentGroup = (items, currentPath, parent = null) => {
+// 从祖先链中向上查找，找到第一个同级有子级的层级
+const findSiblingsWithChildren = (ancestors, topLevelItems) => {
+    for (let i = ancestors.length - 1; i >= 0; i--) {
+        const { parent, siblings } = ancestors[i]
+        const siblingsWithChildren = collectAllChildrenFromSiblings(siblings)
+        if (siblingsWithChildren.length > 0) {
+            return {
+                group: parent,
+                children: siblingsWithChildren,
+                mode: 'siblings'
+            }
+        }
+    }
+    
+    const topLevelWithChildren = collectAllChildrenFromSiblings(topLevelItems)
+    if (topLevelWithChildren.length > 0) {
+        return {
+            group: null,
+            children: topLevelWithChildren,
+            mode: 'siblings'
+        }
+    }
+    
+    return {
+        group: null,
+        children: topLevelItems,
+        mode: 'flat'
+    }
+}
+
+// 递归查找当前页面，同时记录祖先链
+const findCurrentGroup = (items, currentPath, ancestors = [], topLevelItems = null) => {
+    if (topLevelItems === null) {
+        topLevelItems = items
+    }
+    
     for (const item of items) {
         if (item.link) {
             const itemPath = normalizePath(item.link)
             if (currentPath === itemPath || currentPath.startsWith(itemPath + '/')) {
-
-                // ========== 顶层项处理（没有parent） ==========
-                if (!parent) {
-                    // 收集所有顶层同级的子级
-                    const allSiblingChildren = collectAllChildrenFromSiblings(items)
-                    if (allSiblingChildren.length > 0) {
-                        return {
-                            group: null,  // 顶层没有group标题
-                            children: allSiblingChildren,
-                            mode: 'siblings'
-                        }
-                    }
-                    // 顶层同级都没有子级，返回顶层列表本身
-                    return {
-                        group: null,
-                        children: items,
-                        mode: 'flat'
-                    }
-                }
-
-                // ========== 非顶层项处理（有parent） ==========
-                // 情况1: 当前项有子项，返回当前项的子项
+                
                 if (item.items && item.items.length > 0) {
-                    return {
-                        group: item,
+                    return { 
+                        group: item, 
                         children: item.items,
                         mode: 'direct'
                     }
                 }
-
-                // 情况2: 当前项没有子项，收集同级所有子级
-                if (parent.items) {
-                    const allSiblingChildren = collectAllChildrenFromSiblings(parent.items)
-                    if (allSiblingChildren.length > 0) {
-                        return {
-                            group: parent,
-                            children: allSiblingChildren,
-                            mode: 'siblings'
-                        }
-                    }
-
-                    // 情况3: 同级都没有子级，返回同级列表本身
+                
+                const currentLevelSiblings = ancestors.length > 0 
+                    ? ancestors[ancestors.length - 1].siblings 
+                    : items
+                const siblingsWithChildren = collectAllChildrenFromSiblings(currentLevelSiblings)
+                
+                if (siblingsWithChildren.length > 0) {
+                    const parent = ancestors.length > 0 ? ancestors[ancestors.length - 1].parent : null
                     return {
                         group: parent,
-                        children: parent.items,
-                        mode: 'flat'
+                        children: siblingsWithChildren,
+                        mode: 'siblings'
                     }
                 }
+                
+                return findSiblingsWithChildren(ancestors, topLevelItems)
             }
         }
 
-        // 递归检查子项
         if (item.items) {
-            const found = findCurrentGroup(item.items, currentPath, item)
+            const newAncestors = [...ancestors, { parent: item, siblings: item.items }]
+            const found = findCurrentGroup(item.items, currentPath, newAncestors, topLevelItems)
             if (found) return found
         }
     }
@@ -131,15 +141,34 @@ const groupTitle = computed(() => currentGroup.value?.group?.text || '')
 const childItems = computed(() => currentGroup.value?.children || [])
 const displayMode = computed(() => currentGroup.value?.mode || 'direct')
 
-// 计算总项目数（用于显示）
+// 递归计算总项目数
+const countItems = (items) => {
+    let count = 0
+    for (const item of items) {
+        if (item.link) {
+            count++
+        }
+        if (item.items) {
+            count += countItems(item.items)
+        }
+    }
+    return count
+}
+
 const totalItemCount = computed(() => {
     if (displayMode.value === 'siblings') {
         return childItems.value.reduce((sum, group) => {
-            return sum + (group.items?.length || 0)
+            return sum + countItems(group.items || [])
         }, 0)
     }
-    return childItems.value.length
+    return countItems(childItems.value)
 })
+
+// 检查路径是否激活
+const isActive = (link) => {
+    if (!link) return false
+    return normalizePath(route.path) === normalizePath(link)
+}
 </script>
 
 <template>
@@ -157,29 +186,29 @@ const totalItemCount = computed(() => {
 
         <!-- 直接子级模式 / 平级列表模式 -->
         <ul class="child-list" v-if="displayMode === 'direct' || displayMode === 'flat'">
-            <li v-for="(item, index) in childItems" :key="index" class="child-item">
-                <a v-if="item.link" :href="normalizeLink(item.link)" class="child-link"
-                    :class="{ active: normalizePath(route.path) === normalizePath(item.link) }">
-                    <span class="link-icon">📄</span>
-                    <span class="link-text">{{ item.text }}</span>
-                </a>
-
-                <!-- 如果子项还有嵌套 -->
-                <div v-else-if="item.items" class="nested-group">
-                    <div class="nested-title">
-                        <span class="folder-icon">📁</span>
-                        <span>{{ item.text }}</span>
+            <template v-for="(item, index) in childItems" :key="index">
+                <li class="child-item">
+                    <!-- 有链接的项 -->
+                    <a v-if="item.link" :href="normalizeLink(item.link)" class="child-link"
+                        :class="{ active: isActive(item.link) }">
+                        <span class="link-icon">📄</span>
+                        <span class="link-text">{{ item.text }}</span>
+                    </a>
+                    
+                    <!-- 无链接但有子级的项（文件夹） -->
+                    <div v-else-if="item.items" class="folder-item">
+                        <div class="folder-title">
+                            <span class="folder-icon">📁</span>
+                            <span>{{ item.text }}</span>
+                        </div>
                     </div>
-                    <ul class="nested-list">
-                        <li v-for="nested in item.items" :key="nested.text">
-                            <a :href="normalizeLink(nested.link)" class="nested-link"
-                                :class="{ active: normalizePath(route.path) === normalizePath(nested.link) }">
-                                {{ nested.text }}
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </li>
+                </li>
+                
+                <!-- 递归渲染子级 -->
+                <li v-if="item.items && item.items.length > 0" class="nested-container">
+                    <RecursiveItems :items="item.items" :depth="1" :normalize-link="normalizeLink" :is-active="isActive" />
+                </li>
+            </template>
         </ul>
 
         <!-- 同级子级模式：显示所有同级项目的子级 -->
@@ -187,41 +216,20 @@ const totalItemCount = computed(() => {
             <div v-for="(group, index) in childItems" :key="index" class="sibling-group">
                 <div class="sibling-header">
                     <a v-if="group.link" :href="normalizeLink(group.link)" class="sibling-title-link"
-                        :class="{ active: normalizePath(route.path) === normalizePath(group.link) }">
+                        :class="{ active: isActive(group.link) }">
                         <span class="folder-icon">📁</span>
                         <span>{{ group.text }}</span>
-                        <span class="group-count">{{ group.items?.length || 0 }}</span>
+                        <span class="group-count">{{ countItems(group.items || []) }}</span>
                     </a>
                     <div v-else class="sibling-title">
                         <span class="folder-icon">📁</span>
                         <span>{{ group.text }}</span>
-                        <span class="group-count">{{ group.items?.length || 0 }}</span>
+                        <span class="group-count">{{ countItems(group.items || []) }}</span>
                     </div>
                 </div>
-                <ul class="sibling-children">
-                    <li v-for="child in group.items" :key="child.text">
-                        <a v-if="child.link" :href="normalizeLink(child.link)" class="child-link"
-                            :class="{ active: normalizePath(route.path) === normalizePath(child.link) }">
-                            <span class="link-icon">📄</span>
-                            <span class="link-text">{{ child.text }}</span>
-                        </a>
-                        <!-- 处理更深层嵌套 -->
-                        <div v-else-if="child.items" class="nested-in-sibling">
-                            <div class="nested-folder">
-                                <span class="folder-icon">📁</span>
-                                <span>{{ child.text }}</span>
-                            </div>
-                            <ul class="deep-nested-list">
-                                <li v-for="deep in child.items" :key="deep.text">
-                                    <a :href="normalizeLink(deep.link)" class="nested-link"
-                                        :class="{ active: normalizePath(route.path) === normalizePath(deep.link) }">
-                                        {{ deep.text }}
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                </ul>
+                <div class="sibling-children">
+                    <RecursiveItems :items="group.items" :depth="0" :normalize-link="normalizeLink" :is-active="isActive" />
+                </div>
             </div>
         </div>
     </div>
@@ -230,6 +238,78 @@ const totalItemCount = computed(() => {
         <p>当前页面没有子目录内容</p>
     </div>
 </template>
+
+<!-- 递归子组件 -->
+<script>
+import { defineComponent, h } from 'vue'
+
+const RecursiveItems = defineComponent({
+    name: 'RecursiveItems',
+    props: {
+        items: { type: Array, required: true },
+        depth: { type: Number, default: 0 },
+        normalizeLink: { type: Function, required: true },
+        isActive: { type: Function, required: true }
+    },
+    setup(props) {
+        return () => {
+            const children = []
+            
+            for (const item of props.items) {
+                // 有链接的项
+                if (item.link) {
+                    children.push(
+                        h('div', { 
+                            class: ['recursive-item', { 'depth-indent': props.depth > 0 }],
+                            style: { paddingLeft: `${props.depth * 1}rem` }
+                        }, [
+                            h('a', {
+                                href: props.normalizeLink(item.link),
+                                class: ['recursive-link', { active: props.isActive(item.link) }]
+                            }, [
+                                h('span', { class: 'link-icon' }, '📄'),
+                                h('span', { class: 'link-text' }, item.text)
+                            ])
+                        ])
+                    )
+                }
+                // 无链接但有子级的文件夹
+                else if (item.items && item.items.length > 0) {
+                    children.push(
+                        h('div', { 
+                            class: 'recursive-folder',
+                            style: { paddingLeft: `${props.depth * 1}rem` }
+                        }, [
+                            h('div', { class: 'folder-header' }, [
+                                h('span', { class: 'folder-icon' }, '📁'),
+                                h('span', { class: 'folder-name' }, item.text)
+                            ])
+                        ])
+                    )
+                }
+                
+                // 递归渲染子级
+                if (item.items && item.items.length > 0) {
+                    children.push(
+                        h(RecursiveItems, {
+                            items: item.items,
+                            depth: props.depth + 1,
+                            normalizeLink: props.normalizeLink,
+                            isActive: props.isActive
+                        })
+                    )
+                }
+            }
+            
+            return h('div', { class: 'recursive-container' }, children)
+        }
+    }
+})
+
+export default {
+    components: { RecursiveItems }
+}
+</script>
 
 <style scoped>
 .sub-sidebar-list {
@@ -270,7 +350,11 @@ const totalItemCount = computed(() => {
 }
 
 .child-item {
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.25rem;
+}
+
+.nested-container {
+    list-style: none !important;
 }
 
 .child-link {
@@ -297,17 +381,18 @@ const totalItemCount = computed(() => {
 
 .link-icon {
     font-size: 0.9em;
+    flex-shrink: 0;
 }
 
 .link-text {
     flex: 1;
 }
 
-.nested-group {
-    margin-top: 0.5rem;
+.folder-item {
+    margin-bottom: 0.25rem;
 }
 
-.nested-title {
+.folder-title {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -318,34 +403,7 @@ const totalItemCount = computed(() => {
 
 .folder-icon {
     font-size: 0.9em;
-}
-
-.nested-list {
-    list-style: none !important;
-    margin: 0 !important;
-    padding-left: 2rem !important;
-    border-left: 2px solid var(--vp-c-divider);
-    margin-left: 1rem !important;
-}
-
-.nested-link {
-    display: block;
-    padding: 6px 12px;
-    text-decoration: none;
-    color: var(--vp-c-text-3);
-    font-size: 0.9em;
-    border-radius: 4px;
-    transition: all 0.2s ease;
-}
-
-.nested-link:hover {
-    color: var(--vp-c-brand);
-    background-color: var(--vp-c-bg-mute);
-}
-
-.nested-link.active {
-    color: var(--vp-c-brand);
-    font-weight: 500;
+    flex-shrink: 0;
 }
 
 .empty-state {
@@ -411,26 +469,47 @@ const totalItemCount = computed(() => {
 }
 
 .sibling-children {
-    list-style: none !important;
-    margin: 0 !important;
-    padding: 0.5rem !important;
+    padding: 0.5rem;
 }
 
-.sibling-children li {
+/* 递归组件样式 */
+:deep(.recursive-container) {
+    display: flex;
+    flex-direction: column;
+}
+
+:deep(.recursive-item) {
     margin-bottom: 0.25rem;
 }
 
-.sibling-children .child-link {
+:deep(.recursive-link) {
+    display: flex;
+    align-items: center;
+    gap: 8px;
     padding: 6px 10px;
+    text-decoration: none;
+    color: var(--vp-c-text-2);
+    border-radius: 6px;
+    transition: all 0.2s ease;
     font-size: 0.95em;
 }
 
-/* 深层嵌套样式 */
-.nested-in-sibling {
-    padding: 0.25rem 0;
+:deep(.recursive-link:hover) {
+    background-color: var(--vp-c-bg-mute);
+    color: var(--vp-c-brand);
 }
 
-.nested-folder {
+:deep(.recursive-link.active) {
+    background-color: var(--vp-c-brand-soft);
+    color: var(--vp-c-brand);
+    font-weight: 500;
+}
+
+:deep(.recursive-folder) {
+    margin-bottom: 0.25rem;
+}
+
+:deep(.folder-header) {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -440,16 +519,12 @@ const totalItemCount = computed(() => {
     font-size: 0.95em;
 }
 
-.deep-nested-list {
-    list-style: none !important;
-    margin: 0 !important;
-    padding-left: 1.5rem !important;
-    border-left: 2px solid var(--vp-c-divider);
-    margin-left: 0.75rem !important;
+:deep(.folder-name) {
+    flex: 1;
 }
 
-.deep-nested-list .nested-link {
-    padding: 4px 10px;
-    font-size: 0.9em;
+:deep(.depth-indent) {
+    border-left: 2px solid var(--vp-c-divider);
+    margin-left: 0.5rem;
 }
 </style>
