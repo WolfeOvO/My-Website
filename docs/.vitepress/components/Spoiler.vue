@@ -7,6 +7,16 @@ const toggleReveal = () => {
 }
 </script>
 
+<template>
+  <span 
+    class="spoiler-ink" 
+    :class="{ revealed: isRevealed }"
+    @click="toggleReveal"
+  >
+    <slot />
+  </span>
+</template>
+
 <style scoped>
 .spoiler-ink {
   /* 
