@@ -1,5 +1,4 @@
 import { defineConfig } from 'vitepress'
-// 1. 引入必须放在最上面
 import { sidebar } from './sidebar'
 
 export default defineConfig({
@@ -30,7 +29,6 @@ export default defineConfig({
       { text: '墙外指南', link: '/墙外指南/墙外指南目录.md' }
     ],
 
-    // 2. 在这里直接使用引入的 sidebar 变量
     sidebar: sidebar,
 
     socialLinks: [
