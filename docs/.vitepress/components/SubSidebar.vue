@@ -24,7 +24,6 @@ const collectAllChildrenFromSiblings = (siblings) => {
     const allChildren = []
     for (const sibling of siblings) {
         if (sibling.items && sibling.items.length > 0) {
-            // 将每个有子级的同级项作为一个分组添加
             allChildren.push({
                 text: sibling.text,
                 link: sibling.link,
@@ -42,24 +41,44 @@ const findCurrentGroup = (items, currentPath, parent = null) => {
         if (item.link) {
             const itemPath = normalizePath(item.link)
             if (currentPath === itemPath || currentPath.startsWith(itemPath + '/')) {
+
+                // ========== 顶层项处理（没有parent） ==========
+                if (!parent) {
+                    // 收集所有顶层同级的子级
+                    const allSiblingChildren = collectAllChildrenFromSiblings(items)
+                    if (allSiblingChildren.length > 0) {
+                        return {
+                            group: null,  // 顶层没有group标题
+                            children: allSiblingChildren,
+                            mode: 'siblings'
+                        }
+                    }
+                    // 顶层同级都没有子级，返回顶层列表本身
+                    return {
+                        group: null,
+                        children: items,
+                        mode: 'flat'
+                    }
+                }
+
+                // ========== 非顶层项处理（有parent） ==========
                 // 情况1: 当前项有子项，返回当前项的子项
                 if (item.items && item.items.length > 0) {
                     return {
                         group: item,
                         children: item.items,
-                        mode: 'direct'  // 直接子级模式
+                        mode: 'direct'
                     }
                 }
 
-                // 当前项没有子项，检查父级
-                if (parent && parent.items) {
-                    // 情况2: 收集同级所有子级
+                // 情况2: 当前项没有子项，收集同级所有子级
+                if (parent.items) {
                     const allSiblingChildren = collectAllChildrenFromSiblings(parent.items)
                     if (allSiblingChildren.length > 0) {
                         return {
                             group: parent,
                             children: allSiblingChildren,
-                            mode: 'siblings'  // 同级子级模式
+                            mode: 'siblings'
                         }
                     }
 
@@ -67,7 +86,7 @@ const findCurrentGroup = (items, currentPath, parent = null) => {
                     return {
                         group: parent,
                         children: parent.items,
-                        mode: 'flat'  // 平级列表模式
+                        mode: 'flat'
                     }
                 }
             }
@@ -115,20 +134,24 @@ const displayMode = computed(() => currentGroup.value?.mode || 'direct')
 // 计算总项目数（用于显示）
 const totalItemCount = computed(() => {
     if (displayMode.value === 'siblings') {
-        // siblings模式下，统计所有子项数量
         return childItems.value.reduce((sum, group) => {
             return sum + (group.items?.length || 0)
         }, 0)
     }
-    // direct 和 flat 模式直接返回长度
     return childItems.value.length
 })
 </script>
 
 <template>
     <div class="sub-sidebar-list" v-if="childItems.length > 0">
+        <!-- 有标题时显示标题 -->
         <div class="group-header" v-if="groupTitle">
             <span class="group-title">{{ groupTitle }}</span>
+            <span class="item-count">{{ totalItemCount }} 项</span>
+        </div>
+        <!-- 顶层没有标题时显示简洁的计数 -->
+        <div class="group-header" v-else-if="displayMode === 'siblings'">
+            <span class="group-title">全部内容</span>
             <span class="item-count">{{ totalItemCount }} 项</span>
         </div>
 
@@ -177,11 +200,26 @@ const totalItemCount = computed(() => {
                 </div>
                 <ul class="sibling-children">
                     <li v-for="child in group.items" :key="child.text">
-                        <a :href="normalizeLink(child.link)" class="child-link"
+                        <a v-if="child.link" :href="normalizeLink(child.link)" class="child-link"
                             :class="{ active: normalizePath(route.path) === normalizePath(child.link) }">
                             <span class="link-icon">📄</span>
                             <span class="link-text">{{ child.text }}</span>
                         </a>
+                        <!-- 处理更深层嵌套 -->
+                        <div v-else-if="child.items" class="nested-in-sibling">
+                            <div class="nested-folder">
+                                <span class="folder-icon">📁</span>
+                                <span>{{ child.text }}</span>
+                            </div>
+                            <ul class="deep-nested-list">
+                                <li v-for="deep in child.items" :key="deep.text">
+                                    <a :href="normalizeLink(deep.link)" class="nested-link"
+                                        :class="{ active: normalizePath(route.path) === normalizePath(deep.link) }">
+                                        {{ deep.text }}
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                     </li>
                 </ul>
             </div>
@@ -385,5 +423,33 @@ const totalItemCount = computed(() => {
 .sibling-children .child-link {
     padding: 6px 10px;
     font-size: 0.95em;
+}
+
+/* 深层嵌套样式 */
+.nested-in-sibling {
+    padding: 0.25rem 0;
+}
+
+.nested-folder {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    font-weight: 500;
+    color: var(--vp-c-text-2);
+    font-size: 0.95em;
+}
+
+.deep-nested-list {
+    list-style: none !important;
+    margin: 0 !important;
+    padding-left: 1.5rem !important;
+    border-left: 2px solid var(--vp-c-divider);
+    margin-left: 0.75rem !important;
+}
+
+.deep-nested-list .nested-link {
+    padding: 4px 10px;
+    font-size: 0.9em;
 }
 </style>
