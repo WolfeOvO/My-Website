@@ -1,5 +1,6 @@
 import { defineConfig } from 'vitepress'
 import { sidebar } from './sidebar'
+import { tabsMarkdownPlugin } from 'vitepress-plugin-tabs'
 
 export default defineConfig({
   title: "Wolfeの储物间",
@@ -8,6 +9,10 @@ export default defineConfig({
   lastUpdated: true,
 
   markdown: {
+    config(md) {
+      md.use(tabsMarkdownPlugin)
+    },
+    
     container: {
       tipLabel: '⚠️注意',
       warningLabel: '❗️警告',
