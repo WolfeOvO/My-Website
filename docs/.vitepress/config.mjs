@@ -1,6 +1,5 @@
 import { defineConfig } from 'vitepress'
 import { sidebar } from './sidebar'
-import { defineConfig } from 'vitepress'
 
 export default defineConfig({
   title: "Wolfeの储物间",
