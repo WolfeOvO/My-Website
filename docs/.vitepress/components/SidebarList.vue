@@ -1,7 +1,7 @@
 <script setup>
 import { useData, useRoute, withBase } from 'vitepress'
 import { computed } from 'vue'
-·
+
 const { theme } = useData()
 const route = useRoute()
 
