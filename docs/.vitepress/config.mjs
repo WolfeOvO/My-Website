@@ -9,7 +9,7 @@ export default defineConfig({
 
   footer: {
       message: 'Released under the MIT License. 根据 MIT 协议发布。',
-      copyright: 'Copyright © 2026-present Wolfe<br>© 2026—至今 Wolfe 版权所有<br>侵权举报：cqml2021@163.com'
+      copyright: 'Copyright © 2026-present Wolfe<br>© 2026—至今 Wolfe 版权所有'
     },
 
   markdown: {
