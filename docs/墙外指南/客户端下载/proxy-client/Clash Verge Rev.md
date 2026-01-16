@@ -20,5 +20,5 @@
              通过 Windows 11 自带的包管理器 WinGet 安装 Clash Verge Rev：
             </IconTab>
         </IconTabs>
-    </IconTabs>
+    </IconTab>
 </IconTab>
