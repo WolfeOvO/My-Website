@@ -19,10 +19,10 @@ const icons = {
 }
 
 const defaultTitles = {
-    info: 'Info',
-    tip: 'Tip',
-    warning: 'Warning',
-    danger: 'Danger'
+    info: '信息',
+    tip: '提示',
+    warning: '注意',
+    danger: '警告'
 }
 
 const displayTitle = props.title || defaultTitles[props.type]
