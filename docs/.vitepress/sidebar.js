@@ -42,9 +42,10 @@ export const sidebar = {
         },
         {
           text: '客户端下载',
+          collapsed: false,
           items: [
-            { text: '123', link: '/墙外指南/客户端下载/合集.md' },
-
+            { text: '合集', link: '/墙外指南/客户端下载/合集.md' },
+            { text: '各大客户端', link: '/墙外指南/客户端下载/各大客户端.md' },
           ]
         }
       ]

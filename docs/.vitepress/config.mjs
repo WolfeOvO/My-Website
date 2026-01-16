@@ -3,9 +3,10 @@ import { sidebar } from './sidebar'
 
 export default defineConfig({
   title: "Wolfeの储物间",
-  description: "在这里写描述",
+  description: "Wolfe 的小破站，始于2026/1/11",
   ignoreDeadLinks: true,
   lastUpdated: true,
+  externalLinkIcon: true,
 
   markdown: {
     container: {
