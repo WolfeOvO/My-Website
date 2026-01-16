@@ -19,19 +19,56 @@ const normalizePath = (path) => {
         .replace(/\/$/, '')
 }
 
+// 收集一个项目下所有有子级的项目的子级内容
+const collectAllChildrenFromSiblings = (siblings) => {
+    const allChildren = []
+    for (const sibling of siblings) {
+        if (sibling.items && sibling.items.length > 0) {
+            // 将每个有子级的同级项作为一个分组添加
+            allChildren.push({
+                text: sibling.text,
+                link: sibling.link,
+                items: sibling.items,
+                isGroup: true
+            })
+        }
+    }
+    return allChildren
+}
+
 // 递归查找当前页面所属的父级项目及其子内容
 const findCurrentGroup = (items, currentPath, parent = null) => {
     for (const item of items) {
         if (item.link) {
             const itemPath = normalizePath(item.link)
             if (currentPath === itemPath || currentPath.startsWith(itemPath + '/')) {
-                // 如果当前项有子项，返回当前项
+                // 情况1: 当前项有子项，返回当前项的子项
                 if (item.items && item.items.length > 0) {
-                    return { group: item, children: item.items }
+                    return {
+                        group: item,
+                        children: item.items,
+                        mode: 'direct'  // 直接子级模式
+                    }
                 }
-                // 如果当前项没有子项，但有父级，返回父级的子项
+
+                // 当前项没有子项，检查父级
                 if (parent && parent.items) {
-                    return { group: parent, children: parent.items }
+                    // 情况2: 收集同级所有子级
+                    const allSiblingChildren = collectAllChildrenFromSiblings(parent.items)
+                    if (allSiblingChildren.length > 0) {
+                        return {
+                            group: parent,
+                            children: allSiblingChildren,
+                            mode: 'siblings'  // 同级子级模式
+                        }
+                    }
+
+                    // 情况3: 同级都没有子级，返回同级列表本身
+                    return {
+                        group: parent,
+                        children: parent.items,
+                        mode: 'flat'  // 平级列表模式
+                    }
                 }
             }
         }
@@ -73,16 +110,30 @@ const currentGroup = computed(() => {
 
 const groupTitle = computed(() => currentGroup.value?.group?.text || '')
 const childItems = computed(() => currentGroup.value?.children || [])
+const displayMode = computed(() => currentGroup.value?.mode || 'direct')
+
+// 计算总项目数（用于显示）
+const totalItemCount = computed(() => {
+    if (displayMode.value === 'siblings') {
+        // siblings模式下，统计所有子项数量
+        return childItems.value.reduce((sum, group) => {
+            return sum + (group.items?.length || 0)
+        }, 0)
+    }
+    // direct 和 flat 模式直接返回长度
+    return childItems.value.length
+})
 </script>
 
 <template>
     <div class="sub-sidebar-list" v-if="childItems.length > 0">
         <div class="group-header" v-if="groupTitle">
             <span class="group-title">{{ groupTitle }}</span>
-            <span class="item-count">{{ childItems.length }} 项</span>
+            <span class="item-count">{{ totalItemCount }} 项</span>
         </div>
 
-        <ul class="child-list">
+        <!-- 直接子级模式 / 平级列表模式 -->
+        <ul class="child-list" v-if="displayMode === 'direct' || displayMode === 'flat'">
             <li v-for="(item, index) in childItems" :key="index" class="child-item">
                 <a v-if="item.link" :href="normalizeLink(item.link)" class="child-link"
                     :class="{ active: normalizePath(route.path) === normalizePath(item.link) }">
@@ -107,6 +158,34 @@ const childItems = computed(() => currentGroup.value?.children || [])
                 </div>
             </li>
         </ul>
+
+        <!-- 同级子级模式：显示所有同级项目的子级 -->
+        <div class="siblings-mode" v-else-if="displayMode === 'siblings'">
+            <div v-for="(group, index) in childItems" :key="index" class="sibling-group">
+                <div class="sibling-header">
+                    <a v-if="group.link" :href="normalizeLink(group.link)" class="sibling-title-link"
+                        :class="{ active: normalizePath(route.path) === normalizePath(group.link) }">
+                        <span class="folder-icon">📁</span>
+                        <span>{{ group.text }}</span>
+                        <span class="group-count">{{ group.items?.length || 0 }}</span>
+                    </a>
+                    <div v-else class="sibling-title">
+                        <span class="folder-icon">📁</span>
+                        <span>{{ group.text }}</span>
+                        <span class="group-count">{{ group.items?.length || 0 }}</span>
+                    </div>
+                </div>
+                <ul class="sibling-children">
+                    <li v-for="child in group.items" :key="child.text">
+                        <a :href="normalizeLink(child.link)" class="child-link"
+                            :class="{ active: normalizePath(route.path) === normalizePath(child.link) }">
+                            <span class="link-icon">📄</span>
+                            <span class="link-text">{{ child.text }}</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
 
     <div v-else class="empty-state">
@@ -237,5 +316,74 @@ const childItems = computed(() => currentGroup.value?.children || [])
     color: var(--vp-c-text-3);
     background: var(--vp-c-bg-soft);
     border-radius: 8px;
+}
+
+/* 同级子级模式样式 */
+.siblings-mode {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.sibling-group {
+    border: 1px solid var(--vp-c-divider);
+    border-radius: 6px;
+    overflow: hidden;
+    background: var(--vp-c-bg);
+}
+
+.sibling-header {
+    background: var(--vp-c-bg-mute);
+    border-bottom: 1px solid var(--vp-c-divider);
+}
+
+.sibling-title,
+.sibling-title-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    font-weight: 600;
+    color: var(--vp-c-text-1);
+}
+
+.sibling-title-link {
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.sibling-title-link:hover {
+    color: var(--vp-c-brand);
+    background: var(--vp-c-bg-soft);
+}
+
+.sibling-title-link.active {
+    color: var(--vp-c-brand);
+    background: var(--vp-c-brand-soft);
+}
+
+.group-count {
+    margin-left: auto;
+    font-size: 0.8em;
+    font-weight: normal;
+    color: var(--vp-c-text-3);
+    background: var(--vp-c-bg);
+    padding: 2px 8px;
+    border-radius: 10px;
+}
+
+.sibling-children {
+    list-style: none !important;
+    margin: 0 !important;
+    padding: 0.5rem !important;
+}
+
+.sibling-children li {
+    margin-bottom: 0.25rem;
+}
+
+.sibling-children .child-link {
+    padding: 6px 10px;
+    font-size: 0.95em;
 }
 </style>
