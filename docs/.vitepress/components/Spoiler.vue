@@ -1,4 +1,3 @@
-<!-- .vitepress/components/Spoiler.vue -->
 <script setup>
 import { ref } from 'vue'
 
