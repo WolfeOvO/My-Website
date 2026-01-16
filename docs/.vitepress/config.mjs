@@ -6,7 +6,6 @@ export default defineConfig({
   description: "Wolfe 的小破站，始于2026/1/11",
   ignoreDeadLinks: true,
   lastUpdated: true,
-  externalLinkIcon: true,
 
   footer: {
       message: 'Released under the MIT License. 根据 MIT 协议发布。',
@@ -22,13 +21,13 @@ export default defineConfig({
       detailsLabel: '详细信息'
     }
   },
-  
+
   themeConfig: {
     outline: {
       level: 'deep', 
       label: '大纲' 
     },
-    
+
     nav: [
       { text: '首页', link: '/' },
       { text: '储物间', link: '/储物间/储物间目录.md' },
