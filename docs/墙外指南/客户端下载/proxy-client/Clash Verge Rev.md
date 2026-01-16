@@ -13,11 +13,14 @@
 - 带有 ``fix_webview2`` 字样的安装包为内置 Webview2 环境版本。该文件体积比普通安装包大，仅用于当系统缺少且无法安装 WebView2 环境时使用，当你无法正常打开面板也可以试试这个版本。
 :::
 
-## 
+::: tabs
+
+== 123
 
 | 系统架构 | 下载地址 |
 | :---: | :---: |
 | x64 | <GitHubRelease owner="clash-verge-rev" repo="clash-verge-rev" />
+:::
 
 == MacOS
 

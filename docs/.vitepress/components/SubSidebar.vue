@@ -11,14 +11,17 @@ const normalizeLink = (url) => {
     return withBase(decoded.replace(/\.md$/, '.html'))
 }
 
+// 规范化路径：同时处理 .md 和 .html 后缀
 const normalizePath = (path) => {
-    return decodeURIComponent(path).replace(/\.html$/, '').replace(/\/$/, '')
+    if (!path) return ''
+    return decodeURIComponent(path)
+        .replace(/\.(md|html)$/, '')
+        .replace(/\/$/, '')
 }
 
 // 递归查找当前页面所属的父级项目及其子内容
 const findCurrentGroup = (items, currentPath, parent = null) => {
     for (const item of items) {
-        // 检查当前项的link是否匹配
         if (item.link) {
             const itemPath = normalizePath(item.link)
             if (currentPath === itemPath || currentPath.startsWith(itemPath + '/')) {
@@ -54,7 +57,7 @@ const getSidebarItems = () => {
     if (typeof sidebar === 'object') {
         const keys = Object.keys(sidebar).sort((a, b) => b.length - a.length)
         for (const key of keys) {
-            if (currentPath.startsWith(key.replace(/\/$/, ''))) {
+            if (currentPath.startsWith(normalizePath(key))) {
                 return sidebar[key]
             }
         }
