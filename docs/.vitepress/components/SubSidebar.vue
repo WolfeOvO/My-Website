@@ -166,7 +166,7 @@ const isActive = (link) => {
             <span class="item-count">{{ totalItemCount }} 项</span>
         </div>
         <div class="group-header" v-else-if="displayMode === 'siblings'">
-            <span class="group-title">全部内容</span>
+            <span class="group-title">目录</span>
             <span class="item-count">{{ totalItemCount }} 项</span>
         </div>
 
