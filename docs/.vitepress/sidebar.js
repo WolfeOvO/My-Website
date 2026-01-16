@@ -45,7 +45,7 @@ export const sidebar = {
           collapsed: false,
           items: [
             { text: '合集', link: '/墙外指南/客户端下载/合集.md' },
-            { text: '各大客户端', link: '/墙外指南/客户端下载/各大客户端.md' },
+            { text: '各大客户端', link: '/墙外指南/客户端下载/客户端.md' },
           ]
         }
       ]
