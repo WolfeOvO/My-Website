@@ -35,7 +35,7 @@ export const sidebar = {
               text: '2026 年',
               collapsed: true,
               items: [
-                {text: '1 月', link: '/墙外指南/推荐机场/2026 年/2026 年 1 月.md' }
+                { text: '1 月', link: '/墙外指南/推荐机场/2026 年/2026 年 1 月.md' }
               ]
             }
           ]
@@ -45,7 +45,13 @@ export const sidebar = {
           collapsed: false,
           items: [
             { text: '合集', link: '/墙外指南/客户端下载/合集.md' },
-            { text: '各大客户端', link: '/墙外指南/客户端下载/客户端.md' },
+            { text: '各大客户端',
+              link: '/墙外指南/客户端下载/客户端.md' ,
+              collapsed: true,
+              items: [
+                { text: 'Clash Verge Rev', link: '/墙外指南/客户端下载/proxy-client/Clash Verge Rev.md'}
+              ]
+            }
           ]
         }
       ]
