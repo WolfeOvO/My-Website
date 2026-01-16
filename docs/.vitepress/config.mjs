@@ -13,6 +13,10 @@ export default defineConfig({
     },
 
   markdown: {
+    anchor: {
+      level: [2, 3, 4, 5, 6]
+    },
+    
     container: {
       tipLabel: '⚠️注意',
       warningLabel: '❗️警告',
