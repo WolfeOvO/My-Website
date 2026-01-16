@@ -1,5 +1,5 @@
 {
-  "name": "My-Website",
+  "name": "wolfeovo.github.io",
   "version": "1.0.0",
   "scripts": {
     "docs:build": "vitepress build docs",
