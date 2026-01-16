@@ -9,7 +9,7 @@ hero:
   actions:
     - theme: brand
       text: 立即进入
-      link: /home/home
+      link: /首页/homepage.md
     - theme: alt
       text: 访问 GitHub
       link: https://github.com/WolfeOvO/My-Website
