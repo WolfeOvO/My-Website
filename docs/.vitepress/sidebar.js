@@ -63,7 +63,7 @@ export const sidebar = {
               collapsed: true,
               items: [
                 { text: '合集', link: '/墙外指南/面板&客户端/proxy-client/client.md' },
-                { text: 'Clash', link: '墙外指南/面板&客户端/proxy-client/Clash.md' },
+                { text: 'Clash', link: '/墙外指南/面板&客户端/proxy-client/Clash.md' },
                 { text: 'Clash Verge Rev', link: '/墙外指南/面板&客户端/proxy-client/ClashVergeRev.md' }
               ]
             }

@@ -5,16 +5,18 @@ import { enhanceAppWithTabs } from 'vitepress-plugin-tabs/client'
 import GitHubRelease from '../components/GitHubRelease.vue'
 import SubSidebar from '../components/SubSidebar.vue'
 import { injectTabs } from '../plugins/vitepress-tabbed.js'
+import NotionTags from './components/NotionTags.vue'
 
 export default {
   extends: DefaultTheme,
   enhanceApp({ app, router }) {
     // 注册组件
-    app.component('Spoiler', Spoiler)
+    app.component('sp', Spoiler)
     enhanceAppWithTabs(app)
-    app.component('GitHubRelease', GitHubRelease)
-    app.component('SubSidebar', SubSidebar)
+    app.component('gtl', GitHubRelease)
+    app.component('sidebar', SubSidebar)
     injectTabs()
+    app.component('ntags', NotionTags)
     
     // 脚注功能
     if (typeof window !== 'undefined') {

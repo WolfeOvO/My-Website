@@ -1,4 +1,4 @@
-# Clash Verge Rev
+# Clash Verge Rev <ntags color="blue">Windows</ntags> <ntags color="yellow">Linux</ntags>
 
 - GitHub 项目地址：[https://github.com/clash-verge-rev/clash-verge-rev](https://github.com/clash-verge-rev/clash-verge-rev)
 - 发布地址：见[下文](#发布面板)
@@ -19,8 +19,8 @@
 
 | 系统架构 | 下载地址 |
 | :---: | :---: |
-| x64 | <GitHubRelease owner="clash-verge-rev" repo="clash-verge-rev" mode="button" label="安装包" arch="x64" match="x64-setup.exe" /> <GitHubRelease owner="clash-verge-rev" repo="clash-verge-rev" mode="button" label="内置 WebView2 安装包" arch="x64" match="x64_fixed_webview2-setup.exe" /> |
-| ARM64 | <GitHubRelease owner="clash-verge-rev" repo="clash-verge-rev" mode="button" label="安装包" arch="ARM64" match="arm64-setup.exe" /> <GitHubRelease owner="clash-verge-rev" repo="clash-verge-rev" mode="button" label="内置 WebView2 安装包" arch="ARM64" match="arm64_fixed_webview2-setup.exe" /> |
+| x64 | <gtl owner="clash-verge-rev" repo="clash-verge-rev" mode="button" label="安装包" arch="x64" match="x64-setup.exe" /> <gtl owner="clash-verge-rev" repo="clash-verge-rev" mode="button" label="内置 WebView2 安装包" arch="x64" match="x64_fixed_webview2-setup.exe" /> |
+| ARM64 | <gtl owner="clash-verge-rev" repo="clash-verge-rev" mode="button" label="安装包" arch="ARM64" match="arm64-setup.exe" /> <gtl owner="clash-verge-rev" repo="clash-verge-rev" mode="button" label="内置 WebView2 安装包" arch="ARM64" match="arm64_fixed_webview2-setup.exe" /> |
 
 === "WinGet" @2
 
@@ -63,9 +63,9 @@ Ubuntu 24.04 需要安装额外依赖，详见[常见问题](https://www.clashve
 
 | 系统架构 | 下载地址 |
 | :---: | :---: |
-| x64 | <GitHubRelease owner="clash-verge-rev" repo="clash-verge-rev" mode="button" label="安装包" arch="x64" match="amd64.deb" /> |
-| ARM64 | <GitHubRelease owner="clash-verge-rev" repo="clash-verge-rev" mode="button" label="安装包" arch="ARM64" match="arm64.deb" /> |
-| ARMv7 | <GitHubRelease owner="clash-verge-rev" repo="clash-verge-rev" mode="button" label="安装包" arch="ARMv7" match="armhf.deb" /> |
+| x64 | <gtl owner="clash-verge-rev" repo="clash-verge-rev" mode="button" label="安装包" arch="x64" match="amd64.deb" /> |
+| ARM64 | <gtl owner="clash-verge-rev" repo="clash-verge-rev" mode="button" label="安装包" arch="ARM64" match="arm64.deb" /> |
+| ARMv7 | <gtl owner="clash-verge-rev" repo="clash-verge-rev" mode="button" label="安装包" arch="ARMv7" match="armhf.deb" /> |
 
 下载上方 ``.deb`` 包后使用 ``apt`` 安装：
 ``` Bash
@@ -76,9 +76,9 @@ sudo apt install -y ./Clash.Verge_x.x.x-_xxx.deb
 
 | 系统架构 | 下载地址 |
 | :---: | :---: |
-| x64 | <GitHubRelease owner="clash-verge-rev" repo="clash-verge-rev" mode="button" label="安装包" arch="x64" match="x86_64.rpm" /> |
-| ARM64 | <GitHubRelease owner="clash-verge-rev" repo="clash-verge-rev" mode="button" label="安装包" arch="ARM64" match="aarch64.rpm" /> |
-| ARMv7 | <GitHubRelease owner="clash-verge-rev" repo="clash-verge-rev" mode="button" label="安装包" arch="ARMv7" match="armhfp.rpm" /> |
+| x64 | <gtl owner="clash-verge-rev" repo="clash-verge-rev" mode="button" label="安装包" arch="x64" match="x86_64.rpm" /> |
+| ARM64 | <gtl owner="clash-verge-rev" repo="clash-verge-rev" mode="button" label="安装包" arch="ARM64" match="aarch64.rpm" /> |
+| ARMv7 | <gtl owner="clash-verge-rev" repo="clash-verge-rev" mode="button" label="安装包" arch="ARMv7" match="armhfp.rpm" /> |
 
 下载上方 ``.rpm`` 包后使用 ``dnf`` 或 ``yum`` 安装：
 ``` Bash
@@ -179,5 +179,5 @@ yay -S clash-verge-rev-autobuild-bin # 测试版
 
 | 发行版本 | 下载次数 | 下载地址 |
 | :---: | :---: | :---: |
-| Github Release 正式版 | <GitHubRelease owner="clash-verge-rev" repo="clash-verge-rev" mode="badge" :showVersion="false" /> | <GitHubRelease owner="clash-verge-rev" repo="clash-verge-rev" mode="badge" :showDownloads="false" /> |
-| Github Release 测试版 | <GitHubRelease owner="clash-verge-rev" repo="clash-verge-rev" mode="badge" :showVersion="false" prerelease /> | <GitHubRelease owner="clash-verge-rev" repo="clash-verge-rev" mode="badge" :showDownloads="false" prerelease /> |
+| Github Release 正式版 | <gtl owner="clash-verge-rev" repo="clash-verge-rev" mode="badge" :showVersion="false" /> | <gtl owner="clash-verge-rev" repo="clash-verge-rev" mode="badge" :showDownloads="false" /> |
+| Github Release 测试版 | <gtl owner="clash-verge-rev" repo="clash-verge-rev" mode="badge" :showVersion="false" prerelease /> | <gtl owner="clash-verge-rev" repo="clash-verge-rev" mode="badge" :showDownloads="false" prerelease /> |
