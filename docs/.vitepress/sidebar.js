@@ -21,11 +21,11 @@ export const sidebar = {
     }
   ],
   '/墙外指南/': [
+    { text: '目录', link: '墙外指南目录' },
     {
       text: '墙外指南',
       base: '/墙外指南/',
       items: [
-        { text: '目录', link: '墙外指南目录' },
         { text: '名词解释', link: '名词解释' }
       ]
     },
