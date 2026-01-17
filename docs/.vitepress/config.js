@@ -21,6 +21,17 @@ export default defineConfig({
 
     config(md) {
       md.use(footnote)
+      md.renderer.rules.footnote_ref = (tokens, idx, options, env, slf) => {
+        const id = slf.rules.footnote_anchor_name(tokens, idx, options, env, slf)
+        const refid = id
+        const n = Number(tokens[idx].meta.id + 1).toString()
+        
+        return `<sup class="footnote-ref">
+          <a href="#fn${id}" id="fnref${refid}" class="footnote-link" data-footnote="${n}">
+            ${n}
+          </a>
+        </sup>`
+      }
     },
     
     container: {

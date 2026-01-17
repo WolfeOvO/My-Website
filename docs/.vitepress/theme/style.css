@@ -17,3 +17,59 @@
 .header-anchor {
   content: "#" !important;
 }
+
+/* 脚注链接样式 */
+.footnote-ref {
+  font-size: 0.85em;
+}
+
+.footnote-link {
+  color: var(--vp-c-brand);
+  text-decoration: none;
+  cursor: help;
+  padding: 0 2px;
+}
+
+.footnote-link:hover {
+  text-decoration: underline;
+}
+
+/* Tooltip 样式 */
+.footnote-tooltip {
+  position: fixed;
+  background: var(--vp-c-bg-soft);
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 8px;
+  padding: 12px 16px;
+  max-width: 400px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 9999;
+  opacity: 0;
+  transition: opacity 0.2s;
+  pointer-events: none;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.footnote-tooltip.visible {
+  opacity: 1;
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .footnote-tooltip {
+    position: fixed;
+    left: 10px !important;
+    right: 10px !important;
+    max-width: calc(100vw - 20px);
+  }
+}
+
+/* 隐藏原始脚注区域（可选） */
+.footnotes {
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid var(--vp-c-divider);
+  font-size: 0.9em;
+  color: var(--vp-c-text-2);
+}

@@ -1,3 +1,5 @@
+import { text } from "node:stream/consumers";
+
 export const sidebar = {
       '/储物间/': [
         {
@@ -32,6 +34,12 @@ export const sidebar = {
           items: [
             { text: 'Wikipedia 维基百科', link: '/墙外指南/镜像/Wikipedia.md' },
             { text: 'GitHub 代理', link: '/墙外指南/镜像/GitHub.md' }
+          ]
+        },
+        {
+          text: '教程',
+          items: [
+            { text: '加速 GitHub 下载', link: '/墙外指南/教程/加速GitHub下载.md' }
           ]
         },
         {
