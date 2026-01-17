@@ -1,412 +1,411 @@
 <script setup>
-/**
- * AutoToc - VitePress 自动目录组件
- * 
- * 规则：
- * 1. 顶层 → 无限向下（所有子级、子子级、子子子级...全部显示）
- * 2. 同级无子级 → 只显示同级（不展开）
- * 3. 有父有子 → 从同级无限向下（同级及所有子孙级全部显示）
- * 4. 最底层无同级 → 空
- */
 import { computed } from 'vue'
 import { useData, useRoute } from 'vitepress'
 
 const props = defineProps({
     title: { type: String, default: '目录导航' },
-    showIcon: { type: Boolean, default: true },
     emptyText: { type: String, default: '暂无内容' },
     debug: { type: Boolean, default: false }
 })
 
 const { theme } = useData()
 const route = useRoute()
-
 const currentPath = computed(() => route.path)
 
-// 规范化路径
+// --- 基础工具 ---
+
 function normalizePath(path) {
     if (!path) return ''
-    let decoded = path
-    try {
-        decoded = decodeURIComponent(path)
-    } catch (e) {
-        decoded = path
-    }
-    return decoded
-        .replace(/\/index\.html?$/, '/')
-        .replace(/\.html?$/, '')
-        .replace(/\/+/g, '/')
-        .replace(/\/$/, '') || '/'
+    try { path = decodeURIComponent(path) } catch (e) { }
+    return path.replace(/\/index\.html?$/, '/').replace(/\.html?$/, '').replace(/\/+/g, '/').replace(/\/$/, '') || '/'
 }
 
-// 拼接 base 和 link
 function resolveLink(base, link) {
     if (!link) return null
     if (link.startsWith('/')) return normalizePath(link)
-
     const resolvedBase = base || '/'
-    const fullPath = resolvedBase.endsWith('/')
-        ? resolvedBase + link
-        : resolvedBase + '/' + link
-
-    return normalizePath(fullPath)
+    return normalizePath(resolvedBase.endsWith('/') ? resolvedBase + link : resolvedBase + '/' + link)
 }
 
-// 【无限向下】递归展平所有子孙级
-function flattenAllDescendants(items, parentBase = '/', depth = 0) {
+// 自动 Emoji 映射
+function getIcon(text) {
+    const t = text.toLowerCase()
+    if (t.includes('搜') || t.includes('search')) return '🔍'
+    if (t.includes('问') || t.includes('ask')) return '🙋‍♂️'
+    if (t.includes('百科') || t.includes('wiki')) return '📖'
+    if (t.includes('盘') || t.includes('drive')) return '💾'
+    if (t.includes('影') || t.includes('video')) return '🎬'
+    if (t.includes('音') || t.includes('music')) return '🎵'
+    if (t.includes('图') || t.includes('img')) return '🖼️'
+    if (t.includes('书') || t.includes('lib')) return '🏛️'
+    if (t.includes('社') || t.includes('social')) return '💬'
+    if (t.includes('工') || t.includes('tool')) return '🛠️'
+    if (t.includes('下') || t.includes('load')) return '📥'
+    if (t.includes('教程') || t.includes('guide')) return '🧭'
+    if (t.includes('代理') || t.includes('proxy')) return '🪜'
+    if (t.includes('机') || t.includes('airport')) return '✈️'
+    if (t.includes('电') || t.includes('telegram')) return '📢'
+    return '📄'
+}
+
+// --- 数据处理 ---
+
+function flattenLeaves(items, base) {
+    let results = []
+    for (const item of items) {
+        const currentBase = item.base || base
+        const fullLink = item.link ? resolveLink(currentBase, item.link) : null
+
+        if (fullLink) {
+            results.push({
+                text: item.text,
+                link: fullLink,
+                icon: getIcon(item.text)
+            })
+        }
+
+        if (item.items) {
+            results = results.concat(flattenLeaves(item.items, currentBase))
+        }
+    }
+    return results
+}
+
+function structurizeItems(items, parentBase = '/') {
     const result = []
+    const rootItems = []
 
     for (const item of items) {
         const currentBase = item.base || parentBase
-        const fullLink = item.link ? resolveLink(currentBase, item.link) : null
 
-        result.push({
-            text: item.text,
-            link: fullLink,
-            depth,
-            hasChildren: !!(item.items?.length)
-        })
-
-        // 无限递归子级
-        if (item.items?.length) {
-            result.push(...flattenAllDescendants(item.items, currentBase, depth + 1))
+        if (item.items && item.items.length > 0) {
+            // 这是一个文件夹（分组）
+            const children = flattenLeaves(item.items, currentBase)
+            result.push({
+                type: 'group',
+                text: item.text,
+                count: children.length,
+                children: children,
+                collapsed: item.collapsed // 保持配置的折叠状态
+            })
+        } else if (item.link) {
+            // 这是一个直接的文件
+            const fullLink = resolveLink(currentBase, item.link)
+            rootItems.push({
+                text: item.text,
+                link: fullLink,
+                icon: getIcon(item.text)
+            })
         }
+    }
+
+    // 如果有散落的文件，放在最前面作为一个特殊分组
+    if (rootItems.length > 0) {
+        result.unshift({
+            type: 'root',
+            text: '基础页面',
+            count: rootItems.length,
+            children: rootItems,
+            collapsed: false
+        })
     }
 
     return result
 }
 
-// 【只显示同级】不递归
-function flattenSiblingsOnly(items, parentBase = '/') {
-    return items.map(item => {
-        const currentBase = item.base || parentBase
-        const fullLink = item.link ? resolveLink(currentBase, item.link) : null
-        return {
-            text: item.text,
-            link: fullLink,
-            depth: 0,
-            hasChildren: !!(item.items?.length)
-        }
-    })
-}
-
-// 查找 sidebar 分组
 function findSidebarGroup(sidebar, path) {
     if (!sidebar) return null
-
-    if (Array.isArray(sidebar)) {
-        return { key: '/', items: sidebar }
-    }
+    if (Array.isArray(sidebar)) return { key: '/', items: sidebar }
 
     const normalizedPath = normalizePath(path)
     const keys = Object.keys(sidebar).sort((a, b) => b.length - a.length)
-
     for (const key of keys) {
-        const normalizedKey = normalizePath(key)
-        if (normalizedPath.startsWith(normalizedKey)) {
-            return { key, items: sidebar[key] }
-        }
+        if (normalizedPath.startsWith(normalizePath(key))) return { key, items: sidebar[key] }
     }
     return null
 }
 
-// 递归查找当前页面位置
-function findPosition(items, path, parentBase = '/', depth = 0) {
-    const normalizedPath = normalizePath(path)
-
-    for (let i = 0; i < items.length; i++) {
-        const item = items[i]
+function getFirstLink(items, parentBase) {
+    for (const item of items) {
         const currentBase = item.base || parentBase
-        const fullLink = item.link ? resolveLink(currentBase, item.link) : null
-
-        if (fullLink && normalizePath(fullLink) === normalizedPath) {
-            return {
-                current: item,
-                currentBase,
-                siblings: items,
-                siblingBase: parentBase,
-                depth,
-                hasChildren: !!(item.items?.length)
-            }
-        }
-
+        if (item.link) return resolveLink(currentBase, item.link)
         if (item.items?.length) {
-            const found = findPosition(item.items, path, currentBase, depth + 1)
+            const found = getFirstLink(item.items, currentBase)
             if (found) return found
         }
     }
     return null
 }
 
-// 生成目录内容
-const tocItems = computed(() => {
+// 核心数据
+const tocGroups = computed(() => {
     const sidebar = theme.value.sidebar
     if (!sidebar) return []
 
     const group = findSidebarGroup(sidebar, currentPath.value)
     if (!group) return []
 
-    const position = findPosition(group.items, currentPath.value, group.key)
-
-    // 情况1: 未找到位置（顶层）→ 无限向下
-    if (!position) {
-        return flattenAllDescendants(group.items, group.key, 0)
-    }
-
-    const { depth, hasChildren, siblings, siblingBase, current, currentBase } = position
-
-    // 情况1: 顶层(depth=0)且有子级 → 无限向下
-    if (depth === 0 && hasChildren) {
-        return flattenAllDescendants(current.items, currentBase, 0)
-    }
-
-    // 情况3: 有父级(depth>0)且有子级 → 从同级无限向下
-    if (depth > 0 && hasChildren) {
-        return flattenAllDescendants(siblings, siblingBase, 0)
-    }
-
-    // 情况2: 无子级且同级有其他内容 → 只显示同级
-    if (!hasChildren && siblings.length > 1) {
-        return flattenSiblingsOnly(siblings, siblingBase)
-    }
-
-    // 情况4: 最底层无同级 → 空
-    return []
+    // 只要是该侧边栏分组下的页面，统统显示该分组的完整目录结构
+    return structurizeItems(group.items, group.key)
 })
 
-// 判断是否为当前页面
-function isCurrentPage(link) {
-    if (!link) return false
-    return normalizePath(link) === normalizePath(currentPath.value)
+// 计算总统计
+const totalStats = computed(() => {
+    let count = 0
+    tocGroups.value.forEach(g => count += g.count)
+    return count
+})
+
+function isCurrent(link) {
+    return link && normalizePath(link) === normalizePath(currentPath.value)
 }
-
-// 调试信息
-const debugInfo = computed(() => {
-    const sidebar = theme.value.sidebar
-    if (!sidebar) return { error: 'sidebar 为空' }
-
-    const group = findSidebarGroup(sidebar, currentPath.value)
-    if (!group) return { error: '未匹配分组', keys: Object.keys(sidebar) }
-
-    const position = findPosition(group.items, currentPath.value, group.key)
-
-    let positionType = '未知'
-    if (!position) {
-        positionType = '顶层（未找到位置）→ 无限向下'
-    } else if (position.depth === 0 && position.hasChildren) {
-        positionType = '顶层有子级 → 无限向下'
-    } else if (position.depth > 0 && position.hasChildren) {
-        positionType = '有父有子 → 从同级无限向下'
-    } else if (!position.hasChildren && position.siblings.length > 1) {
-        positionType = '无子级有同级 → 只显示同级'
-    } else {
-        positionType = '最底层无同级 → 空'
-    }
-
-    return {
-        currentPath: normalizePath(currentPath.value),
-        groupKey: group.key,
-        positionType,
-        position: position ? {
-            depth: position.depth,
-            hasChildren: position.hasChildren,
-            siblingsCount: position.siblings.length,
-            currentText: position.current?.text
-        } : null,
-        resultCount: tocItems.value.length
-    }
-})
 </script>
 
 <template>
-    <div class="auto-toc">
-        <div class="auto-toc-header" v-if="title">
-            <span class="auto-toc-icon" v-if="showIcon">📑</span>
-            <span class="auto-toc-title">{{ title }}</span>
+    <div class="toc-container">
+        <!-- 1. 顶部标题栏：包含总计 -->
+        <div class="toc-header" v-if="title">
+            <div class="header-left">
+                <span class="header-icon">🗂️</span>
+                <span class="header-title">{{ title }}</span>
+            </div>
+            <div class="header-right">
+                <span class="total-badge">共 {{ totalStats }} 篇</span>
+            </div>
         </div>
 
-        <div class="auto-toc-content" v-if="tocItems.length > 0">
-            <ul class="auto-toc-list">
-                <li v-for="(item, index) in tocItems" :key="index" class="auto-toc-item" :class="{
-                    'is-current': isCurrentPage(item.link),
-                    'is-group': !item.link
-                }" :style="{ paddingLeft: `${item.depth * 16 + 12}px` }">
-                    <a v-if="item.link" :href="item.link" class="auto-toc-link"
-                        :class="{ 'is-active': isCurrentPage(item.link) }">
-                        <span class="link-indicator" v-if="showIcon">
-                            {{ isCurrentPage(item.link) ? '📍' : '📄' }}
-                        </span>
-                        <span class="link-text">{{ item.text }}</span>
+        <div v-if="tocGroups.length" class="toc-body">
+            <!-- 2. 分组列表 -->
+            <details class="toc-section" v-for="(group, idx) in tocGroups" :key="idx" :open="true">
+                <summary class="toc-section-title">
+                    <div class="section-info">
+                        <!-- 文件夹图标 -->
+                        <span class="folder-icon">{{ group.type === 'root' ? '📌' : '📂' }}</span>
+                        <span class="folder-name">{{ group.text }}</span>
+                        <span class="folder-count">{{ group.count }}</span>
+                    </div>
+                    <span class="chevron"></span>
+                </summary>
+
+                <!-- 3. 紧凑网格内容 -->
+                <div class="toc-grid">
+                    <a v-for="(item, i) in group.children" :key="i" :href="item.link" class="toc-card"
+                        :class="{ 'active': isCurrent(item.link) }">
+                        <span class="card-icon">{{ item.icon }}</span>
+                        <span class="card-text">{{ item.text }}</span>
                     </a>
-                    <span v-else class="auto-toc-group-title">
-                        <span class="group-indicator" v-if="showIcon">📁</span>
-                        <span class="group-text">{{ item.text }}</span>
-                    </span>
-                </li>
-            </ul>
-        </div>
-
-        <div class="auto-toc-empty" v-else>
-            <span class="empty-icon" v-if="showIcon">📭</span>
-            <span class="empty-text">{{ emptyText }}</span>
-        </div>
-
-        <div v-if="debug" class="auto-toc-debug">
-            <details>
-                <summary>🔍 调试</summary>
-                <pre>{{ JSON.stringify(debugInfo, null, 2) }}</pre>
+                </div>
             </details>
+        </div>
+
+        <div v-else class="toc-empty">
+            <span class="empty-icon">📭</span>
+            {{ emptyText }}
+        </div>
+
+        <div v-if="debug" class="toc-debug">
+            <pre>{{ JSON.stringify(tocGroups, null, 2) }}</pre>
         </div>
     </div>
 </template>
 
 <style scoped>
-.auto-toc {
+.toc-container {
+    margin: 1.5rem 0;
     border: 1px solid var(--vp-c-divider);
-    border-radius: 8px;
-    background: var(--vp-c-bg-soft);
+    border-radius: 12px;
+    background-color: var(--vp-c-bg-soft);
     overflow: hidden;
-    margin: 16px 0;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
 }
 
-.auto-toc-header {
+/* --- 顶部 Header --- */
+.toc-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 20px;
+    background: var(--vp-c-bg-alt);
+    border-bottom: 1px solid var(--vp-c-divider);
+}
+
+.header-left {
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 12px 16px;
-    background: var(--vp-c-bg-alt);
-    border-bottom: 1px solid var(--vp-c-divider);
-    font-weight: 600;
+}
+
+.header-icon {
+    font-size: 1.2rem;
+}
+
+.header-title {
+    font-weight: 700;
+    font-size: 1rem;
     color: var(--vp-c-text-1);
 }
 
-.auto-toc-icon {
-    font-size: 1.1em;
+.total-badge {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--vp-c-brand-text);
+    /* 使用主题色文字 */
+    background: var(--vp-c-brand-soft);
+    /* 使用主题色淡背景 */
+    padding: 4px 10px;
+    border-radius: 20px;
 }
 
-.auto-toc-title {
-    font-size: 0.95em;
+/* --- 分组标题 --- */
+.toc-section {
+    border-bottom: 1px solid var(--vp-c-divider);
 }
 
-.auto-toc-content {
-    padding: 8px 0;
+.toc-section:last-child {
+    border-bottom: none;
 }
 
-.auto-toc-list {
+.toc-section-title {
+    padding: 12px 20px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     list-style: none;
-    margin: 0;
-    padding: 0;
+    background: var(--vp-c-bg-soft);
+    transition: background 0.2s;
 }
 
-.auto-toc-item {
-    padding: 8px 12px;
-    transition: background-color 0.2s ease;
+.toc-section-title::-webkit-details-marker {
+    display: none;
 }
 
-.auto-toc-item:hover {
+.toc-section-title:hover {
     background: var(--vp-c-bg-alt);
 }
 
-.auto-toc-item.is-current {
-    background: var(--vp-c-brand-soft);
-}
-
-.auto-toc-item.is-group {
-    padding-top: 12px;
-    padding-bottom: 6px;
-}
-
-.auto-toc-link {
+.section-info {
     display: flex;
     align-items: center;
     gap: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
     color: var(--vp-c-text-2);
-    text-decoration: none;
-    font-size: 0.9em;
-    transition: color 0.2s ease;
 }
 
-.auto-toc-link:hover {
-    color: var(--vp-c-brand-1);
+.folder-icon {
+    font-size: 1.1rem;
 }
 
-.auto-toc-link.is-active {
-    color: var(--vp-c-brand-1);
+.folder-count {
+    font-size: 0.75rem;
+    color: var(--vp-c-text-3);
+    background: var(--vp-c-divider);
+    padding: 1px 6px;
+    border-radius: 4px;
+    margin-left: 4px;
+    font-weight: normal;
+}
+
+.chevron::after {
+    content: '›';
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--vp-c-text-3);
+    display: inline-block;
+    transform: rotate(90deg);
+    transition: transform 0.2s;
+}
+
+details[open] .chevron::after {
+    transform: rotate(-90deg);
+}
+
+/* --- 紧凑 Grid 网格 --- */
+.toc-grid {
+    display: grid;
+    /* 核心：自适应列宽，最小140px，自动填满 */
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 10px;
+    padding: 15px 20px;
+    background: var(--vp-c-bg);
+    /* 内容区用纯白/纯黑背景，突出层次 */
+}
+
+.toc-card {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    background: var(--vp-c-bg-alt);
+    /* 卡片微灰背景 */
+    border: 1px solid transparent;
+    text-decoration: none !important;
+    color: var(--vp-c-text-1) !important;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+}
+
+.toc-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--vp-c-brand);
+    background: var(--vp-c-bg);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.toc-card.active {
+    background: var(--vp-c-brand-soft);
+    color: var(--vp-c-brand-1) !important;
+    border-color: var(--vp-c-brand-soft);
     font-weight: 600;
 }
 
-.link-indicator {
-    font-size: 0.9em;
-    flex-shrink: 0;
+.card-icon {
+    font-size: 1.1em;
 }
 
-.link-text {
-    flex: 1;
+.card-text {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
-.auto-toc-group-title {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    color: var(--vp-c-text-1);
-    font-weight: 600;
-    font-size: 0.85em;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+/* 移动端优化 */
+@media (max-width: 600px) {
+    .toc-grid {
+        grid-template-columns: repeat(2, 1fr);
+        /* 手机强制双列 */
+        gap: 8px;
+        padding: 10px;
+    }
+
+    .toc-card {
+        padding: 8px;
+        font-size: 0.85rem;
+    }
 }
 
-.group-indicator {
-    font-size: 0.9em;
-}
-
-.auto-toc-empty {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 32px 16px;
+.toc-empty {
+    padding: 40px;
+    text-align: center;
     color: var(--vp-c-text-3);
-    font-size: 0.9em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
 }
 
 .empty-icon {
-    font-size: 1.2em;
+    font-size: 2rem;
 }
 
-.auto-toc-debug {
-    border-top: 1px dashed var(--vp-c-divider);
-    padding: 8px 12px;
+.toc-debug {
+    background: #222;
+    color: #0f0;
+    padding: 10px;
     font-size: 12px;
-}
-
-.auto-toc-debug summary {
-    cursor: pointer;
-    color: var(--vp-c-text-3);
-}
-
-.auto-toc-debug pre {
-    margin: 8px 0 0;
-    padding: 8px;
-    background: var(--vp-c-bg-alt);
-    border-radius: 4px;
-    overflow-x: auto;
-    font-size: 11px;
-}
-
-@media (max-width: 768px) {
-    .auto-toc {
-        margin: 12px 0;
-    }
-
-    .auto-toc-header {
-        padding: 10px 12px;
-    }
-
-    .auto-toc-item {
-        padding: 6px 10px;
-    }
+    overflow: auto;
+    max-height: 200px;
 }
 </style>
