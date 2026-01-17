@@ -6,7 +6,7 @@ import GitHubRelease from '../components/GitHubRelease.vue'
 import { injectTabs } from '../plugins/vitepress-tabbed.js'
 import NotionTags from '../components/NotionTags.vue'
 import LinkCard from '../components/LinkCard.vue'
-import Sidebar from '../components/Sidebar.vue'
+import Sidebar from '../components/SidebarDirectory.vue'
 
 export default {
   extends: DefaultTheme,
