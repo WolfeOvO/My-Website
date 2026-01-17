@@ -53,6 +53,16 @@ scoop install extras/clash-verge-rev
 
 === "Linux" @1
 
+=== "Debian/Ubuntu/Deepin" @2
+
+::: warning
+Ubuntu 24.04 需要安装额外依赖，详见[常见问题](https://www.clashverge.dev/faq/linux.html)。
+:::
+
+| 系统架构 | 下载地址 |
+| :---: | :---: |
+| x64 | <GitHubRelease owner="clash-verge-rev" repo="clash-verge-rev" mode="button" label="安装包" arch="x64" match="amd64.deb" /> |
+
 <!-- tabs:end -->
 
 | 发行版本 | 下载次数 | 下载地址 |

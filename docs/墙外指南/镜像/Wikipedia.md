@@ -53,6 +53,4 @@
 - 当前官网：[https://wikipedia.zyhorg.cn/](https://wikipedia.zyhorg.cn/)
 - 项目地址：[https://github.com/zyhgov/Wikipedia-Proxy-Gateway](https://github.com/zyhgov/wikipedia-proxy-gateway)）
 
----
-
 [^1]: 实际上为过去缓存，并非实际更新。
