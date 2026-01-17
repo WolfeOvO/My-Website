@@ -8,12 +8,6 @@ export default defineConfig({
   description: "Wolfe 的小破站，始于2026/1/11",
   ignoreDeadLinks: true,
   lastUpdated: true,
-  darkModeSwitchLabel: '切换主题',
-  lightModeSwitchTitle: '切换到浅色模式',
-  darkModeSwitchTitle: '切换到深色模式',
-  sidebarMenuLabel: '侧边栏',
-  returnToTopLabel: '返回顶部',
-  externalLinkIcon: true,
 
   markdown: {
     config(md) {
@@ -34,9 +28,16 @@ export default defineConfig({
   },
 
   themeConfig: {
+  darkModeSwitchLabel: '切换主题',
+  lightModeSwitchTitle: '切换到浅色模式',
+  darkModeSwitchTitle: '切换到深色模式',
+  sidebarMenuLabel: '侧边栏',
+  returnToTopLabel: '返回顶部',
+  externalLinkIcon: true,
+  
   footer: {
-      message: 'Released under the MIT License. 根据 MIT 协议发布。',
-      copyright: 'Copyright © 2026-present Wolfe'
+      message: '内容版权所有，侵权必究；使用 VitePress 搭建，遵循 MIT 协议开源。',
+      copyright: 'Copyright © 2026 Wolfe Group'
     },
 
     outline: {
@@ -56,10 +57,6 @@ export default defineConfig({
       { icon: 'github', link: 'https://github.com/WolfeOvO' }
     ],
 
-    search: {
-    provider: 'local'
-    },
-
     lastUpdated: {
       text: '最后更新',
       formatOptions: {
@@ -71,6 +68,30 @@ export default defineConfig({
     docFooter: {
       prev: '上一页',
       next: '下一页'
+    },
+
+    search: {
+      provider: 'local',
+      options: {
+        locales: {
+          zh: {
+            translations: {
+              button: {
+                buttonText: '搜索文档',
+                buttonAriaLabel: '搜索文档'
+              },
+              modal: {
+                noResultsText: '无法找到相关结果',
+                resetButtonTitle: '清除查询条件',
+                footer: {
+                  selectText: '选择',
+                  navigateText: '切换'
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 })
