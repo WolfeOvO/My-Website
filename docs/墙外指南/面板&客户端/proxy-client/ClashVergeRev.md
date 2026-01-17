@@ -1,7 +1,9 @@
 # Clash Verge Rev
 
 - GitHub 项目地址：[https://github.com/clash-verge-rev/clash-verge-rev](https://github.com/clash-verge-rev/clash-verge-rev)
-- 发布地址：[https://github.com/clash-verge-rev/clash-verge-rev/releases/](https://github.com/clash-verge-rev/clash-verge-rev/releases)
+- 发布地址：见[下文](#发布面板)
+
+## 下载
 
 <!-- tabs:start -->
 
@@ -93,7 +95,7 @@ sudo yum localinstall ./Clash.Verge_x.x.x-_xxx.rpm
 === "archlinuxcn" @3
 
 1. 添加 ``[archlinuxcn]`` 仓库；
-    1. 在 ``/etc/pacman.conf`` 文件中写入下列内容：
+    1.1. 在 ``/etc/pacman.conf`` 文件中写入下列内容：
     ``` ini
     [archlinuxcn]
     Server = https://mirrors.ustc.edu.cn/archlinuxcn/$arch
@@ -101,7 +103,7 @@ sudo yum localinstall ./Clash.Verge_x.x.x-_xxx.rpm
     Server = https://mirrors.hit.edu.cn/archlinuxcn/$arch
     Server = https://repo.huaweicloud.com/archlinuxcn/$arch
     ```
-    2. 在终端运行下列命令：
+    1.2. 在终端运行下列命令：
     ``` Bash
     sudo pacman -S archlinuxcn-keyring
     ```
@@ -110,7 +112,70 @@ sudo yum localinstall ./Clash.Verge_x.x.x-_xxx.rpm
 sudo pacman -S clash-verge-rev
 ```
 
+=== "AUR" @3
+
+=== "paru" @4
+
+1. 安装 paru：
+``` Bash
+sudo pacman -S --needed base-devel git
+git clone https://aur.archlinux.org/paru.git
+cd paru
+makepkg -si
+```
+
+2. 使用 paru 安装 Clash Verge Rev：
+``` Bash
+paru -S clash-verge-rev-bin # 正式版
+paru -S clash-verge-rev-autobuild-bin # 测试版
+```
+
+=== "yay" @4
+
+1. 安装 yay：
+``` Bash
+sudo pacman -S --needed base-devel git
+git clone https://aur.archlinux.org/yay.git
+cd yay
+makepkg -si
+```
+
+2. 使用 yay 安装 Clash Verge Rev：
+``` Bash
+yay -S clash-verge-rev-bin # 正式版
+yay -S clash-verge-rev-autobuild-bin # 测试版
+```
+
 <!-- tabs:end -->
+
+## 源代码编译安装
+
+编译构建指南请转到[构建](https://github.com/clash-verge-rev/clash-verge-rev/blob/main/CONTRIBUTING.md)。
+
+请注意区分以下文件清单（以用户量比较多的 Windows 为例）：
+``` Plain Text
++--- resources                      #资源目录
+  +--- locales                      #语言包
+  \--- clash-verge-service.exe      #服务模式主程序
+  \--- Country.mmdb
+  \--- enableLoopback.exe           #解除UWP应用网络回环限制工具
+  \--- geoip.dat
+  \--- geosite.dat
+  \--- install-service.exe          #服务模式安装程序
+  \--- sysproxy.exe                 #系统代理程序
+  \--- uninstall-service.exe        #服务模式卸载程序
+\--- clash-verge.exe                #主程序
+\--- verge-mihomo.exe               #Mihomo核心程序
+\--- verge-mihomo-alpha.exe         #Mihomo Alpha 版本
+```
+
+## 安装问题
+
+如果安装和使用过程中遇到了问题，请参考文档中的[常见问题](https://www.clashverge.dev/faq/windows.html)。
+
+## 发布面板
+
+> Clash Verge Rev 目前**仅通过 GitHub Release 发布**，请注意辨别。
 
 | 发行版本 | 下载次数 | 下载地址 |
 | :---: | :---: | :---: |

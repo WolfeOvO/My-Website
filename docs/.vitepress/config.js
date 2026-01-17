@@ -6,7 +6,7 @@ import footnote from 'markdown-it-footnote'
 
 export default defineConfig({
   title: "Wolfeの储物间",
-  description: "Wolfe 的小破站，始于2026/1/11",
+  description: "Wolfe 的小破站，始于 2026/1/11",
   ignoreDeadLinks: true,
   lastUpdated: true,
 
@@ -49,7 +49,7 @@ export default defineConfig({
     externalLinkIcon: true,
     
     footer: {
-      message: '内容版权所有，侵权必究；使用 VitePress 搭建,遵循 MIT 协议开源。',
+      message: '<a href="https://icp.gov.moe/?keyword=20260914" target="_blank">萌ICP备20260914号</a> | 使用 VitePress 搭建，遵循 MIT 协议开源',
       copyright: 'Copyright © 2026 Wolfe Group'
     },
 
