@@ -4,6 +4,8 @@
 
 - GitHub 项目地址：[https://github.com/clash-verge-rev/clash-verge-rev](https://github.com/clash-verge-rev/clash-verge-rev)
 - 发布地址：见[下文](#发布面板)
+- Telegram 频道：[https://t.me/clash_verge_re](https://t.me/clash_verge_re)
+- Telegram 群组：[https://t.me/clash_verge_rev](https://t.me/clash_verge_rev)
 
 ## 下载
 
@@ -168,7 +170,7 @@ yay -S clash-verge-rev-autobuild-bin # 测试版
 
 <!-- tabs:end -->
 
-## 源代码编译安装
+### 源代码编译安装
 
 编译构建指南请转到[构建](https://github.com/clash-verge-rev/clash-verge-rev/blob/main/CONTRIBUTING.md)。
 
@@ -189,7 +191,7 @@ yay -S clash-verge-rev-autobuild-bin # 测试版
 \--- verge-mihomo-alpha.exe         #Mihomo Alpha 版本
 ```
 
-## 安装问题
+### 安装问题
 
 如果安装和使用过程中遇到了问题，请参考文档中的《[常见问题](https://www.clashverge.dev/faq/windows.html)》进行处理。
 

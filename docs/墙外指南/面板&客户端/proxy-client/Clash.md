@@ -15,6 +15,11 @@
 
 Android 平台基于 Clash Premium 内核的代理软件，受 Clash For Windows 删库事件影响删除代码库并从 Google Play 下架。
 
+## 下载
+
+::: danger 🚫不可用
+:::
+
 ## 发布面板
 
 ::: danger 🚫不可用

@@ -32,9 +32,9 @@ export default defineConfig({
     },
     
     container: {
-      tipLabel: '⚠️注意',
-      warningLabel: '❗️警告',
-      dangerLabel: '🚨危险',
+      tipLabel: '注意',
+      warningLabel: '警告',
+      dangerLabel: '危险',
       infoLabel: '(请在 ``::: info`` 后方自定义容器名称)',
       detailsLabel: '(请在 ``::: details`` 后方自定义容器名称)'
     }
