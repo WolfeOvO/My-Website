@@ -50,7 +50,6 @@ export const sidebar = {
         },
         {
           text: '面板&客户端',
-          collapsed: false,
           items: [
             { text: '客户端',
               collapsed: true,

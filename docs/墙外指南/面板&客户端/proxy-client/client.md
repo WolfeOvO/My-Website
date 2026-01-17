@@ -1,5 +1,9 @@
 # 客户端（代理软件）
 
+::: tip
+测试
+:::
+
 ## 免客户端翻墙
 
 - [https://github.com/bannedbook/fanqiang](https://github.com/bannedbook/fanqiang)（[GitBook 分站](https://fanqiang.gitbook.io/fanqiang)）
