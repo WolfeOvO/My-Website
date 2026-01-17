@@ -1,4 +1,11 @@
 <script setup>
+/**
+ * AutoToc Ultimate V2 - 深度递归 & 紧凑布局版
+ * 
+ * 1. 递归提取所有含文件的文件夹，解决深层目录(如2026、客户端)不显示的问题
+ * 2. 统计信息移至右侧，并细化为 "分组:X | 页面:Y"
+ * 3. 样式高度压缩，更紧凑
+ */
 import { computed } from 'vue'
 import { useData, useRoute } from 'vitepress'
 
@@ -45,71 +52,91 @@ function getIcon(text) {
     if (t.includes('代理') || t.includes('proxy')) return '🪜'
     if (t.includes('机') || t.includes('airport')) return '✈️'
     if (t.includes('电') || t.includes('telegram')) return '📢'
+    if (t.includes('端') || t.includes('client')) return '💻'
+    if (t.includes('年') || t.includes('月')) return '🗓️'
     return '📄'
 }
 
-// --- 数据处理 ---
+// --- 核心数据逻辑 ---
 
-function flattenLeaves(items, base) {
-    let results = []
-    for (const item of items) {
-        const currentBase = item.base || base
-        const fullLink = item.link ? resolveLink(currentBase, item.link) : null
+// 递归查找：找到所有“包含直接文件链接”的组
+function collectDisplayGroups(items, parentBase = '/') {
+    let groups = []
 
-        if (fullLink) {
-            results.push({
-                text: item.text,
-                link: fullLink,
-                icon: getIcon(item.text)
-            })
-        }
-
-        if (item.items) {
-            results = results.concat(flattenLeaves(item.items, currentBase))
-        }
-    }
-    return results
-}
-
-function structurizeItems(items, parentBase = '/') {
-    const result = []
-    const rootItems = []
+    // 1. 检查当前层级是否有直接文件
+    const directFiles = []
+    // 2. 检查当前层级有多少个子文件夹（用于统计）
+    let subGroupCount = 0
 
     for (const item of items) {
         const currentBase = item.base || parentBase
 
-        if (item.items && item.items.length > 0) {
-            // 这是一个文件夹（分组）
-            const children = flattenLeaves(item.items, currentBase)
-            result.push({
-                type: 'group',
+        if (item.link) {
+            // 是文件
+            directFiles.push({
                 text: item.text,
-                count: children.length,
-                children: children,
-                collapsed: item.collapsed // 保持配置的折叠状态
-            })
-        } else if (item.link) {
-            // 这是一个直接的文件
-            const fullLink = resolveLink(currentBase, item.link)
-            rootItems.push({
-                text: item.text,
-                link: fullLink,
+                link: resolveLink(currentBase, item.link),
                 icon: getIcon(item.text)
             })
+        } else if (item.items) {
+            // 是子文件夹
+            subGroupCount++
+            // 递归：深入子文件夹去抓取
+            groups = groups.concat(collectDisplayGroups(item.items, currentBase))
         }
     }
 
-    // 如果有散落的文件，放在最前面作为一个特殊分组
-    if (rootItems.length > 0) {
-        result.unshift({
-            type: 'root',
-            text: '基础页面',
-            count: rootItems.length,
-            children: rootItems,
-            collapsed: false
+    // 3. 如果当前层级有文件，或者这是一个我们要强制显示的节点（通过 title 判断是否为空）
+    // 这里逻辑是：只要有文件，就生成一个 TOC 分组
+    if (directFiles.length > 0) {
+        // 这里的 item.text 在递归中很难获取上级名称，
+        // 所以我们在外面调用时，实际上是把 items 传进来的。
+        // 为了解决命名问题，我们稍作修改，让上层传入 Group Info。
+        groups.unshift({
+            isGroup: true,
+            files: directFiles,
+            subGroupCount: subGroupCount // 当前组下面还有多少个子文件夹
         })
     }
 
+    return groups
+}
+
+// 包装函数：带上文件夹名称
+function recursivelyFindGroups(items, parentBase = '/') {
+    let result = []
+
+    for (const item of items) {
+        const currentBase = item.base || parentBase
+
+        // 如果这个 item 有 children
+        if (item.items && item.items.length > 0) {
+            // 1. 先看看它自己下面有没有直接文件
+            const directFiles = item.items.filter(i => i.link).map(i => ({
+                text: i.text,
+                link: resolveLink(i.base || currentBase, i.link),
+                icon: getIcon(i.text)
+            }))
+
+            // 2. 统计它的直接子文件夹数量
+            const subFolders = item.items.filter(i => i.items)
+
+            // 3. 如果有文件，这就是一个要显示的组
+            if (directFiles.length > 0) {
+                result.push({
+                    text: item.text,
+                    count: directFiles.length,       // 页面数
+                    groupCount: subFolders.length,   // 子分组数
+                    children: directFiles,
+                    collapsed: item.collapsed        // 继承配置
+                })
+            }
+
+            // 4. 无论自己有没有文件，都要继续去子文件夹里找
+            // (比如 "推荐机场" 下面没有文件，但 "推荐机场/2026" 下面有)
+            result = result.concat(recursivelyFindGroups(item.items, currentBase))
+        }
+    }
     return result
 }
 
@@ -125,19 +152,6 @@ function findSidebarGroup(sidebar, path) {
     return null
 }
 
-function getFirstLink(items, parentBase) {
-    for (const item of items) {
-        const currentBase = item.base || parentBase
-        if (item.link) return resolveLink(currentBase, item.link)
-        if (item.items?.length) {
-            const found = getFirstLink(item.items, currentBase)
-            if (found) return found
-        }
-    }
-    return null
-}
-
-// 核心数据
 const tocGroups = computed(() => {
     const sidebar = theme.value.sidebar
     if (!sidebar) return []
@@ -145,15 +159,47 @@ const tocGroups = computed(() => {
     const group = findSidebarGroup(sidebar, currentPath.value)
     if (!group) return []
 
-    // 只要是该侧边栏分组下的页面，统统显示该分组的完整目录结构
-    return structurizeItems(group.items, group.key)
+    // 1. 处理根目录散落文件的情况（虽然很少见）
+    const rootFiles = group.items.filter(i => i.link).map(i => ({
+        text: i.text,
+        link: resolveLink(group.key, i.link),
+        icon: getIcon(i.text)
+    }))
+
+    let finalGroups = []
+
+    // 如果根目录有散文件，加进去
+    if (rootFiles.length > 0) {
+        finalGroups.push({
+            text: '基础页面',
+            count: rootFiles.length,
+            groupCount: 0,
+            children: rootFiles,
+            collapsed: false
+        })
+    }
+
+    // 2. 递归查找所有层级的文件夹
+    finalGroups = finalGroups.concat(recursivelyFindGroups(group.items, group.key))
+
+    return finalGroups
 })
 
-// 计算总统计
+// 总统计
 const totalStats = computed(() => {
-    let count = 0
-    tocGroups.value.forEach(g => count += g.count)
-    return count
+    let pages = 0
+    let groups = 0
+    tocGroups.value.forEach(g => {
+        pages += g.count
+        groups += g.groupCount
+    })
+    // 这里的 groups 累加的是各层级的子分组数，或者我们可以直接统计 tocGroups.length (即显示出来的分组块数)
+    // 根据用户需求 "总分组: XX"，通常指显示了多少个块。
+    // 用户需求是 "总分组: XX | 总页面: XX"
+    return {
+        groups: tocGroups.value.length,
+        pages: pages
+    }
 })
 
 function isCurrent(link) {
@@ -163,31 +209,34 @@ function isCurrent(link) {
 
 <template>
     <div class="toc-container">
-        <!-- 1. 顶部标题栏：包含总计 -->
+        <!-- 顶部 Header -->
         <div class="toc-header" v-if="title">
             <div class="header-left">
                 <span class="header-icon">🗂️</span>
                 <span class="header-title">{{ title }}</span>
             </div>
             <div class="header-right">
-                <span class="total-badge">共 {{ totalStats }} 篇</span>
+                <!-- 需求：总分组: XX | 总页面: XX -->
+                <span class="total-badge">总分组: {{ totalStats.groups }} | 总页面: {{ totalStats.pages }}</span>
             </div>
         </div>
 
         <div v-if="tocGroups.length" class="toc-body">
-            <!-- 2. 分组列表 -->
             <details class="toc-section" v-for="(group, idx) in tocGroups" :key="idx" :open="true">
                 <summary class="toc-section-title">
                     <div class="section-info">
-                        <!-- 文件夹图标 -->
-                        <span class="folder-icon">{{ group.type === 'root' ? '📌' : '📂' }}</span>
+                        <span class="folder-icon">📂</span>
                         <span class="folder-name">{{ group.text }}</span>
-                        <span class="folder-count">{{ group.count }}</span>
                     </div>
-                    <span class="chevron"></span>
+
+                    <!-- 需求：蓝框统计移动到右边 -->
+                    <div class="section-meta">
+                        <!-- 需求：分组: XX | 页面: XX -->
+                        <span class="count-badge">分组: {{ group.groupCount }} | 页面: {{ group.count }}</span>
+                        <span class="chevron"></span>
+                    </div>
                 </summary>
 
-                <!-- 3. 紧凑网格内容 -->
                 <div class="toc-grid">
                     <a v-for="(item, i) in group.children" :key="i" :href="item.link" class="toc-card"
                         :class="{ 'active': isCurrent(item.link) }">
@@ -213,18 +262,20 @@ function isCurrent(link) {
 .toc-container {
     margin: 1.5rem 0;
     border: 1px solid var(--vp-c-divider);
-    border-radius: 12px;
+    border-radius: 8px;
+    /* 圆角稍微改小一点点更干练 */
     background-color: var(--vp-c-bg-soft);
     overflow: hidden;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
 }
 
-/* --- 顶部 Header --- */
+/* --- Header --- */
 .toc-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 14px 20px;
+    /* 需求：更紧凑，减小 padding */
+    padding: 10px 16px;
     background: var(--vp-c-bg-alt);
     border-bottom: 1px solid var(--vp-c-divider);
 }
@@ -236,27 +287,27 @@ function isCurrent(link) {
 }
 
 .header-icon {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
 }
 
 .header-title {
-    font-weight: 700;
-    font-size: 1rem;
+    font-weight: 600;
+    font-size: 0.95rem;
     color: var(--vp-c-text-1);
 }
 
 .total-badge {
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: var(--vp-c-brand-text);
-    /* 使用主题色文字 */
-    background: var(--vp-c-brand-soft);
-    /* 使用主题色淡背景 */
-    padding: 4px 10px;
-    border-radius: 20px;
+    font-size: 0.75rem;
+    font-family: var(--vp-font-family-mono);
+    /* 使用等宽字体数字更整齐 */
+    color: var(--vp-c-text-2);
+    background: var(--vp-c-bg-soft);
+    padding: 2px 8px;
+    border-radius: 4px;
+    border: 1px solid var(--vp-c-divider);
 }
 
-/* --- 分组标题 --- */
+/* --- Section --- */
 .toc-section {
     border-bottom: 1px solid var(--vp-c-divider);
 }
@@ -266,14 +317,17 @@ function isCurrent(link) {
 }
 
 .toc-section-title {
-    padding: 12px 20px;
+    /* 需求：绿框太高 -> 减少 padding */
+    padding: 8px 16px;
+    min-height: 40px;
+    /* 保证最小点击区域 */
     cursor: pointer;
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    /* 垂直居中 */
     list-style: none;
     background: var(--vp-c-bg-soft);
-    transition: background 0.2s;
+    transition: background 0.1s;
 }
 
 .toc-section-title::-webkit-details-marker {
@@ -288,31 +342,46 @@ function isCurrent(link) {
     display: flex;
     align-items: center;
     gap: 8px;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     font-weight: 600;
-    color: var(--vp-c-text-2);
+    color: var(--vp-c-text-1);
 }
 
 .folder-icon {
-    font-size: 1.1rem;
+    font-size: 1rem;
+    color: var(--vp-c-yellow-1, #e6a23c);
 }
 
-.folder-count {
-    font-size: 0.75rem;
+/* 文件夹设为黄色系 */
+
+/* 需求：统计信息移到右边 */
+.section-meta {
+    margin-left: auto;
+    /* 核心：推到右边 */
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.count-badge {
+    font-size: 0.7rem;
     color: var(--vp-c-text-3);
-    background: var(--vp-c-divider);
-    padding: 1px 6px;
+    background: var(--vp-c-bg);
+    padding: 2px 6px;
     border-radius: 4px;
-    margin-left: 4px;
-    font-weight: normal;
+    font-family: var(--vp-font-family-mono);
+    border: 1px solid transparent;
+    /* 预留边框位置防止抖动 */
 }
 
+/* 箭头 */
 .chevron::after {
     content: '›';
     font-size: 1.2rem;
-    font-weight: bold;
+    line-height: 1;
     color: var(--vp-c-text-3);
-    display: inline-block;
+    display: block;
+    /* block 更好控制旋转中心 */
     transform: rotate(90deg);
     transition: transform 0.2s;
 }
@@ -321,37 +390,36 @@ details[open] .chevron::after {
     transform: rotate(-90deg);
 }
 
-/* --- 紧凑 Grid 网格 --- */
+/* --- Grid --- */
 .toc-grid {
     display: grid;
-    /* 核心：自适应列宽，最小140px，自动填满 */
     grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 10px;
-    padding: 15px 20px;
+    gap: 8px;
+    padding: 12px 16px;
+    /* 内容区 padding 也稍微调整 */
     background: var(--vp-c-bg);
-    /* 内容区用纯白/纯黑背景，突出层次 */
 }
 
 .toc-card {
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 10px 12px;
-    border-radius: 8px;
+    gap: 6px;
+    padding: 8px 10px;
+    border-radius: 6px;
     background: var(--vp-c-bg-alt);
-    /* 卡片微灰背景 */
     border: 1px solid transparent;
     text-decoration: none !important;
-    color: var(--vp-c-text-1) !important;
-    font-size: 0.9rem;
-    transition: all 0.2s ease;
+    color: var(--vp-c-text-2) !important;
+    font-size: 0.85rem;
+    transition: all 0.2s;
 }
 
 .toc-card:hover {
-    transform: translateY(-2px);
+    transform: translateY(-1px);
     border-color: var(--vp-c-brand);
+    color: var(--vp-c-brand) !important;
     background: var(--vp-c-bg);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .toc-card.active {
@@ -362,7 +430,7 @@ details[open] .chevron::after {
 }
 
 .card-icon {
-    font-size: 1.1em;
+    font-size: 1em;
 }
 
 .card-text {
@@ -371,40 +439,38 @@ details[open] .chevron::after {
     white-space: nowrap;
 }
 
-/* 移动端优化 */
 @media (max-width: 600px) {
     .toc-grid {
         grid-template-columns: repeat(2, 1fr);
-        /* 手机强制双列 */
-        gap: 8px;
         padding: 10px;
     }
 
-    .toc-card {
-        padding: 8px;
-        font-size: 0.85rem;
+    .section-meta {
+        gap: 6px;
+    }
+
+    .count-badge {
+        display: none;
+        /* 手机屏幕太窄时，可选隐藏具体统计，或者缩小字体 */
+    }
+
+    /* 或者让手机只显示总数 */
+    .total-badge {
+        font-size: 0.7rem;
     }
 }
 
 .toc-empty {
-    padding: 40px;
+    padding: 30px;
     text-align: center;
     color: var(--vp-c-text-3);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-}
-
-.empty-icon {
-    font-size: 2rem;
 }
 
 .toc-debug {
     background: #222;
     color: #0f0;
     padding: 10px;
-    font-size: 12px;
+    font-size: 10px;
     overflow: auto;
     max-height: 200px;
 }
