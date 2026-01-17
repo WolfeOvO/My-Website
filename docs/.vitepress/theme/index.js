@@ -1,9 +1,22 @@
-import DefaultTheme from 'vitepress/theme'
 import './style.css'
+import DefaultTheme from 'vitepress/theme'
+import Spoiler from '../components/Spoiler.vue'
+import { enhanceAppWithTabs } from 'vitepress-plugin-tabs/client'
+import GitHubRelease from '../components/GitHubRelease.vue'
+import SubSidebar from '../components/SubSidebar.vue'
+import { injectTabs } from '../plugins/vitepress-tabbed.js'
 
 export default {
   extends: DefaultTheme,
-  enhanceApp({ app, router, siteData }) {
+  enhanceApp({ app, router }) {
+    // 注册组件
+    app.component('Spoiler', Spoiler)
+    enhanceAppWithTabs(app)
+    app.component('GitHubRelease', GitHubRelease)
+    app.component('SubSidebar', SubSidebar)
+    injectTabs()
+    
+    // 脚注功能
     if (typeof window !== 'undefined') {
       router.onAfterRouteChanged = () => {
         initFootnotes()
@@ -12,6 +25,7 @@ export default {
   }
 }
 
+// 脚注初始化函数
 function initFootnotes() {
   const footnoteLinks = document.querySelectorAll('.footnote-link')
   
