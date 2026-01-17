@@ -42,25 +42,25 @@ https://ghproxylist.com/https://github.com/user/repo/releases/download/tag/file
 
 - 源码下载:
 
-``` uri
+``` HTTP
 https://ghproxylist.com/https://github.com/geekan/MetaGPT/archive/refs/heads/main.zip
 ```
 
 - Release 源码下载：
 
-``` uri
+``` HTTP
 https://ghproxylist.com/https://github.com/langgenius/dify/archive/refs/tags/1.0.1.zip
 ```
 
 - Release 文件下载：
 
-``` http
+``` HTTP
 https://ghproxylist.com/https://github.com/glanceapp/glance/releases/download/v0.7.7/glance-linux-arm64.tar.gz
 ```
 
 - Raw 文件下载：
 
-``` http
+``` HTTP
 https://ghproxylist.com/https://raw.githubusercontent.com/FujiwaraChoki/MoneyPrinterV2/main/assets/banner.txt
 ```
 
