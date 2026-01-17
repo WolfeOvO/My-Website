@@ -171,7 +171,7 @@ yay -S clash-verge-rev-autobuild-bin # 测试版
 
 ## 安装问题
 
-如果安装和使用过程中遇到了问题，请参考文档中的[常见问题](https://www.clashverge.dev/faq/windows.html)。
+如果安装和使用过程中遇到了问题，请参考文档中的《[常见问题](https://www.clashverge.dev/faq/windows.html)》进行处理。
 
 ## 发布面板
 
