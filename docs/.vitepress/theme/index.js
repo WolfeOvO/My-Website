@@ -5,7 +5,7 @@ import { enhanceAppWithTabs } from 'vitepress-plugin-tabs/client'
 import GitHubRelease from '../components/GitHubRelease.vue'
 import SubSidebar from '../components/SubSidebar.vue'
 import { injectTabs } from '../plugins/vitepress-tabbed.js'
-import NotionTags from './components/NotionTags.vue'
+import NotionTags from '../components/NotionTags.vue'
 
 export default {
   extends: DefaultTheme,

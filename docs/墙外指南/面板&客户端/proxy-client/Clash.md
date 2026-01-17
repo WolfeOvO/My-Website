@@ -17,5 +17,5 @@ Android 平台基于 Clash Premium 内核的代理软件，受 Clash For Windows
 
 ## 发布面板
 
-::: warning 🚫不可用
+::: danger 🚫不可用
 :::
