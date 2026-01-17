@@ -3,6 +3,8 @@
 - GitHub 项目地址：[https://github.com/clash-verge-rev/clash-verge-rev](https://github.com/clash-verge-rev/clash-verge-rev)
 - 发布地址：[https://github.com/clash-verge-rev/clash-verge-rev/releases/](https://github.com/clash-verge-rev/clash-verge-rev/releases)
 
+<!-- tabs:start -->
+
 === "Windows" @1
 
 === "GitHub Release" @2
@@ -51,7 +53,7 @@ scoop install extras/clash-verge-rev
 
 === "Linux" @1
 
-===
+<!-- tabs:end -->
 
 | 发行版本 | 下载次数 | 下载地址 |
 | :---: | :---: | :---: |
