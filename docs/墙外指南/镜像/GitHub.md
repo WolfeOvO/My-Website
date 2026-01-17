@@ -6,19 +6,9 @@
 
 稳定、快速地下载 GitHub Release、Archive、Raw 等文件，支持 [github.com](https://github.com/) 和 [raw.githubusercontent.com](https://raw.githubusercontent.com/) 链接，众多代理合集确保你再也不用担心 GitHub 文件下载问题。
 
-::: details
-<h1>稳定下载</h1>
-
-我们搜集了许多代理服务，确保在任何时候都有可用服务。
-
-<h1>实时测试</h1>
-
-我们自动验证代理服务，确保提供最方便快捷的下载服务。
-
-<h1>完全免费</h1>
-
-我们不会收取任何费用，所有代理服务也都是大佬免费提供。
-:::
+- **稳定下载：**我们搜集了许多代理服务，确保在任何时候都有可用服务；
+- **实时测试：**我们自动验证代理服务，确保提供最方便快捷的下载服务；
+- **完全免费：**我们不会收取任何费用，所有代理服务也都是大佬免费提供。
 
 ### 使用说明
 
@@ -26,7 +16,7 @@
 
 为了方便分享，您可以直接在我们的网址后面附加 GitHub 链接，无需手动输入：
 
-``` HTTP
+```
 https://ghproxylist.com/https://github.com/user/repo/releases/download/tag/file
 ```
 
@@ -42,25 +32,25 @@ https://ghproxylist.com/https://github.com/user/repo/releases/download/tag/file
 
 - 源码下载:
 
-``` HTTP
+```
 https://ghproxylist.com/https://github.com/geekan/MetaGPT/archive/refs/heads/main.zip
 ```
 
 - Release 源码下载：
 
-``` HTTP
+```
 https://ghproxylist.com/https://github.com/langgenius/dify/archive/refs/tags/1.0.1.zip
 ```
 
 - Release 文件下载：
 
-``` HTTP
+```
 https://ghproxylist.com/https://github.com/glanceapp/glance/releases/download/v0.7.7/glance-linux-arm64.tar.gz
 ```
 
 - Raw 文件下载：
 
-``` HTTP
+```
 https://ghproxylist.com/https://raw.githubusercontent.com/FujiwaraChoki/MoneyPrinterV2/main/assets/banner.txt
 ```
 

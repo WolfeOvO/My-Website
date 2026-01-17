@@ -16,7 +16,6 @@ export default {
     enhanceAppWithTabs(app)
     app.component('sp', Spoiler)
     app.component('gtl', GitHubRelease)
-    app.component('sidebar', SubSidebar)
     app.component('ntags', NotionTags)
     app.component('lc', LinkCard)
     app.component('sidebar', Sidebar)
