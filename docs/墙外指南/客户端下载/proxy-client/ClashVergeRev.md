@@ -5,7 +5,7 @@
 
 === "Windows"
 
-    === "GitHub Release"
+    ==== "GitHub Release"
 
         ::: warning
         - 如果你不清楚你的电脑系统架构，请下载 ``x64`` 架构文件，目前多数 Windows 电脑使用该架构；
@@ -17,44 +17,48 @@
         | :---: | :---: |
         | x64 | <GitHubRelease owner="clash-verge-rev" repo="clash-verge-rev" mode="button" label="安装包" arch="x64" match="x64-setup.exe" /> <GitHubRelease owner="clash-verge-rev" repo="clash-verge-rev" mode="button" label="内置 Webview2 安装包" arch="x64" match="x64_fixed_webview2-setup.exe" /> |
         | ARM64 | <GitHubRelease owner="clash-verge-rev" repo="clash-verge-rev" mode="button" label="安装包" arch="ARM64" match="arm64-setup.exe" /> <GitHubRelease owner="clash-verge-rev" repo="clash-verge-rev" mode="button" label="内置 Webview2 安装包" arch="ARM64" match="arm64_fixed_webview2-setup.exe" /> |
+    ====
 
-    === "WinGet"
+    ==== "WinGet"
 
         通过 Windows 11 自带的包管理器 WinGet 安装：
 
         ```
         winget install ClashVergeRev.ClashVergeRev
         ```
+    ====
 
-    === "Scoop"
+    ==== "Scoop"
 
-        ::: warning
-        这是社区维护的 Scoop 分发，Clash Verge Rev 开发团队不为下游渠道产生的问题提供支持。
-        :::
+     ::: warning
+     这是社区维护的 Scoop 分发，Clash Verge Rev 开发团队不为下游渠道产生的问题提供支持。
+     :::
 
-        ::: tip ✏️笔记
-        对于有**修改配置目录**或**便携版**需求的用户适用。
-        :::
+     ::: tip ✏️笔记
+     对于有**修改配置目录**或**便携版**需求的用户适用。
+     :::
 
-        安装 Scoop：
+     安装 Scoop：
 
-        ```
-        # See https://github.com/ScoopInstaller/Install#readme
-        Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser 
-        irm get.scoop.sh -outfile 'install.ps1'
-        .\install.ps1 -ScoopDir 'D:\Scoop' -ScoopGlobalDir 'D:\ScoopGlobal' # 仅作示例，可根据实际需求调整
-        ```
+     ```
+     # See https://github.com/ScoopInstaller/Install#readme
+     Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser 
+     irm get.scoop.sh -outfile 'install.ps1'
+     .\install.ps1 -ScoopDir 'D:\Scoop' -ScoopGlobalDir 'D:\ScoopGlobal' # 仅作示例，可根据实际需求调整
+     ```
 
-        安装 Clash Verge Rev：
+     安装 Clash Verge Rev：
 
-        ```
-        scoop bucket add extras
-        scoop install extras/clash-verge-rev
-        ```
+     ```
+     scoop bucket add extras
+     scoop install extras/clash-verge-rev
+     ```
+    ====
+===
 
 === "Linux"
 
-    === 
+===
 
 | 发行版本 | 下载次数 | 下载地址 |
 | :---: | :---: | :---: |

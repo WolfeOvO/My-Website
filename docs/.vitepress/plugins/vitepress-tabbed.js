@@ -16,28 +16,49 @@ function preprocess(src) {
   let i = 0
 
   while (i < lines.length) {
-    const m = lines[i].match(/^(\s*)=== "([^"]+)"\s*$/)
+    // 匹配 ===+ "label"，= 的数量表示层级
+    const m = lines[i].match(/^(={3,}) "([^"]+)"\s*$/)
     if (m) {
-      const base = m[1].length, tabs = []
+      const level = m[1].length  // === 是 3，==== 是 4
+      const tabs = []
 
+      // 收集同级 tabs
       while (i < lines.length) {
-        const tm = lines[i].match(/^(\s*)=== "([^"]+)"\s*$/)
-        if (tm && tm[1].length === base) {
+        const tm = lines[i].match(/^(={3,}) "([^"]+)"\s*$/)
+        if (tm && tm[1].length === level) {
           const label = tm[2], content = []
           i++
+          
+          // 收集内容直到：同级 tab / 闭合标记 / 更外层 tab
           while (i < lines.length) {
-            const nm = lines[i].match(/^(\s*)=== "[^"]+"\s*$/)
-            if (nm && nm[1].length <= base) break
-            let line = lines[i]
-            const indent = base + 4
-            if (line.length >= indent && line.slice(0, indent).trim() === '') line = line.slice(indent)
-            else if (!line.trim()) line = ''
-            content.push(line)
+            // 闭合标记（同级）
+            const closeMatch = lines[i].match(/^(={3,})\s*$/)
+            if (closeMatch && closeMatch[1].length === level) {
+              i++  // 跳过闭合标记
+              break
+            }
+            
+            // 下一个同级 tab
+            const nextTab = lines[i].match(/^(={3,}) "[^"]+"\s*$/)
+            if (nextTab && nextTab[1].length === level) break
+            
+            // 更外层的 tab 或闭合（层级更少）
+            if (nextTab && nextTab[1].length < level) break
+            if (closeMatch && closeMatch[1].length < level) break
+            
+            content.push(lines[i])
             i++
           }
+          
+          // 清理首尾空行
           while (content.length && !content[0].trim()) content.shift()
           while (content.length && !content.at(-1).trim()) content.pop()
+          
           tabs.push({ label, content: content.join('\n') })
+          
+          // 检查是否遇到闭合标记后结束整组
+          const checkClose = lines[i - 1]?.match(/^(={3,})\s*$/)
+          if (checkClose && checkClose[1].length === level) break
         } else break
       }
 
