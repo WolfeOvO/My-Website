@@ -1,6 +1,6 @@
 # Clash Verge Rev
 
-<ntags color="blue">Windows</ntags> <ntags color="yellow">Linux</ntags>
+<ntags color="blue">Windows</ntags> <ntags color="yellow">Linux</ntags> <ntags color="gray">MacOS</ntags>
 
 - GitHub 项目地址：[https://github.com/clash-verge-rev/clash-verge-rev](https://github.com/clash-verge-rev/clash-verge-rev)
 - 发布地址：见[下文](#发布面板)
@@ -11,13 +11,13 @@
 
 === "Windows" @1
 
-=== "GitHub Release" @2
-
 ::: warning
 - 如果你不清楚你的电脑系统架构，请下载 ``x64`` 架构文件，目前多数 Windows 电脑使用该架构；
 - Windows 7 用户请升级至 Win10/11 或改为使用 Linux 桌面发行版，现版本已经不再支持 Windows 7；
 - 带有 ``fix_webview2`` 字样的安装包为内置 WebView2 环境版本。该文件体积比普通安装包大，仅用于当系统缺少且无法安装 WebView2 环境时使用，当你无法正常打开面板也可以试试这个版本。
 :::
+
+=== "GitHub Release" @2
 
 | 系统架构 | 下载地址 |
 | :---: | :---: |
@@ -97,6 +97,7 @@ sudo yum localinstall ./Clash.Verge_x.x.x-_xxx.rpm
 === "archlinuxcn" @3
 
 1. 添加 ``[archlinuxcn]`` 仓库；
+
     1.1. 在 ``/etc/pacman.conf`` 文件中写入下列内容：
     ``` ini
     [archlinuxcn]
@@ -105,10 +106,12 @@ sudo yum localinstall ./Clash.Verge_x.x.x-_xxx.rpm
     Server = https://mirrors.hit.edu.cn/archlinuxcn/$arch
     Server = https://repo.huaweicloud.com/archlinuxcn/$arch
     ```
+
     1.2. 在终端运行下列命令：
     ``` Bash
     sudo pacman -S archlinuxcn-keyring
     ```
+
 2. 安装 Clash Verge Rev：
 ``` Bash
 sudo pacman -S clash-verge-rev
@@ -147,6 +150,21 @@ makepkg -si
 yay -S clash-verge-rev-bin # 正式版
 yay -S clash-verge-rev-autobuild-bin # 测试版
 ```
+
+=== "MacOS" @1
+
+::: warning
+支持 MacOS 12 及以上系统。
+
+对于 MacOS 11 用户可以自行下载 ``metacubex/mihomo`` 内核（带有 ``go124`` 标签的版本）替换文件`` /applications/Clash\ Verge.app/Contents/MacOS/verge-mihomo`` 来使用，不过还是建议更新系统以获得更好的支持。
+:::
+
+| 系统架构 | 下载地址 |
+| :---: | :---: |
+| Inter 芯片 | <gtl owner="clash-verge-rev" repo="clash-verge-rev" mode="button" label="安装包" arch="x64" match="x64.dmg" /> |
+| Apple M 系列芯片 | <gtl owner="clash-verge-rev" repo="clash-verge-rev" mode="button" label="安装包" arch="aarch64" match="aarch64.dmg" /> |
+
+![](https://www.clashverge.dev/assets/guide/quickstart/mac_install.png)
 
 <!-- tabs:end -->
 
