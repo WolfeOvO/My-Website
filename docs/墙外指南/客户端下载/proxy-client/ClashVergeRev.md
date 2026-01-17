@@ -16,7 +16,7 @@
         | 系统架构 | 下载地址 |
         | :---: | :---: |
         | x64 | <GitHubRelease owner="clash-verge-rev" repo="clash-verge-rev" mode="button" label="安装包" arch="x64" match="x64-setup.exe" /> <GitHubRelease owner="clash-verge-rev" repo="clash-verge-rev" mode="button" label="内置 Webview2 安装包" arch="x64" match="x64_fixed_webview2-setup.exe" /> |
-        | ARM64 | <GitHubRelease owner="clash-verge-rev" repo="clash-verge-rev" mode="button" label="安装包" arch="arm64" match="arm64-setup.exe" /> <GitHubRelease owner="clash-verge-rev" repo="clash-verge-rev" mode="button" label="内置 Webview2 安装包" arch="arm64" match="arm64_fixed_webview2-setup.exe" /> |
+        | ARM64 | <GitHubRelease owner="clash-verge-rev" repo="clash-verge-rev" mode="button" label="安装包" arch="ARM64" match="arm64-setup.exe" /> <GitHubRelease owner="clash-verge-rev" repo="clash-verge-rev" mode="button" label="内置 Webview2 安装包" arch="ARM64" match="arm64_fixed_webview2-setup.exe" /> |
 
     === "WinGet"
 
