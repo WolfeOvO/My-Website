@@ -183,8 +183,9 @@ export function injectTabs() {
 
     tabs.querySelectorAll(':scope > .vp-tabs-nav > .vp-tabs-tab').forEach(b => b.classList.toggle('active', b.dataset.i === idx))
     tabs.querySelectorAll(':scope > .vp-tabs-panel').forEach(p => p.classList.toggle('active', p.dataset.i === idx))
-    localStorage.setItem(key, label)
+    sessionStorage.setItem(key, label)
 
+    // 同步页面中其他相同key的tab组
     document.querySelectorAll('.vp-tabs').forEach(t => {
       if (t === tabs || getKey(t) !== key) return
       t.querySelectorAll(':scope > .vp-tabs-nav > .vp-tabs-tab').forEach(b => b.classList.toggle('active', b.textContent === label))
@@ -197,7 +198,7 @@ export function injectTabs() {
 
   function restore() {
     document.querySelectorAll('.vp-tabs').forEach(tabs => {
-      const saved = localStorage.getItem(getKey(tabs))
+      const saved = sessionStorage.getItem(getKey(tabs))
       if (!saved) return
       tabs.querySelectorAll(':scope > .vp-tabs-nav > .vp-tabs-tab').forEach(b => b.classList.toggle('active', b.textContent === saved))
       tabs.querySelectorAll(':scope > .vp-tabs-panel').forEach(p => {

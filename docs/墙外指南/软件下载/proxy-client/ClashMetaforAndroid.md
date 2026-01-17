@@ -25,4 +25,8 @@
 
 | 系统架构 | 下载地址 |
 | :---: | :---: |
-| 通用 | <gtl owner="MetaCubeX" repo="ClashMetaForAndroid" mode="button" label="安装包" arch="x64" match="meta-universal-release.apk" /> |
+| 通用 | <gtl owner="MetaCubeX" repo="ClashMetaForAndroid" mode="button" label="安装包" arch="universal" match="meta-universal-release.apk" /> |
+| ARMv7 | <gtl owner="MetaCubeX" repo="ClashMetaForAndroid" mode="button" label="安装包" arch="ARMv7" match="meta-armeabi-v7a-release.apk" /> |
+| ARMv8 | <gtl owner="MetaCubeX" repo="ClashMetaForAndroid" mode="button" label="安装包" arch="ARMv8" match="meta-arm64-v8a-release.apk" /> |
+| x86 | <gtl owner="MetaCubeX" repo="ClashMetaForAndroid" mode="button" label="安装包" arch="x86" match="meta-x86-release.apk" /> |
+| x86_64 | <gtl owner="MetaCubeX" repo="ClashMetaForAndroid" mode="button" label="安装包" arch="x64" match="meta-x86_64-release.apk" /> |

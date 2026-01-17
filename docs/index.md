@@ -8,7 +8,7 @@ hero:
   actions:
     - theme: brand
       text: 立即进入
-      link: /homepage.md
+      link: /homepage
     - theme: alt
       text: 访问项目仓库
       link: https://github.com/WolfeOvO/wolfeovo.github.io

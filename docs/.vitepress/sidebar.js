@@ -1,73 +1,81 @@
-import { text } from "node:stream/consumers";
-
 export const sidebar = {
-      '/储物间/': [
+  '/储物间/': [
+    {
+      text: '储物间',
+      base: '/储物间/', 
+      items: [
+        { text: '目录', link: '储物间目录' }, 
+        { text: '1 - 搜索引擎', link: '1-搜索引擎' },
+        { text: '2 - 问答导航', link: '2-问答导航' },
+        { text: '3 - 百科全书', link: '3-百科全书' },
+        { text: '4 - BT 导航', link: '4-BT导航' },
+        { text: '5 - 网盘服务', link: '5-网盘服务' },
+        { text: '6 - 音乐导航', link: '6-音乐导航' },
+        { text: '7 - 社交平台', link: '7-社交平台' },
+        { text: '8 - 图书馆', link: '8-图书馆' },
+        { text: '9 - 图片资源', link: '9-图片资源' },
+        { text: '10 - 网页浏览器', link: '10-网页浏览器' },
+        { text: '11 - 维基媒体', link: '11-维基媒体' },
+        { text: '12 - 工具箱', link: '12-工具箱' }
+      ]
+    }
+  ],
+  '/墙外指南/': [
+    {
+      text: '墙外指南',
+      base: '/墙外指南/',
+      items: [
+        { text: '目录', link: '墙外指南目录' },
+        { text: '名词解释', link: '名词解释' }
+      ]
+    },
+    {
+      text: '镜像',
+      base: '/墙外指南/镜像/',
+      items: [
+        { text: 'Wikipedia 维基百科', link: 'Wikipedia' },
+        { text: 'GitHub 代理', link: 'GitHub' }
+      ]
+    },
+    {
+      text: '教程',
+      base: '/墙外指南/教程/',
+      items: [
+        { text: '加速 GitHub 下载', link: '加速GitHub下载' }
+      ]
+    },
+    {
+      text: '推荐机场',
+      base: '/墙外指南/推荐机场/',
+      collapsed: false,
+      items: [
+        { text: 'Telegram 频道推荐', link: 'Telegram频道推荐' },
         {
-          text: '储物间',
+          text: '2026 年',
+          collapsed: true,
           items: [
-            { text: '目录', link: '/储物间/储物间目录.md' },
-            { text: '1 - 搜索引擎', link: '/储物间/1-搜索引擎.md' },
-            { text: '2 - 问答导航', link: '/储物间/2-问答导航.md' },
-            { text: '3 - 百科全书', link: '/储物间/3-百科全书.md' },
-            { text: '4 - BT 导航', link: '/储物间/4-BT导航.md' },
-            { text: '5 - 网盘服务', link: '/储物间/5-网盘服务.md' },
-            { text: '6 - 音乐导航', link: '/储物间/6-音乐导航.md' },
-            { text: '7 - 社交平台', link: '/储物间/7-社交平台.md' },
-            { text: '8 - 图书馆', link: '/储物间/8-图书馆.md' },
-            { text: '9 - 图片资源', link: '/储物间/9-图片资源.md' },
-            { text: '10 - 网页浏览器', link: '/储物间/10-网页浏览器.md' },
-            { text: '11 - 维基媒体', link: '/储物间/11-维基媒体.md' },
-            { text: '12 - 工具箱', link: '/储物间/12-工具箱.md' }
+            // 这里因为层级较深，可以手动拼接，或者只写剩余部分
+            { text: '1 月', link: '2026年/2026年1月' }
           ]
         }
-      ],
-      '/墙外指南/': [
-        {
-          text: '墙外指南',
+      ]
+    },
+    {
+      text: '软件下载',
+      // 这里 base 设置到 proxy-client 层级，下面链接会非常短
+      base: '/墙外指南/软件下载/proxy-client/', 
+      items: [
+        { 
+          text: '客户端',
+          collapsed: true,
           items: [
-            { text: '目录', link: '/墙外指南/墙外指南目录.md' },
-            { text: '名词解释', link: '/墙外指南/名词解释.md' }
-          ]
-        },
-        {
-          text: '镜像',
-          items: [
-            { text: 'Wikipedia 维基百科', link: '/墙外指南/镜像/Wikipedia.md' },
-            { text: 'GitHub 代理', link: '/墙外指南/镜像/GitHub.md' }
-          ]
-        },
-        {
-          text: '教程',
-          items: [
-            { text: '加速 GitHub 下载', link: '/墙外指南/教程/加速GitHub下载.md' }
-          ]
-        },
-        {
-           text: '推荐机场',
-           collapsed: false,
-           items: [
-            { text: 'Telegram 频道推荐', link: '/墙外指南/推荐机场/Telegram频道推荐.md' },
-            {
-              text: '2026 年',
-              collapsed: true,
-              items: [
-                { text: '1 月', link: '/墙外指南/推荐机场/2026年/2026年1月.md' }
-              ]
-            }
-          ]
-        },
-        {
-          text: '面板&客户端',
-          items: [
-            { text: '客户端',
-              collapsed: true,
-              items: [
-                { text: '合集', link: '/墙外指南/面板&客户端/proxy-client/client.md' },
-                { text: 'Clash', link: '/墙外指南/面板&客户端/proxy-client/Clash.md' },
-                { text: 'Clash Verge Rev', link: '/墙外指南/面板&客户端/proxy-client/ClashVergeRev.md' }
-              ]
-            }
+            { text: '合集', link: 'client' },
+            { text: 'Clash', link: 'Clash' },
+            { text: 'Clash Verge Rev', link: 'ClashVergeRev' },
+            { text: 'Clash Meta for Android', link: 'ClashMetaforAndroid' }
           ]
         }
       ]
     }
+  ]
+}

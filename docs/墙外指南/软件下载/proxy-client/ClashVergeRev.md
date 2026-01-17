@@ -29,6 +29,7 @@
 === "WinGet" @2
 
 通过 Windows 11 自带的包管理器 WinGet 安装：
+
 ``` PowerShell
 winget install ClashVergeRev.ClashVergeRev
 ```
@@ -44,6 +45,7 @@ winget install ClashVergeRev.ClashVergeRev
 :::
 
 安装 Scoop：
+
 ``` PowerShell
 # See https://github.com/ScoopInstaller/Install#readme
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser 
@@ -52,6 +54,7 @@ irm get.scoop.sh -outfile 'install.ps1'
 ```
 
 安装 Clash Verge Rev：
+
 ``` PowerShell
 scoop bucket add extras
 scoop install extras/clash-verge-rev
@@ -72,6 +75,7 @@ Ubuntu 24.04 需要安装额外依赖，详见[常见问题](https://www.clashve
 | ARMv7 | <gtl owner="clash-verge-rev" repo="clash-verge-rev" mode="button" label="安装包" arch="ARMv7" match="armhf.deb" /> |
 
 下载上方 ``.deb`` 包后使用 ``apt`` 安装：
+
 ``` Bash
 sudo apt install -y ./Clash.Verge_x.x.x-_xxx.deb
 ```
@@ -85,6 +89,7 @@ sudo apt install -y ./Clash.Verge_x.x.x-_xxx.deb
 | ARMv7 | <gtl owner="clash-verge-rev" repo="clash-verge-rev" mode="button" label="安装包" arch="ARMv7" match="armhfp.rpm" /> |
 
 下载上方 ``.rpm`` 包后使用 ``dnf`` 或 ``yum`` 安装：
+
 ``` Bash
 sudo dnf install ./Clash.Verge_x.x.x-_xxx.rpm
 sudo yum localinstall ./Clash.Verge_x.x.x-_xxx.rpm
@@ -101,6 +106,7 @@ sudo yum localinstall ./Clash.Verge_x.x.x-_xxx.rpm
 1. 添加 ``[archlinuxcn]`` 仓库；
 
     1.1. 在 ``/etc/pacman.conf`` 文件中写入下列内容：
+
     ``` ini
     [archlinuxcn]
     Server = https://mirrors.ustc.edu.cn/archlinuxcn/$arch
@@ -110,11 +116,13 @@ sudo yum localinstall ./Clash.Verge_x.x.x-_xxx.rpm
     ```
 
     1.2. 在终端运行下列命令：
+
     ``` Bash
     sudo pacman -S archlinuxcn-keyring
     ```
 
 2. 安装 Clash Verge Rev：
+
 ``` Bash
 sudo pacman -S clash-verge-rev
 ```
@@ -124,6 +132,7 @@ sudo pacman -S clash-verge-rev
 === "paru" @4
 
 1. 安装 paru：
+
 ``` Bash
 sudo pacman -S --needed base-devel git
 git clone https://aur.archlinux.org/paru.git
@@ -132,6 +141,7 @@ makepkg -si
 ```
 
 2. 使用 paru 安装 Clash Verge Rev：
+
 ``` Bash
 paru -S clash-verge-rev-bin # 正式版
 paru -S clash-verge-rev-autobuild-bin # 测试版
@@ -140,6 +150,7 @@ paru -S clash-verge-rev-autobuild-bin # 测试版
 === "yay" @4
 
 1. 安装 yay：
+
 ``` Bash
 sudo pacman -S --needed base-devel git
 git clone https://aur.archlinux.org/yay.git
@@ -148,6 +159,7 @@ makepkg -si
 ```
 
 2. 使用 yay 安装 Clash Verge Rev：
+
 ``` Bash
 yay -S clash-verge-rev-bin # 正式版
 yay -S clash-verge-rev-autobuild-bin # 测试版
@@ -175,6 +187,7 @@ yay -S clash-verge-rev-autobuild-bin # 测试版
 编译构建指南请转到[构建](https://github.com/clash-verge-rev/clash-verge-rev/blob/main/CONTRIBUTING.md)。
 
 请注意区分以下文件清单（以用户量比较多的 Windows 为例）：
+
 ``` Plain Text
 +--- resources                      #资源目录
   +--- locales                      #语言包
@@ -197,7 +210,7 @@ yay -S clash-verge-rev-autobuild-bin # 测试版
 
 ## 发布面板
 
-> Clash Verge Rev 目前**仅通过 GitHub Release 发布**，请注意辨别。
+Clash Verge Rev 目前**仅通过 GitHub Release 发布**，请注意辨别。
 
 | 发行版本 | 下载次数 | 下载地址 |
 | :---: | :---: | :---: |
