@@ -1,7 +1,12 @@
 <script setup>
 /**
  * AutoToc - VitePress 自动目录组件
- * 支持 base 属性、多层嵌套、collapsed 等复杂配置
+ * 
+ * 规则：
+ * 1. 顶层 → 无限向下（所有子级、子子级、子子子级...全部显示）
+ * 2. 同级无子级 → 只显示同级（不展开）
+ * 3. 有父有子 → 从同级无限向下（同级及所有子孙级全部显示）
+ * 4. 最底层无同级 → 空
  */
 import { computed } from 'vue'
 import { useData, useRoute } from 'vitepress'
@@ -10,7 +15,7 @@ const props = defineProps({
     title: { type: String, default: '目录导航' },
     showIcon: { type: Boolean, default: true },
     emptyText: { type: String, default: '暂无内容' },
-    debug: { type: Boolean, default: false }  // 调试模式
+    debug: { type: Boolean, default: false }
 })
 
 const { theme } = useData()
@@ -21,7 +26,6 @@ const currentPath = computed(() => route.path)
 // 规范化路径
 function normalizePath(path) {
     if (!path) return ''
-    // 解码 URL 编码的中文字符
     let decoded = path
     try {
         decoded = decodeURIComponent(path)
@@ -48,8 +52,8 @@ function resolveLink(base, link) {
     return normalizePath(fullPath)
 }
 
-// 递归展平 sidebar 项目
-function flattenItems(items, parentBase = '/', depth = 0) {
+// 【无限向下】递归展平所有子孙级
+function flattenAllDescendants(items, parentBase = '/', depth = 0) {
     const result = []
 
     for (const item of items) {
@@ -60,19 +64,33 @@ function flattenItems(items, parentBase = '/', depth = 0) {
             text: item.text,
             link: fullLink,
             depth,
-            collapsed: item.collapsed,
             hasChildren: !!(item.items?.length)
         })
 
+        // 无限递归子级
         if (item.items?.length) {
-            result.push(...flattenItems(item.items, currentBase, depth + 1))
+            result.push(...flattenAllDescendants(item.items, currentBase, depth + 1))
         }
     }
 
     return result
 }
 
-// 查找当前路径所属的 sidebar 分组
+// 【只显示同级】不递归
+function flattenSiblingsOnly(items, parentBase = '/') {
+    return items.map(item => {
+        const currentBase = item.base || parentBase
+        const fullLink = item.link ? resolveLink(currentBase, item.link) : null
+        return {
+            text: item.text,
+            link: fullLink,
+            depth: 0,
+            hasChildren: !!(item.items?.length)
+        }
+    })
+}
+
+// 查找 sidebar 分组
 function findSidebarGroup(sidebar, path) {
     if (!sidebar) return null
 
@@ -92,8 +110,8 @@ function findSidebarGroup(sidebar, path) {
     return null
 }
 
-// 在原始结构中查找当前页面的位置信息
-function findPositionInStructure(items, path, parentBase = '/', parent = null, depth = 0) {
+// 递归查找当前页面位置
+function findPosition(items, path, parentBase = '/', depth = 0) {
     const normalizedPath = normalizePath(path)
 
     for (let i = 0; i < items.length; i++) {
@@ -105,35 +123,19 @@ function findPositionInStructure(items, path, parentBase = '/', parent = null, d
             return {
                 current: item,
                 currentBase,
-                parent,
                 siblings: items,
                 siblingBase: parentBase,
                 depth,
-                index: i,
                 hasChildren: !!(item.items?.length)
             }
         }
 
         if (item.items?.length) {
-            const found = findPositionInStructure(item.items, path, currentBase, item, depth + 1)
+            const found = findPosition(item.items, path, currentBase, depth + 1)
             if (found) return found
         }
     }
     return null
-}
-
-// 判断位置类型
-function getPositionType(position) {
-    if (!position) return 'top'
-
-    const { depth, hasChildren, siblings } = position
-
-    if (depth === 0 && hasChildren) return 'top'
-    if (depth > 0 && hasChildren) return 'middle'
-    if (!hasChildren && siblings.length > 1) return 'sibling'
-    if (!hasChildren && siblings.length <= 1) return 'empty'
-
-    return 'sibling'
 }
 
 // 生成目录内容
@@ -144,55 +146,32 @@ const tocItems = computed(() => {
     const group = findSidebarGroup(sidebar, currentPath.value)
     if (!group) return []
 
-    const position = findPositionInStructure(group.items, currentPath.value, group.key)
-    const positionType = getPositionType(position)
+    const position = findPosition(group.items, currentPath.value, group.key)
 
-    let items = []
-
-    switch (positionType) {
-        case 'top':
-            // 情况1: 顶层或未找到位置，显示该分组所有内容
-            if (position?.current?.items) {
-                items = flattenItems(position.current.items, position.currentBase, 0)
-            } else {
-                // 未找到具体位置时，展示整个分组内容
-                items = flattenItems(group.items, group.key, 0)
-            }
-            break
-
-        case 'middle':
-            // 情况3: 有父级有子级，从同级无限向下
-            if (position) {
-                items = flattenItems(position.siblings, position.siblingBase, 0)
-            }
-            break
-
-        case 'sibling':
-            // 情况2: 同级无子级，显示同级内容
-            if (position) {
-                items = position.siblings.map(item => {
-                    const fullLink = item.link
-                        ? resolveLink(item.base || position.siblingBase, item.link)
-                        : null
-                    return {
-                        text: item.text,
-                        link: fullLink,
-                        depth: 0,
-                        hasChildren: !!(item.items?.length)
-                    }
-                })
-            }
-            break
-
-        case 'empty':
-            items = []
-            break
-
-        default:
-            items = flattenItems(group.items, group.key, 0)
+    // 情况1: 未找到位置（顶层）→ 无限向下
+    if (!position) {
+        return flattenAllDescendants(group.items, group.key, 0)
     }
 
-    return items.filter(item => item.link || item.text)
+    const { depth, hasChildren, siblings, siblingBase, current, currentBase } = position
+
+    // 情况1: 顶层(depth=0)且有子级 → 无限向下
+    if (depth === 0 && hasChildren) {
+        return flattenAllDescendants(current.items, currentBase, 0)
+    }
+
+    // 情况3: 有父级(depth>0)且有子级 → 从同级无限向下
+    if (depth > 0 && hasChildren) {
+        return flattenAllDescendants(siblings, siblingBase, 0)
+    }
+
+    // 情况2: 无子级且同级有其他内容 → 只显示同级
+    if (!hasChildren && siblings.length > 1) {
+        return flattenSiblingsOnly(siblings, siblingBase)
+    }
+
+    // 情况4: 最底层无同级 → 空
+    return []
 })
 
 // 判断是否为当前页面
@@ -204,44 +183,37 @@ function isCurrentPage(link) {
 // 调试信息
 const debugInfo = computed(() => {
     const sidebar = theme.value.sidebar
-
-    if (!sidebar) {
-        return { error: 'sidebar 为空', sidebar: null }
-    }
+    if (!sidebar) return { error: 'sidebar 为空' }
 
     const group = findSidebarGroup(sidebar, currentPath.value)
+    if (!group) return { error: '未匹配分组', keys: Object.keys(sidebar) }
 
-    if (!group) {
-        return {
-            error: '未匹配到 sidebar 分组',
-            currentPath: currentPath.value,
-            normalizedPath: normalizePath(currentPath.value),
-            sidebarKeys: Object.keys(sidebar)
-        }
+    const position = findPosition(group.items, currentPath.value, group.key)
+
+    let positionType = '未知'
+    if (!position) {
+        positionType = '顶层（未找到位置）→ 无限向下'
+    } else if (position.depth === 0 && position.hasChildren) {
+        positionType = '顶层有子级 → 无限向下'
+    } else if (position.depth > 0 && position.hasChildren) {
+        positionType = '有父有子 → 从同级无限向下'
+    } else if (!position.hasChildren && position.siblings.length > 1) {
+        positionType = '无子级有同级 → 只显示同级'
+    } else {
+        positionType = '最底层无同级 → 空'
     }
 
-    // 收集所有可能的链接用于调试
-    const allLinks = flattenItems(group.items, group.key, 0)
-        .filter(item => item.link)
-        .map(item => item.link)
-
-    const position = findPositionInStructure(group.items, currentPath.value, group.key)
-    const positionType = getPositionType(position)
-
     return {
-        currentPath: currentPath.value,
-        normalizedPath: normalizePath(currentPath.value),
+        currentPath: normalizePath(currentPath.value),
         groupKey: group.key,
         positionType,
-        positionFound: !!position,
         position: position ? {
             depth: position.depth,
             hasChildren: position.hasChildren,
             siblingsCount: position.siblings.length,
             currentText: position.current?.text
         } : null,
-        allLinksInGroup: allLinks,
-        tocItemsCount: tocItems.value.length
+        resultCount: tocItems.value.length
     }
 })
 </script>
@@ -279,10 +251,9 @@ const debugInfo = computed(() => {
             <span class="empty-text">{{ emptyText }}</span>
         </div>
 
-        <!-- 调试信息 -->
         <div v-if="debug" class="auto-toc-debug">
             <details>
-                <summary>🔍 调试信息</summary>
+                <summary>🔍 调试</summary>
                 <pre>{{ JSON.stringify(debugInfo, null, 2) }}</pre>
             </details>
         </div>
@@ -405,7 +376,6 @@ const debugInfo = computed(() => {
     font-size: 1.2em;
 }
 
-/* 调试样式 */
 .auto-toc-debug {
     border-top: 1px dashed var(--vp-c-divider);
     padding: 8px 12px;
@@ -424,7 +394,6 @@ const debugInfo = computed(() => {
     border-radius: 4px;
     overflow-x: auto;
     font-size: 11px;
-    line-height: 1.4;
 }
 
 @media (max-width: 768px) {
