@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, watch } from 'vue'
 
 const props = defineProps({
     owner: { type: String, required: true },
@@ -29,6 +29,16 @@ const gradientPresets = [
     ['#96fbc4', '#f9f586'], ['#37ecba', '#72afd3'],
 ]
 
+// 详情区域的颜色配置
+const detailColors = [
+    { bg: '#f0f7ff', border: '#c6deff' }, // 蓝色系
+    { bg: '#f0fdf4', border: '#bbf7d0' }, // 绿色系
+    { bg: '#fefce8', border: '#fef08a' }, // 黄色系
+    { bg: '#fdf2f8', border: '#fbcfe8' }, // 粉色系
+    { bg: '#f5f3ff', border: '#ddd6fe' }, // 紫色系
+    { bg: '#fff7ed', border: '#fed7aa' }, // 橙色系
+]
+
 const hashString = (str) => {
     let hash = 0
     for (let i = 0; i < str.length; i++) {
@@ -52,6 +62,7 @@ const matchedAssets = ref([])
 const showModal = ref(false)
 const selectedAsset = ref(null)
 const showFileList = ref(false)
+const savedScrollPosition = ref(0)
 
 // 格式化下载数
 const formatDownloads = (num) => {
@@ -169,9 +180,29 @@ const projectUrl = computed(() => `https://github.com/${props.owner}/${props.rep
 const releasesUrl = computed(() => `https://github.com/${props.owner}/${props.repo}/releases`)
 const latestUrl = computed(() => `https://github.com/${props.owner}/${props.repo}/releases/latest`)
 
+// 监听弹窗状态，锁定/解锁背景滚动
+watch(showModal, (val) => {
+    if (val) {
+        // 保存当前滚动位置
+        savedScrollPosition.value = window.scrollY
+        document.body.style.overflow = 'hidden'
+        document.body.style.position = 'fixed'
+        document.body.style.top = `-${savedScrollPosition.value}px`
+        document.body.style.width = '100%'
+    } else {
+        // 恢复滚动
+        document.body.style.overflow = ''
+        document.body.style.position = ''
+        document.body.style.top = ''
+        document.body.style.width = ''
+        window.scrollTo(0, savedScrollPosition.value)
+    }
+})
+
 // 点击按钮
 const handleButtonClick = (e) => {
     e.preventDefault()
+    e.stopPropagation()
     if (loading.value || error.value || matchedAssets.value.length === 0) return
 
     if (hasMultipleFiles.value) {
@@ -240,6 +271,11 @@ const getSHA256 = (assetName) => {
     return null
 }
 
+// 获取行颜色
+const getRowColor = (index) => {
+    return detailColors[index % detailColors.length]
+}
+
 onMounted(fetchRelease)
 </script>
 
@@ -271,7 +307,7 @@ onMounted(fetchRelease)
         </template>
 
         <!-- 下载按钮 -->
-        <a v-if="showButton" href="#"
+        <button v-if="showButton" type="button"
             :class="['gh-dl-btn', { disabled: loading || error || matchedAssets.length === 0 }]"
             :title="firstAsset?.name || error || '加载中...'" @click="handleButtonClick">
             <span class="gh-dl-label" :style="{ backgroundColor: btnLabelColor }">{{ label }}</span>
@@ -284,7 +320,7 @@ onMounted(fetchRelease)
                     <span v-if="hasMultipleFiles" class="gh-multi-badge">{{ matchedAssets.length }}</span>
                 </template>
             </span>
-        </a>
+        </button>
 
         <!-- 弹窗遮罩 -->
         <Teleport to="body">
@@ -328,33 +364,39 @@ onMounted(fetchRelease)
                             <div class="gh-detail-section">
                                 <div class="gh-detail-title">📦 文件信息</div>
                                 <div class="gh-detail-grid">
-                                    <div class="gh-detail-item">
-                                        <div class="gh-detail-label">文件名</div>
+                                    <div class="gh-detail-item"
+                                        :style="{ backgroundColor: getRowColor(0).bg, borderColor: getRowColor(0).border }">
+                                        <div class="gh-detail-label">📝 文件名</div>
                                         <div class="gh-detail-value gh-copyable"
                                             @click="copyToClipboard(selectedAsset.name)">
                                             {{ selectedAsset.name }}
                                             <span class="gh-copy-hint">点击复制</span>
                                         </div>
                                     </div>
-                                    <div class="gh-detail-item">
-                                        <div class="gh-detail-label">文件大小</div>
+                                    <div class="gh-detail-item"
+                                        :style="{ backgroundColor: getRowColor(1).bg, borderColor: getRowColor(1).border }">
+                                        <div class="gh-detail-label">💾 文件大小</div>
                                         <div class="gh-detail-value">{{ formatSize(selectedAsset.size) }}</div>
                                     </div>
-                                    <div class="gh-detail-item">
-                                        <div class="gh-detail-label">下载次数</div>
+                                    <div class="gh-detail-item"
+                                        :style="{ backgroundColor: getRowColor(2).bg, borderColor: getRowColor(2).border }">
+                                        <div class="gh-detail-label">📥 下载次数</div>
                                         <div class="gh-detail-value">{{ selectedAsset.download_count.toLocaleString() }}
                                             次</div>
                                     </div>
-                                    <div class="gh-detail-item">
-                                        <div class="gh-detail-label">上传时间</div>
+                                    <div class="gh-detail-item"
+                                        :style="{ backgroundColor: getRowColor(3).bg, borderColor: getRowColor(3).border }">
+                                        <div class="gh-detail-label">📤 上传时间</div>
                                         <div class="gh-detail-value">{{ formatTime(selectedAsset.created_at) }}</div>
                                     </div>
-                                    <div class="gh-detail-item">
-                                        <div class="gh-detail-label">更新时间</div>
+                                    <div class="gh-detail-item"
+                                        :style="{ backgroundColor: getRowColor(4).bg, borderColor: getRowColor(4).border }">
+                                        <div class="gh-detail-label">🔄 更新时间</div>
                                         <div class="gh-detail-value">{{ formatTime(selectedAsset.updated_at) }}</div>
                                     </div>
-                                    <div class="gh-detail-item">
-                                        <div class="gh-detail-label">Content-Type</div>
+                                    <div class="gh-detail-item"
+                                        :style="{ backgroundColor: getRowColor(5).bg, borderColor: getRowColor(5).border }">
+                                        <div class="gh-detail-label">📋 Content-Type</div>
                                         <div class="gh-detail-value">{{ selectedAsset.content_type }}</div>
                                     </div>
                                 </div>
@@ -363,32 +405,36 @@ onMounted(fetchRelease)
                             <div class="gh-detail-section">
                                 <div class="gh-detail-title">🔗 相关链接</div>
                                 <div class="gh-detail-grid">
-                                    <div class="gh-detail-item gh-detail-full">
-                                        <div class="gh-detail-label">下载地址</div>
+                                    <div class="gh-detail-item gh-detail-full"
+                                        :style="{ backgroundColor: getRowColor(0).bg, borderColor: getRowColor(0).border }">
+                                        <div class="gh-detail-label">⬇️ 下载地址</div>
                                         <div class="gh-detail-value gh-copyable gh-url"
                                             @click="copyToClipboard(selectedAsset.browser_download_url)">
                                             {{ selectedAsset.browser_download_url }}
                                             <span class="gh-copy-hint">点击复制</span>
                                         </div>
                                     </div>
-                                    <div class="gh-detail-item gh-detail-full">
-                                        <div class="gh-detail-label">项目地址</div>
+                                    <div class="gh-detail-item gh-detail-full"
+                                        :style="{ backgroundColor: getRowColor(1).bg, borderColor: getRowColor(1).border }">
+                                        <div class="gh-detail-label">🏠 项目地址</div>
                                         <div class="gh-detail-value gh-copyable gh-url"
                                             @click="copyToClipboard(projectUrl)">
                                             {{ projectUrl }}
                                             <span class="gh-copy-hint">点击复制</span>
                                         </div>
                                     </div>
-                                    <div class="gh-detail-item gh-detail-full">
-                                        <div class="gh-detail-label">发布列表</div>
+                                    <div class="gh-detail-item gh-detail-full"
+                                        :style="{ backgroundColor: getRowColor(2).bg, borderColor: getRowColor(2).border }">
+                                        <div class="gh-detail-label">📋 发布列表</div>
                                         <div class="gh-detail-value gh-copyable gh-url"
                                             @click="copyToClipboard(releasesUrl)">
                                             {{ releasesUrl }}
                                             <span class="gh-copy-hint">点击复制</span>
                                         </div>
                                     </div>
-                                    <div class="gh-detail-item gh-detail-full">
-                                        <div class="gh-detail-label">最新发布</div>
+                                    <div class="gh-detail-item gh-detail-full"
+                                        :style="{ backgroundColor: getRowColor(3).bg, borderColor: getRowColor(3).border }">
+                                        <div class="gh-detail-label">🆕 最新发布</div>
                                         <div class="gh-detail-value gh-copyable gh-url"
                                             @click="copyToClipboard(latestUrl)">
                                             {{ latestUrl }}
@@ -401,8 +447,9 @@ onMounted(fetchRelease)
                             <div class="gh-detail-section">
                                 <div class="gh-detail-title">🔐 校验信息</div>
                                 <div class="gh-detail-grid">
-                                    <div class="gh-detail-item gh-detail-full">
-                                        <div class="gh-detail-label">SHA256</div>
+                                    <div class="gh-detail-item gh-detail-full"
+                                        :style="{ backgroundColor: getRowColor(4).bg, borderColor: getRowColor(4).border }">
+                                        <div class="gh-detail-label">🔒 SHA256</div>
                                         <div v-if="getSHA256(selectedAsset.name)"
                                             class="gh-detail-value gh-copyable gh-hash"
                                             @click="copyToClipboard(getSHA256(selectedAsset.name))">
@@ -419,20 +466,24 @@ onMounted(fetchRelease)
                             <div class="gh-detail-section">
                                 <div class="gh-detail-title">📋 版本信息</div>
                                 <div class="gh-detail-grid">
-                                    <div class="gh-detail-item">
-                                        <div class="gh-detail-label">版本号</div>
+                                    <div class="gh-detail-item"
+                                        :style="{ backgroundColor: getRowColor(0).bg, borderColor: getRowColor(0).border }">
+                                        <div class="gh-detail-label">🏷️ 版本号</div>
                                         <div class="gh-detail-value">{{ release?.tag_name }}</div>
                                     </div>
-                                    <div class="gh-detail-item">
-                                        <div class="gh-detail-label">发布名称</div>
+                                    <div class="gh-detail-item"
+                                        :style="{ backgroundColor: getRowColor(1).bg, borderColor: getRowColor(1).border }">
+                                        <div class="gh-detail-label">📛 发布名称</div>
                                         <div class="gh-detail-value">{{ release?.name || release?.tag_name }}</div>
                                     </div>
-                                    <div class="gh-detail-item">
-                                        <div class="gh-detail-label">发布时间</div>
+                                    <div class="gh-detail-item"
+                                        :style="{ backgroundColor: getRowColor(2).bg, borderColor: getRowColor(2).border }">
+                                        <div class="gh-detail-label">📅 发布时间</div>
                                         <div class="gh-detail-value">{{ formatTime(release?.published_at) }}</div>
                                     </div>
-                                    <div class="gh-detail-item">
-                                        <div class="gh-detail-label">预发布</div>
+                                    <div class="gh-detail-item"
+                                        :style="{ backgroundColor: getRowColor(3).bg, borderColor: getRowColor(3).border }">
+                                        <div class="gh-detail-label">🧪 预发布</div>
                                         <div class="gh-detail-value">{{ release?.prerelease ? '是' : '否' }}</div>
                                     </div>
                                 </div>
@@ -510,10 +561,12 @@ onMounted(fetchRelease)
     background-color: #67c23a;
 }
 
-/* 下载按钮样式 */
+/* 下载按钮样式 - 改为 button 并自适应高度 */
 .gh-dl-btn {
     display: inline-flex;
-    text-decoration: none;
+    border: none;
+    padding: 0;
+    margin: 0;
     font-size: 13px;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     border-radius: 4px;
@@ -521,6 +574,7 @@ onMounted(fetchRelease)
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
     transition: all 0.2s ease;
     cursor: pointer;
+    background: none;
 }
 
 .gh-dl-btn:hover:not(.disabled) {
@@ -534,25 +588,30 @@ onMounted(fetchRelease)
 }
 
 .gh-dl-label {
-    padding: 6px 10px;
+    padding: 0.35em 0.65em;
     color: #fff;
     font-weight: 500;
+    line-height: 1.4;
 }
 
 .gh-dl-arch {
-    padding: 6px 10px;
+    padding: 0.35em 0.65em;
     color: #fff;
     font-weight: 600;
     display: flex;
     align-items: center;
     gap: 6px;
+    line-height: 1.4;
+    /* 添加文字阴影提高可读性 */
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 0 4px rgba(0, 0, 0, 0.15);
 }
 
 .gh-multi-badge {
     background: rgba(255, 255, 255, 0.3);
-    padding: 1px 6px;
+    padding: 0.1em 0.45em;
     border-radius: 10px;
-    font-size: 11px;
+    font-size: 0.85em;
+    text-shadow: none;
 }
 
 /* 弹窗样式 */
@@ -575,7 +634,7 @@ onMounted(fetchRelease)
     background: var(--vp-c-bg, #fff);
     border-radius: 16px;
     width: 100%;
-    max-width: 600px;
+    max-width: 520px;
     max-height: 85vh;
     display: flex;
     flex-direction: column;
@@ -587,24 +646,24 @@ onMounted(fetchRelease)
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 20px 24px;
+    padding: 16px 20px;
     border-bottom: 1px solid var(--vp-c-divider, #e2e8f0);
 }
 
 .gh-modal-title {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 600;
     color: var(--vp-c-text-1, #1a202c);
 }
 
 .gh-modal-close {
-    width: 32px;
-    height: 32px;
+    width: 28px;
+    height: 28px;
     border: none;
     background: var(--vp-c-bg-soft, #f1f5f9);
-    border-radius: 8px;
+    border-radius: 6px;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 14px;
     color: var(--vp-c-text-2, #64748b);
     transition: all 0.2s;
 }
@@ -617,23 +676,23 @@ onMounted(fetchRelease)
 .gh-modal-body {
     flex: 1;
     overflow-y: auto;
-    padding: 20px 24px;
+    padding: 16px 20px;
 }
 
 /* 文件列表 */
 .gh-file-list {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 6px;
 }
 
 .gh-file-item {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 14px 16px;
+    gap: 10px;
+    padding: 10px 12px;
     background: var(--vp-c-bg-soft, #f8fafc);
-    border-radius: 12px;
+    border-radius: 10px;
     cursor: pointer;
     transition: all 0.2s;
     border: 1px solid transparent;
@@ -645,7 +704,7 @@ onMounted(fetchRelease)
 }
 
 .gh-file-icon {
-    font-size: 24px;
+    font-size: 20px;
 }
 
 .gh-file-info {
@@ -654,22 +713,23 @@ onMounted(fetchRelease)
 }
 
 .gh-file-name {
+    font-size: 13px;
     font-weight: 500;
     color: var(--vp-c-text-1, #1a202c);
     word-break: break-all;
 }
 
 .gh-file-meta {
-    font-size: 12px;
+    font-size: 11px;
     color: var(--vp-c-text-3, #94a3b8);
-    margin-top: 4px;
+    margin-top: 2px;
     display: flex;
-    gap: 6px;
+    gap: 4px;
 }
 
 .gh-file-arrow {
     color: var(--vp-c-text-3, #94a3b8);
-    font-size: 18px;
+    font-size: 16px;
 }
 
 /* 返回按钮 */
@@ -677,11 +737,11 @@ onMounted(fetchRelease)
     display: inline-flex;
     align-items: center;
     gap: 4px;
-    padding: 8px 12px;
-    margin-bottom: 16px;
+    padding: 6px 10px;
+    margin-bottom: 12px;
     background: var(--vp-c-bg-soft, #f8fafc);
-    border-radius: 8px;
-    font-size: 13px;
+    border-radius: 6px;
+    font-size: 12px;
     color: var(--vp-c-text-2, #64748b);
     cursor: pointer;
     transition: all 0.2s;
@@ -694,7 +754,7 @@ onMounted(fetchRelease)
 
 /* 详情区域 */
 .gh-detail-section {
-    margin-bottom: 24px;
+    margin-bottom: 16px;
 }
 
 .gh-detail-section:last-child {
@@ -702,24 +762,25 @@ onMounted(fetchRelease)
 }
 
 .gh-detail-title {
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 600;
     color: var(--vp-c-text-1, #1a202c);
-    margin-bottom: 12px;
-    padding-bottom: 8px;
+    margin-bottom: 8px;
+    padding-bottom: 6px;
     border-bottom: 1px solid var(--vp-c-divider, #e2e8f0);
 }
 
 .gh-detail-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
+    gap: 8px;
 }
 
 .gh-detail-item {
     background: var(--vp-c-bg-soft, #f8fafc);
-    padding: 12px;
-    border-radius: 8px;
+    padding: 8px 10px;
+    border-radius: 6px;
+    border: 1px solid transparent;
 }
 
 .gh-detail-full {
@@ -727,29 +788,30 @@ onMounted(fetchRelease)
 }
 
 .gh-detail-label {
-    font-size: 11px;
+    font-size: 10px;
     color: var(--vp-c-text-3, #94a3b8);
     text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 4px;
+    letter-spacing: 0.3px;
+    margin-bottom: 2px;
 }
 
 .gh-detail-value {
-    font-size: 13px;
+    font-size: 12px;
     color: var(--vp-c-text-1, #1a202c);
     word-break: break-all;
+    line-height: 1.4;
 }
 
 .gh-copyable {
     cursor: pointer;
     position: relative;
-    padding-right: 60px;
+    padding-right: 50px;
     transition: background 0.2s;
     border-radius: 4px;
 }
 
 .gh-copyable:hover {
-    background: var(--vp-c-bg-mute, #e2e8f0);
+    background: rgba(0, 0, 0, 0.05);
 }
 
 .gh-copy-hint {
@@ -757,7 +819,7 @@ onMounted(fetchRelease)
     right: 0;
     top: 50%;
     transform: translateY(-50%);
-    font-size: 10px;
+    font-size: 9px;
     color: var(--vp-c-brand, #3b82f6);
     opacity: 0;
     transition: opacity 0.2s;
@@ -769,12 +831,12 @@ onMounted(fetchRelease)
 
 .gh-url {
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-    font-size: 12px;
+    font-size: 11px;
 }
 
 .gh-hash {
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-    font-size: 11px;
+    font-size: 10px;
 }
 
 .gh-na {
@@ -785,8 +847,8 @@ onMounted(fetchRelease)
 /* 弹窗底部 */
 .gh-modal-footer {
     display: flex;
-    gap: 12px;
-    padding: 20px 24px;
+    gap: 10px;
+    padding: 14px 20px;
     border-top: 1px solid var(--vp-c-divider, #e2e8f0);
     background: var(--vp-c-bg-soft, #f8fafc);
 }
@@ -796,13 +858,13 @@ onMounted(fetchRelease)
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    padding: 12px 20px;
+    gap: 6px;
+    padding: 10px 16px;
     background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
     color: #fff;
     font-weight: 600;
-    font-size: 14px;
-    border-radius: 10px;
+    font-size: 13px;
+    border-radius: 8px;
     text-decoration: none;
     transition: all 0.2s;
     box-shadow: 0 4px 14px rgba(59, 130, 246, 0.4);
@@ -814,16 +876,16 @@ onMounted(fetchRelease)
 }
 
 .gh-download-icon {
-    font-size: 16px;
+    font-size: 14px;
 }
 
 .gh-github-btn {
-    padding: 12px 20px;
+    padding: 10px 16px;
     background: var(--vp-c-bg, #fff);
     color: var(--vp-c-text-1, #1a202c);
     font-weight: 500;
-    font-size: 14px;
-    border-radius: 10px;
+    font-size: 13px;
+    border-radius: 8px;
     text-decoration: none;
     border: 1px solid var(--vp-c-divider, #e2e8f0);
     transition: all 0.2s;
@@ -863,6 +925,11 @@ onMounted(fetchRelease)
 
 .dark .gh-modal-overlay {
     background: rgba(0, 0, 0, 0.7);
+}
+
+.dark .gh-detail-item {
+    background: var(--vp-c-bg-soft, #1e293b) !important;
+    border-color: var(--vp-c-divider, #334155) !important;
 }
 
 /* 响应式 */
