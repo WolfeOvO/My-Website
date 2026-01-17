@@ -1,5 +1,8 @@
 let gid = 0
 
+// ══════════════════════════════════════════════════════════════
+// Markdown-it 插件
+// ══════════════════════════════════════════════════════════════
 export function tabbed(md) {
   const orig = md.parse.bind(md)
   md.parse = (src, env) => {
@@ -53,10 +56,14 @@ function preprocess(src) {
 
 function esc(s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;') }
 
+// ══════════════════════════════════════════════════════════════
+// 客户端注入（样式 + 交互）
+// ══════════════════════════════════════════════════════════════
 export function injectTabs() {
   if (typeof window === 'undefined' || window.__VPT__) return
   window.__VPT__ = true
-  
+
+  // 样式 - 仿 vitepress-plugin-tabs
   const css = `
 .vp-tabs {
   margin: 16px 0;
@@ -111,9 +118,6 @@ export function injectTabs() {
 /* 嵌套样式 */
 .vp-tabs .vp-tabs {
   margin: 16px 0 0;
-  padding-left: 0;
-  border-left: 2px solid var(--vp-c-divider);
-  padding-left: 16px;
 }
 `
   const style = document.createElement('style')

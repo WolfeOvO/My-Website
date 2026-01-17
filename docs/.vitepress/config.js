@@ -22,8 +22,8 @@ export default defineConfig({
       tipLabel: '⚠️注意',
       warningLabel: '❗️警告',
       dangerLabel: '🚨危险',
-      infoLabel: '信息',
-      detailsLabel: '详细信息'
+      infoLabel: '（请在 ``::: info`` 后方自定义容器名称）',
+      detailsLabel: '（请在 ``::: details`` 后方自定义容器名称）'
     }
   },
 
