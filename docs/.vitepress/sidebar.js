@@ -23,7 +23,8 @@ export const sidebar = {
         {
           text: '墙外指南',
           items: [
-            { text: '目录', link: '/墙外指南/墙外指南目录.md' }
+            { text: '目录', link: '/墙外指南/墙外指南目录.md' },
+            { text: '名词解释', link: '/墙外指南/名词解释.md' }
           ]
         },
         {
