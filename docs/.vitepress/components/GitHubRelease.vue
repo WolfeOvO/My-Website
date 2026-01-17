@@ -490,10 +490,9 @@ onMounted(fetchRelease)
                             </div>
                         </div>
 
-                        <!-- 弹窗底部 -->
-                        <div class="gh-modal-footer">
-                            <a v-if="selectedAsset" :href="selectedAsset.browser_download_url" class="gh-download-btn"
-                                target="_blank">
+                        <!-- 弹窗底部 - 只在文件详情时显示 -->
+                        <div v-if="selectedAsset" class="gh-modal-footer">
+                            <a :href="selectedAsset.browser_download_url" class="gh-download-btn" target="_blank">
                                 <span class="gh-download-icon">⬇</span>
                                 下载文件
                             </a>
@@ -716,7 +715,9 @@ onMounted(fetchRelease)
     font-size: 13px;
     font-weight: 500;
     color: var(--vp-c-text-1, #1a202c);
-    word-break: break-all;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    line-height: 1.4;
 }
 
 .gh-file-meta {

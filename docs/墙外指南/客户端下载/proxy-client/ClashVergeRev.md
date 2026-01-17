@@ -55,3 +55,8 @@
 === "Linux"
 
     === 
+
+| 发行版本 | 下载次数 | 下载地址 |
+| :---: | :---: | :---: |
+| Github Release 正式版 | <GitHubRelease owner="clash-verge-rev" repo="clash-verge-rev" mode="badge" :showVersion="false" /> | <GitHubRelease owner="clash-verge-rev" repo="clash-verge-rev" mode="badge" :showDownloads="false" /> |
+| Github Release 测试版 | <GitHubRelease owner="clash-verge-rev" repo="clash-verge-rev" mode="badge" :showVersion="false" prerelease /> | <GitHubRelease owner="clash-verge-rev" repo="clash-verge-rev" mode="badge" :showDownloads="false" prerelease /> |
