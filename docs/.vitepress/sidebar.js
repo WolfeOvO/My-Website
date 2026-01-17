@@ -4,7 +4,7 @@ export const sidebar = {
       text: '储物间',
       base: '/储物间/', 
       items: [
-        { text: '目录', link: '储物间目录' }, 
+        { text: '目录', link: '储物间目录', isIndex: true }, 
         { text: '1 - 搜索引擎', link: '1-搜索引擎' },
         { text: '2 - 问答导航', link: '2-问答导航' },
         { text: '3 - 百科全书', link: '3-百科全书' },
@@ -21,11 +21,11 @@ export const sidebar = {
     }
   ],
   '/墙外指南/': [
-    { text: '目录', link: '墙外指南目录' },
     {
       text: '墙外指南',
       base: '/墙外指南/',
       items: [
+        { text: '目录', link: '墙外指南目录', isIndex: true },
         { text: '名词解释', link: '名词解释' }
       ]
     },

@@ -49,7 +49,7 @@ const getIcon = (text) => {
     return '📄'
 }
 
-// --- 核心逻辑：递归提取结构 ---
+// --- 核心逻辑：递归提取完整结构 ---
 function recursivelyBuildStructure(items, parentBase = '/') {
     let result = []
 
@@ -57,16 +57,13 @@ function recursivelyBuildStructure(items, parentBase = '/') {
         const currentBase = item.base || parentBase
 
         if (item.items && item.items.length > 0) {
-            // 处理直接子文件
             const directFiles = item.items.filter(i => i.link).map(i => ({
                 text: i.text,
                 link: resolveLink(i.base || currentBase, i.link),
                 icon: getIcon(i.text)
             }))
 
-            // 递归处理子文件夹
             const subFolders = recursivelyBuildStructure(item.items.filter(i => i.items), currentBase)
-
             const allChildren = [...directFiles, ...subFolders]
 
             if (allChildren.length > 0) {
@@ -105,50 +102,41 @@ function findSidebarGroup(sidebar, path) {
 }
 
 /**
- * 在侧边栏结构中查找当前页面的位置信息
- * 返回: { found, isTopLevel, siblings, hasChildren, hasSiblings, parent, currentItem }
+ * 递归查找当前页面所在位置
+ * 返回: { found, isIndex, depth, parentGroup, siblings, siblingGroups, rawSiblings }
  */
-function findCurrentPageContext(items, targetPath, parentBase = '/', parent = null, depth = 0) {
+function findCurrentPageContext(items, targetPath, parentBase = '/', parentGroup = null, depth = 0) {
     const normalizedTarget = normalizePath(targetPath)
 
-    // 收集当前层级的所有链接项（同级）
-    const currentLevelLinks = items.filter(i => i.link).map(i => ({
-        text: i.text,
-        link: resolveLink(i.base || parentBase, i.link),
-        icon: getIcon(i.text),
-        // 检查该项是否有子项（通过检查原始 items 数组中是否有同名的 group）
-        hasChildren: false
-    }))
+    // 当前层的链接
+    const currentLinks = items.filter(i => i.link)
+    // 当前层的分组
+    const currentGroups = items.filter(i => i.items && i.items.length > 0)
 
-    // 收集当前层级的分组
-    const currentLevelGroups = items.filter(i => i.items && i.items.length > 0)
-
-    // 在当前层级的链接中查找目标
-    for (let i = 0; i < currentLevelLinks.length; i++) {
-        const linkItem = currentLevelLinks[i]
-        if (normalizePath(linkItem.link) === normalizedTarget) {
-            // 找到了！
-            // 判断同级有多少项
-            const siblingLinks = currentLevelLinks.filter(l => normalizePath(l.link) !== normalizedTarget)
-            const hasSiblings = siblingLinks.length > 0 || currentLevelGroups.length > 0
-
+    // 在当前层链接中查找
+    for (const linkItem of currentLinks) {
+        const resolvedLink = resolveLink(linkItem.base || parentBase, linkItem.link)
+        if (normalizePath(resolvedLink) === normalizedTarget) {
             return {
                 found: true,
-                isTopLevel: depth === 0 && parent === null,
-                siblings: currentLevelLinks,          // 同级链接
-                siblingGroups: currentLevelGroups,    // 同级分组
-                hasChildren: false,                   // 链接项本身没有子级
-                hasSiblings: hasSiblings,
-                parent: parent,
-                currentItem: linkItem,
+                isIndex: linkItem.isIndex === true,  // 检测目录页标记
                 depth: depth,
+                parentGroup: parentGroup,
+                // 同级的所有链接（不含自己）
+                siblingLinks: currentLinks.filter(l =>
+                    normalizePath(resolveLink(l.base || parentBase, l.link)) !== normalizedTarget
+                ),
+                // 同级的分组
+                siblingGroups: currentGroups,
+                // 原始的同级 items（用于构建显示数据）
+                rawSiblings: items,
                 parentBase: parentBase
             }
         }
     }
 
-    // 在分组中递归查找
-    for (const group of currentLevelGroups) {
+    // 递归进入分组查找
+    for (const group of currentGroups) {
         const groupBase = group.base || parentBase
         const result = findCurrentPageContext(group.items, targetPath, groupBase, group, depth + 1)
         if (result.found) {
@@ -160,64 +148,72 @@ function findCurrentPageContext(items, targetPath, parentBase = '/', parent = nu
 }
 
 /**
- * 根据查询规则构建显示数据
+ * 根据规则构建显示数据
  * 规则:
- * 1. 顶层 → 无限向下显示所有
- * 2. 同级无子级 → 只显示同级
- * 3. 有父有子 → 从同级无限向下显示所有
- * 4. 最底层无同级 → 空
+ * 1. 目录页 (isIndex=true) → 无限向下显示所有
+ * 2. 同级无子级 (siblingGroups为空) → 只显示同级链接
+ * 3. 有父有子 (siblingGroups非空) → 从同级无限向下显示所有
+ * 4. 最底层无同级 (siblingLinks为空且siblingGroups为空) → 空
  */
 function buildDisplayData(context, allItems, baseKey) {
+    // 未找到当前页面，默认显示全部
     if (!context.found) {
-        // 默认：显示全部（顶层行为）
-        const rootFiles = allItems.filter(i => i.link).map(i => ({
-            text: i.text,
-            link: resolveLink(baseKey, i.link),
-            icon: getIcon(i.text)
-        }))
-        const folders = recursivelyBuildStructure(allItems, baseKey)
-        return [...rootFiles, ...folders]
+        return buildFullStructure(allItems, baseKey)
     }
 
-    // 规则 1: 顶层 → 无限向下显示所有
-    if (context.isTopLevel) {
-        const rootFiles = allItems.filter(i => i.link).map(i => ({
-            text: i.text,
-            link: resolveLink(baseKey, i.link),
-            icon: getIcon(i.text)
-        }))
-        const folders = recursivelyBuildStructure(allItems, baseKey)
-        return [...rootFiles, ...folders]
+    const { isIndex, siblingLinks, siblingGroups, rawSiblings, parentBase } = context
+
+    // 规则 1: 目录页 → 无限向下显示所有
+    if (isIndex) {
+        return buildFullStructure(allItems, baseKey)
     }
 
     // 规则 4: 最底层无同级 → 空
-    if (!context.hasSiblings) {
+    const hasSiblingLinks = siblingLinks && siblingLinks.length > 0
+    const hasSiblingGroups = siblingGroups && siblingGroups.length > 0
+    if (!hasSiblingLinks && !hasSiblingGroups) {
         return []
     }
 
-    // 判断同级是否有子级（检查同级分组）
-    const siblingsHaveChildren = context.siblingGroups && context.siblingGroups.length > 0
-
     // 规则 2: 同级无子级 → 只显示同级链接
-    if (!siblingsHaveChildren) {
-        return context.siblings.map(item => ({
-            text: item.text,
-            link: item.link,
-            icon: item.icon
+    if (!hasSiblingGroups) {
+        // 返回所有同级链接（包含当前页面）
+        const allLinks = rawSiblings.filter(i => i.link).map(i => ({
+            text: i.text,
+            link: resolveLink(i.base || parentBase, i.link),
+            icon: getIcon(i.text)
         }))
+        return allLinks
     }
 
     // 规则 3: 有父有子 → 从同级无限向下显示所有
-    // 显示同级链接 + 同级分组的完整递归结构
-    const siblingFiles = context.siblings.map(item => ({
-        text: item.text,
-        link: item.link,
-        icon: item.icon
+    // 构建同级链接
+    const siblingFileItems = rawSiblings.filter(i => i.link).map(i => ({
+        text: i.text,
+        link: resolveLink(i.base || parentBase, i.link),
+        icon: getIcon(i.text)
     }))
 
-    const siblingFolders = recursivelyBuildStructure(context.siblingGroups, context.parentBase)
+    // 构建同级分组的完整递归结构
+    const siblingGroupItems = recursivelyBuildStructure(
+        rawSiblings.filter(i => i.items && i.items.length > 0),
+        parentBase
+    )
 
-    return [...siblingFiles, ...siblingFolders]
+    return [...siblingFileItems, ...siblingGroupItems]
+}
+
+/**
+ * 构建完整的侧边栏结构（用于顶层显示）
+ */
+function buildFullStructure(items, baseKey) {
+    const rootFiles = items.filter(i => i.link).map(i => ({
+        text: i.text,
+        link: resolveLink(baseKey, i.link),
+        icon: getIcon(i.text)
+    }))
+    const folders = recursivelyBuildStructure(items, baseKey)
+    return [...rootFiles, ...folders]
 }
 
 const tocData = computed(() => {
@@ -227,7 +223,7 @@ const tocData = computed(() => {
     const group = findSidebarGroup(sidebar, currentPath.value)
     if (!group) return []
 
-    // 查找当前页面在侧边栏中的位置
+    // 查找当前页面位置
     const context = findCurrentPageContext(group.items, currentPath.value, group.key)
 
     // 根据规则构建显示数据
@@ -258,7 +254,6 @@ const totalCount = computed(() => countTotalLinks(tocData.value))
 </template>
 
 <style scoped>
-/* 容器风格 - 复刻 SubSidebar */
 .sub-sidebar-list {
     margin-top: 1.5rem;
     padding: 1rem;
