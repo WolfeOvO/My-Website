@@ -9,7 +9,8 @@ import { useData, useRoute } from 'vitepress'
 const props = defineProps({
     title: { type: String, default: '目录导航' },
     showIcon: { type: Boolean, default: true },
-    emptyText: { type: String, default: '暂无内容' }
+    emptyText: { type: String, default: '暂无内容' },
+    debug: { type: Boolean, default: false }  // 调试模式
 })
 
 const { theme } = useData()
@@ -20,21 +21,25 @@ const currentPath = computed(() => route.path)
 // 规范化路径
 function normalizePath(path) {
     if (!path) return ''
-    return path
+    // 解码 URL 编码的中文字符
+    let decoded = path
+    try {
+        decoded = decodeURIComponent(path)
+    } catch (e) {
+        decoded = path
+    }
+    return decoded
         .replace(/\/index\.html?$/, '/')
         .replace(/\.html?$/, '')
         .replace(/\/+/g, '/')
         .replace(/\/$/, '') || '/'
 }
 
-// 拼接 base 和 link，处理各种边界情况
+// 拼接 base 和 link
 function resolveLink(base, link) {
     if (!link) return null
-
-    // 如果 link 已经是绝对路径
     if (link.startsWith('/')) return normalizePath(link)
 
-    // 拼接 base 和 link
     const resolvedBase = base || '/'
     const fullPath = resolvedBase.endsWith('/')
         ? resolvedBase + link
@@ -43,15 +48,12 @@ function resolveLink(base, link) {
     return normalizePath(fullPath)
 }
 
-// 递归展平 sidebar 项目，解析所有 base 路径
+// 递归展平 sidebar 项目
 function flattenItems(items, parentBase = '/', depth = 0) {
     const result = []
 
     for (const item of items) {
-        // 当前项的 base（继承父级或使用自己的）
         const currentBase = item.base || parentBase
-
-        // 解析完整链接
         const fullLink = item.link ? resolveLink(currentBase, item.link) : null
 
         result.push({
@@ -62,7 +64,6 @@ function flattenItems(items, parentBase = '/', depth = 0) {
             hasChildren: !!(item.items?.length)
         })
 
-        // 递归处理子项
         if (item.items?.length) {
             result.push(...flattenItems(item.items, currentBase, depth + 1))
         }
@@ -127,13 +128,9 @@ function getPositionType(position) {
 
     const { depth, hasChildren, siblings } = position
 
-    // 顶层且有子级
     if (depth === 0 && hasChildren) return 'top'
-    // 有父级也有子级
     if (depth > 0 && hasChildren) return 'middle'
-    // 同级有其他内容
     if (!hasChildren && siblings.length > 1) return 'sibling'
-    // 最底层且同级无其他内容
     if (!hasChildren && siblings.length <= 1) return 'empty'
 
     return 'sibling'
@@ -154,10 +151,11 @@ const tocItems = computed(() => {
 
     switch (positionType) {
         case 'top':
-            // 情况1: 顶层，无限向下查找所有子级
+            // 情况1: 顶层或未找到位置，显示该分组所有内容
             if (position?.current?.items) {
                 items = flattenItems(position.current.items, position.currentBase, 0)
             } else {
+                // 未找到具体位置时，展示整个分组内容
                 items = flattenItems(group.items, group.key, 0)
             }
             break
@@ -172,7 +170,6 @@ const tocItems = computed(() => {
         case 'sibling':
             // 情况2: 同级无子级，显示同级内容
             if (position) {
-                // 只显示同级，不递归
                 items = position.siblings.map(item => {
                     const fullLink = item.link
                         ? resolveLink(item.base || position.siblingBase, item.link)
@@ -188,7 +185,6 @@ const tocItems = computed(() => {
             break
 
         case 'empty':
-            // 情况4: 最底层无同级
             items = []
             break
 
@@ -205,26 +201,47 @@ function isCurrentPage(link) {
     return normalizePath(link) === normalizePath(currentPath.value)
 }
 
-// 调试信息（开发时可用）
+// 调试信息
 const debugInfo = computed(() => {
     const sidebar = theme.value.sidebar
-    if (!sidebar) return { message: '无 sidebar 配置' }
+
+    if (!sidebar) {
+        return { error: 'sidebar 为空', sidebar: null }
+    }
 
     const group = findSidebarGroup(sidebar, currentPath.value)
-    if (!group) return { message: '未匹配到 sidebar 分组' }
+
+    if (!group) {
+        return {
+            error: '未匹配到 sidebar 分组',
+            currentPath: currentPath.value,
+            normalizedPath: normalizePath(currentPath.value),
+            sidebarKeys: Object.keys(sidebar)
+        }
+    }
+
+    // 收集所有可能的链接用于调试
+    const allLinks = flattenItems(group.items, group.key, 0)
+        .filter(item => item.link)
+        .map(item => item.link)
 
     const position = findPositionInStructure(group.items, currentPath.value, group.key)
     const positionType = getPositionType(position)
 
     return {
         currentPath: currentPath.value,
+        normalizedPath: normalizePath(currentPath.value),
         groupKey: group.key,
         positionType,
+        positionFound: !!position,
         position: position ? {
             depth: position.depth,
             hasChildren: position.hasChildren,
-            siblingsCount: position.siblings.length
-        } : null
+            siblingsCount: position.siblings.length,
+            currentText: position.current?.text
+        } : null,
+        allLinksInGroup: allLinks,
+        tocItemsCount: tocItems.value.length
     }
 })
 </script>
@@ -262,8 +279,13 @@ const debugInfo = computed(() => {
             <span class="empty-text">{{ emptyText }}</span>
         </div>
 
-        <!-- 开发调试用，生产环境可删除 -->
-        <!-- <pre style="font-size: 12px; background: #f5f5f5; padding: 8px; margin-top: 8px;">{{ debugInfo }}</pre> -->
+        <!-- 调试信息 -->
+        <div v-if="debug" class="auto-toc-debug">
+            <details>
+                <summary>🔍 调试信息</summary>
+                <pre>{{ JSON.stringify(debugInfo, null, 2) }}</pre>
+            </details>
+        </div>
     </div>
 </template>
 
@@ -381,6 +403,28 @@ const debugInfo = computed(() => {
 
 .empty-icon {
     font-size: 1.2em;
+}
+
+/* 调试样式 */
+.auto-toc-debug {
+    border-top: 1px dashed var(--vp-c-divider);
+    padding: 8px 12px;
+    font-size: 12px;
+}
+
+.auto-toc-debug summary {
+    cursor: pointer;
+    color: var(--vp-c-text-3);
+}
+
+.auto-toc-debug pre {
+    margin: 8px 0 0;
+    padding: 8px;
+    background: var(--vp-c-bg-alt);
+    border-radius: 4px;
+    overflow-x: auto;
+    font-size: 11px;
+    line-height: 1.4;
 }
 
 @media (max-width: 768px) {
