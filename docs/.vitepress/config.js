@@ -8,11 +8,11 @@ export default defineConfig({
   description: "Wolfe 的小破站，始于2026/1/11",
   ignoreDeadLinks: true,
   lastUpdated: true,
-  darkModeSwitchLabel: "切换主题",
-  lightModeSwitchTitle: "切换到浅色模式",
-  darkModeSwitchTitle: "切换到深色模式",
-  sidebarMenuLabel: "侧边栏",
-  returnToTopLabel: "返回顶部",
+  darkModeSwitchLabel: '切换主题',
+  lightModeSwitchTitle: '切换到浅色模式',
+  darkModeSwitchTitle: '切换到深色模式',
+  sidebarMenuLabel: '侧边栏',
+  returnToTopLabel: '返回顶部',
   externalLinkIcon: true,
 
   markdown: {
