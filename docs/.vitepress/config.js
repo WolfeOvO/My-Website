@@ -2,6 +2,7 @@ import { defineConfig } from 'vitepress'
 import { sidebar } from './sidebar'
 import { tabsMarkdownPlugin } from 'vitepress-plugin-tabs'
 import { tabbed } from './plugins/vitepress-tabbed.js'
+import footnote from 'markdown-it-footnote'
 
 export default defineConfig({
   title: "Wolfeの储物间",
@@ -16,6 +17,10 @@ export default defineConfig({
 
     config(md) {
       md.use(tabbed)
+    },
+
+    config: (md) => {
+      md.use(footnote)
     },
     
     container: {
