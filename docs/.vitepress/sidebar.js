@@ -27,6 +27,13 @@ export const sidebar = {
           ]
         },
         {
+          text: '镜像',
+          items: [
+            { text: 'Wikipedia 维基百科', link: '/墙外指南/镜像/Wikipedia.md' },
+            { text: 'GitHub 代理', link: '/墙外指南/镜像/GitHub.md' }
+          ]
+        },
+        {
            text: '推荐机场',
            collapsed: false,
            items: [
