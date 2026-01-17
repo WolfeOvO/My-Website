@@ -49,15 +49,14 @@ export const sidebar = {
           ]
         },
         {
-          text: '客户端下载',
+          text: '面板&客户端',
           collapsed: false,
           items: [
-            { text: '合集', link: '/墙外指南/客户端下载/合集.md' },
-            { text: '各大客户端',
-              link: '/墙外指南/客户端下载/客户端.md' ,
+            { text: '客户端',
               collapsed: true,
               items: [
-                { text: 'Clash Verge Rev', link: '/墙外指南/客户端下载/proxy-client/ClashVergeRev.md'}
+                { text: '客户端合集', link: '/墙外指南/面板&客户端/proxy-client/client.md' },
+                { text: 'Clash Verge Rev', link: '/墙外指南/面板&客户端/proxy-client/ClashVergeRev.md'}
               ]
             }
           ]

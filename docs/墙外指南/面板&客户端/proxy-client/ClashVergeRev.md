@@ -23,7 +23,7 @@
 === "WinGet" @2
 
 通过 Windows 11 自带的包管理器 WinGet 安装：
-```
+``` PowerShell
 winget install ClashVergeRev.ClashVergeRev
 ```
 
@@ -38,7 +38,7 @@ winget install ClashVergeRev.ClashVergeRev
 :::
 
 安装 Scoop：
-```
+``` PowerShell
 # See https://github.com/ScoopInstaller/Install#readme
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser 
 irm get.scoop.sh -outfile 'install.ps1'
@@ -46,7 +46,7 @@ irm get.scoop.sh -outfile 'install.ps1'
 ```
 
 安装 Clash Verge Rev：
-```
+``` PowerShell
 scoop bucket add extras
 scoop install extras/clash-verge-rev
 ```

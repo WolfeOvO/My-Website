@@ -1,11 +1,11 @@
-# 合集
+# 客户端（代理软件）
 
 ## 免客户端翻墙
 
 - [https://github.com/bannedbook/fanqiang](https://github.com/bannedbook/fanqiang)（[GitBook 分站](https://fanqiang.gitbook.io/fanqiang)）
 - [https://github.com/Alvin9999-newpac/fanqiang](https://github.com/Alvin9999-newpac/fanqiang)
 
-## 客户端导航：
+## 客户端导航
 - 虚空终端：[https://wiki.metacubex.one/](https://wiki.metacubex.one/)
 - [科技分享](https://kejifenxiang.com/)：[https://kejifenxiang.com/tools](https://kejifenxiang.com/tools)
 - [SubConverter](https://subconverter.org/clients/)：[https://subconverter.org/clients/](https://subconverter.org/clients/)
