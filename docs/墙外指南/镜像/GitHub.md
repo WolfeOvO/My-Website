@@ -6,9 +6,9 @@
 
 稳定、快速地下载 GitHub Release、Archive、Raw 等文件，支持 [github.com](https://github.com/) 和 [raw.githubusercontent.com](https://raw.githubusercontent.com/) 链接，众多代理合集确保你再也不用担心 GitHub 文件下载问题。
 
-- **稳定下载：**我们搜集了许多代理服务，确保在任何时候都有可用服务；
-- **实时测试：**我们自动验证代理服务，确保提供最方便快捷的下载服务；
-- **完全免费：**我们不会收取任何费用，所有代理服务也都是大佬免费提供。
+- **稳定下载**：我们搜集了许多代理服务，确保在任何时候都有可用服务；
+- **实时测试**：我们自动验证代理服务，确保提供最方便快捷的下载服务；
+- **完全免费**：我们不会收取任何费用，所有代理服务也都是大佬免费提供。
 
 ### 使用说明
 
@@ -28,7 +28,7 @@ https://ghproxylist.com/https://github.com/user/repo/releases/download/tag/file
 
 #### 文件下载
 
-**示例：**
+**示例**：
 
 - 源码下载:
 
@@ -58,7 +58,7 @@ https://ghproxylist.com/https://raw.githubusercontent.com/FujiwaraChoki/MoneyPri
 
 在地址栏输入 GitHub 文件链接，点击一键生成，即可生成多个代理服务器的下载链接，复制链接后就可以在终端/命令行中使用，支持 ``git clone``、``wget``、``curl`` 等命令。
 
-**示例：**
+**示例**：
 
 - ``git clone`` 使用示例：
 

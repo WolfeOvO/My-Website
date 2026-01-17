@@ -1,7 +1,7 @@
 <script setup>
 import { computed } from 'vue'
 import { useData, useRoute } from 'vitepress'
-import RecursiveRow from './RecursiveRow.vue' // 引入递归子组件
+import RecursiveRow from './RecursiveRow.vue'
 
 const props = defineProps({
     title: { type: String, default: '目录导航' },
@@ -50,36 +50,22 @@ const getIcon = (text) => {
 }
 
 // --- 核心逻辑：递归提取结构 ---
-function recursivelyFindGroups(items, parentBase = '/') {
+function recursivelyBuildStructure(items, parentBase = '/') {
     let result = []
 
     for (const item of items) {
         const currentBase = item.base || parentBase
 
-        // 如果是分组 (有 items)
         if (item.items && item.items.length > 0) {
-            // 1. 递归获取子级
-            const children = recursivelyFindGroups(item.items, currentBase)
-
-            // 2. 只有当它下面真的有文件（无论是直接的还是深层的）时，才算作一个有效组
-            // 或者它本身虽然没直接文件，但为了保持目录结构展示
-
-            // 这里我们做一个转换：
-            // 把当前层级直接是 link 的，转换为 children 的一部分
-            // 把当前层级是 items 的，也转换为 children
-
-            // 但为了配合 RecursiveRow 的渲染，我们需要把数据标准化
-            const standardChildren = []
-
-            // 先处理直接子文件
+            // 处理直接子文件
             const directFiles = item.items.filter(i => i.link).map(i => ({
                 text: i.text,
                 link: resolveLink(i.base || currentBase, i.link),
                 icon: getIcon(i.text)
             }))
 
-            // 再处理子文件夹 (递归结果)
-            const subFolders = recursivelyFindGroups(item.items.filter(i => i.items), currentBase)
+            // 递归处理子文件夹
+            const subFolders = recursivelyBuildStructure(item.items.filter(i => i.items), currentBase)
 
             const allChildren = [...directFiles, ...subFolders]
 
@@ -88,12 +74,10 @@ function recursivelyFindGroups(items, parentBase = '/') {
                     text: item.text,
                     items: allChildren,
                     isGroup: true,
-                    count: countTotalLinks(allChildren) // 计算该组下的总文章数
+                    count: countTotalLinks(allChildren)
                 })
             }
         }
-        // 如果是直接文件，由上层处理，或者如果我们在顶层调用，需要单独处理
-        // (但在递归函数里，我们通常返回结构化的对象)
     }
     return result
 }
@@ -120,31 +104,134 @@ function findSidebarGroup(sidebar, path) {
     return null
 }
 
+/**
+ * 在侧边栏结构中查找当前页面的位置信息
+ * 返回: { found, isTopLevel, siblings, hasChildren, hasSiblings, parent, currentItem }
+ */
+function findCurrentPageContext(items, targetPath, parentBase = '/', parent = null, depth = 0) {
+    const normalizedTarget = normalizePath(targetPath)
+
+    // 收集当前层级的所有链接项（同级）
+    const currentLevelLinks = items.filter(i => i.link).map(i => ({
+        text: i.text,
+        link: resolveLink(i.base || parentBase, i.link),
+        icon: getIcon(i.text),
+        // 检查该项是否有子项（通过检查原始 items 数组中是否有同名的 group）
+        hasChildren: false
+    }))
+
+    // 收集当前层级的分组
+    const currentLevelGroups = items.filter(i => i.items && i.items.length > 0)
+
+    // 在当前层级的链接中查找目标
+    for (let i = 0; i < currentLevelLinks.length; i++) {
+        const linkItem = currentLevelLinks[i]
+        if (normalizePath(linkItem.link) === normalizedTarget) {
+            // 找到了！
+            // 判断同级有多少项
+            const siblingLinks = currentLevelLinks.filter(l => normalizePath(l.link) !== normalizedTarget)
+            const hasSiblings = siblingLinks.length > 0 || currentLevelGroups.length > 0
+
+            return {
+                found: true,
+                isTopLevel: depth === 0 && parent === null,
+                siblings: currentLevelLinks,          // 同级链接
+                siblingGroups: currentLevelGroups,    // 同级分组
+                hasChildren: false,                   // 链接项本身没有子级
+                hasSiblings: hasSiblings,
+                parent: parent,
+                currentItem: linkItem,
+                depth: depth,
+                parentBase: parentBase
+            }
+        }
+    }
+
+    // 在分组中递归查找
+    for (const group of currentLevelGroups) {
+        const groupBase = group.base || parentBase
+        const result = findCurrentPageContext(group.items, targetPath, groupBase, group, depth + 1)
+        if (result.found) {
+            return result
+        }
+    }
+
+    return { found: false }
+}
+
+/**
+ * 根据查询规则构建显示数据
+ * 规则:
+ * 1. 顶层 → 无限向下显示所有
+ * 2. 同级无子级 → 只显示同级
+ * 3. 有父有子 → 从同级无限向下显示所有
+ * 4. 最底层无同级 → 空
+ */
+function buildDisplayData(context, allItems, baseKey) {
+    if (!context.found) {
+        // 默认：显示全部（顶层行为）
+        const rootFiles = allItems.filter(i => i.link).map(i => ({
+            text: i.text,
+            link: resolveLink(baseKey, i.link),
+            icon: getIcon(i.text)
+        }))
+        const folders = recursivelyBuildStructure(allItems, baseKey)
+        return [...rootFiles, ...folders]
+    }
+
+    // 规则 1: 顶层 → 无限向下显示所有
+    if (context.isTopLevel) {
+        const rootFiles = allItems.filter(i => i.link).map(i => ({
+            text: i.text,
+            link: resolveLink(baseKey, i.link),
+            icon: getIcon(i.text)
+        }))
+        const folders = recursivelyBuildStructure(allItems, baseKey)
+        return [...rootFiles, ...folders]
+    }
+
+    // 规则 4: 最底层无同级 → 空
+    if (!context.hasSiblings) {
+        return []
+    }
+
+    // 判断同级是否有子级（检查同级分组）
+    const siblingsHaveChildren = context.siblingGroups && context.siblingGroups.length > 0
+
+    // 规则 2: 同级无子级 → 只显示同级链接
+    if (!siblingsHaveChildren) {
+        return context.siblings.map(item => ({
+            text: item.text,
+            link: item.link,
+            icon: item.icon
+        }))
+    }
+
+    // 规则 3: 有父有子 → 从同级无限向下显示所有
+    // 显示同级链接 + 同级分组的完整递归结构
+    const siblingFiles = context.siblings.map(item => ({
+        text: item.text,
+        link: item.link,
+        icon: item.icon
+    }))
+
+    const siblingFolders = recursivelyBuildStructure(context.siblingGroups, context.parentBase)
+
+    return [...siblingFiles, ...siblingFolders]
+}
+
 const tocData = computed(() => {
     const sidebar = theme.value.sidebar
     if (!sidebar) return []
+
     const group = findSidebarGroup(sidebar, currentPath.value)
     if (!group) return []
 
-    // 获取根目录下的散文件
-    const rootFiles = group.items.filter(i => i.link).map(i => ({
-        text: i.text,
-        link: resolveLink(group.key, i.link),
-        icon: getIcon(i.text)
-    }))
+    // 查找当前页面在侧边栏中的位置
+    const context = findCurrentPageContext(group.items, currentPath.value, group.key)
 
-    // 获取所有文件夹结构
-    const folders = recursivelyFindGroups(group.items, group.key)
-
-    // 合并：如果根目录下既有文件又有文件夹
-    let result = folders
-    if (rootFiles.length > 0) {
-        // 把散文件作为一个特殊的“基础内容”组，或者直接放在顶层
-        // 为了 UI 统一，我们把它们放在顶层列表里
-        result = [...rootFiles, ...folders]
-    }
-
-    return result
+    // 根据规则构建显示数据
+    return buildDisplayData(context, group.items, group.key)
 })
 
 // 总数统计

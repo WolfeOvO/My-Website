@@ -54,7 +54,6 @@ export const sidebar = {
           text: '2026 年',
           collapsed: true,
           items: [
-            // 这里因为层级较深，可以手动拼接，或者只写剩余部分
             { text: '1 月', link: '2026年/2026年1月' }
           ]
         }
@@ -62,7 +61,6 @@ export const sidebar = {
     },
     {
       text: '软件下载',
-      // 这里 base 设置到 proxy-client 层级，下面链接会非常短
       base: '/墙外指南/软件下载/proxy-client/', 
       items: [
         { 
