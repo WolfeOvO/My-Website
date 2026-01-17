@@ -11,16 +11,13 @@ export default defineConfig({
   lastUpdated: true,
 
   markdown: {
+    // ✅ 合并成一个 config 函数
     config(md) {
       md.use(tabsMarkdownPlugin)
-    },
-
-    config(md) {
       md.use(tabbed)
-    },
-
-    config(md) {
       md.use(footnote)
+      
+      // 自定义脚注渲染
       md.renderer.rules.footnote_ref = (tokens, idx, options, env, slf) => {
         const id = slf.rules.footnote_anchor_name(tokens, idx, options, env, slf)
         const refid = id
@@ -38,21 +35,21 @@ export default defineConfig({
       tipLabel: '⚠️注意',
       warningLabel: '❗️警告',
       dangerLabel: '🚨危险',
-      infoLabel: '（请在 ``::: info`` 后方自定义容器名称）',
-      detailsLabel: '（请在 ``::: details`` 后方自定义容器名称）'
+      infoLabel: '(请在 ``::: info`` 后方自定义容器名称)',
+      detailsLabel: '(请在 ``::: details`` 后方自定义容器名称)'
     }
   },
 
   themeConfig: {
-  darkModeSwitchLabel: '切换主题',
-  lightModeSwitchTitle: '切换到浅色模式',
-  darkModeSwitchTitle: '切换到深色模式',
-  sidebarMenuLabel: '侧边栏',
-  returnToTopLabel: '返回顶部',
-  externalLinkIcon: true,
-  
-  footer: {
-      message: '内容版权所有，侵权必究；使用 VitePress 搭建，遵循 MIT 协议开源。',
+    darkModeSwitchLabel: '切换主题',
+    lightModeSwitchTitle: '切换到浅色模式',
+    darkModeSwitchTitle: '切换到深色模式',
+    sidebarMenuLabel: '侧边栏',
+    returnToTopLabel: '返回顶部',
+    externalLinkIcon: true,
+    
+    footer: {
+      message: '内容版权所有，侵权必究；使用 VitePress 搭建,遵循 MIT 协议开源。',
       copyright: 'Copyright © 2026 Wolfe Group'
     },
 
