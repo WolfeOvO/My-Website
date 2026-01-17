@@ -124,6 +124,13 @@ export function injectTabs() {
   style.textContent = css
   document.head.appendChild(style)
 
+  // 获取 tabs 组的唯一标识（用所有 label 组合）
+  function getTabsKey(tabs) {
+    const labels = Array.from(tabs.querySelectorAll(':scope > .vp-tabs-nav > .vp-tabs-tab'))
+      .map(b => b.textContent).join('|')
+    return 'vp-tabs-' + labels
+  }
+
   // 交互
   document.addEventListener('click', e => {
     const btn = e.target.closest('.vp-tabs-tab')
@@ -132,32 +139,48 @@ export function injectTabs() {
     const tabs = btn.closest('.vp-tabs')
     const idx = btn.dataset.i
     const label = btn.textContent
+    const key = getTabsKey(tabs)
 
     // 切换当前组
     tabs.querySelectorAll(':scope > .vp-tabs-nav > .vp-tabs-tab').forEach(b => b.classList.toggle('active', b.dataset.i === idx))
     tabs.querySelectorAll(':scope > .vp-tabs-panel').forEach(p => p.classList.toggle('active', p.dataset.i === idx))
 
-    // 联动：页面内所有相同 label 的 tabs 同步切换
-    localStorage.setItem('vp-tabs-' + label, '1')
+    // 保存当前选择
+    localStorage.setItem(key, label)
+
+    // 联动：相同结构的 tabs 组同步切换
     document.querySelectorAll('.vp-tabs').forEach(t => {
       if (t === tabs) return
-      t.querySelectorAll(':scope > .vp-tabs-nav > .vp-tabs-tab').forEach(b => {
-        if (b.textContent === label) {
-          t.querySelectorAll(':scope > .vp-tabs-nav > .vp-tabs-tab').forEach(x => x.classList.toggle('active', x === b))
-          t.querySelectorAll(':scope > .vp-tabs-panel').forEach(p => p.classList.toggle('active', p.dataset.i === b.dataset.i))
-        }
-      })
+      if (getTabsKey(t) === key) {
+        t.querySelectorAll(':scope > .vp-tabs-nav > .vp-tabs-tab').forEach(b => {
+          const match = b.textContent === label
+          b.classList.toggle('active', match)
+        })
+        t.querySelectorAll(':scope > .vp-tabs-panel').forEach(p => {
+          const matchBtn = t.querySelector(`:scope > .vp-tabs-nav > .vp-tabs-tab[data-i="${p.dataset.i}"]`)
+          p.classList.toggle('active', matchBtn?.textContent === label)
+        })
+      }
     })
   })
 
   // 恢复之前选择的 tab
   function restore() {
     document.querySelectorAll('.vp-tabs').forEach(tabs => {
-      tabs.querySelectorAll(':scope > .vp-tabs-nav > .vp-tabs-tab').forEach(btn => {
-        if (localStorage.getItem('vp-tabs-' + btn.textContent)) {
-          tabs.querySelectorAll(':scope > .vp-tabs-nav > .vp-tabs-tab').forEach(b => b.classList.toggle('active', b === btn))
-          tabs.querySelectorAll(':scope > .vp-tabs-panel').forEach(p => p.classList.toggle('active', p.dataset.i === btn.dataset.i))
-        }
+      const key = getTabsKey(tabs)
+      const saved = localStorage.getItem(key)
+      if (!saved) return
+      
+      const btns = tabs.querySelectorAll(':scope > .vp-tabs-nav > .vp-tabs-tab')
+      const panels = tabs.querySelectorAll(':scope > .vp-tabs-panel')
+      
+      btns.forEach(btn => {
+        const match = btn.textContent === saved
+        btn.classList.toggle('active', match)
+      })
+      panels.forEach(p => {
+        const matchBtn = tabs.querySelector(`:scope > .vp-tabs-nav > .vp-tabs-tab[data-i="${p.dataset.i}"]`)
+        p.classList.toggle('active', matchBtn?.textContent === saved)
       })
     })
   }
