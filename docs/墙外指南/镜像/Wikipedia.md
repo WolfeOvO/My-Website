@@ -11,7 +11,7 @@
 - 中文维基百科镜像：[https://54e1ad.kfd.me/wiki/Wikipedia:%E9%A6%96%E9%A1%B5](https://54e1ad.kfd.me/wiki/Wikipedia:%E9%A6%96%E9%A1%B5)
 - 英文维基百科镜像：[https://ene1ad.kfd.me/wiki/Main_Page](https://ene1ad.kfd.me/wiki/Main_Page)
 
-## Proxy Free Chinese Wikipedia <font color="gray">无需代理的中文维基百科</font>
+## Proxy Free Chinese Wikipedia 无需代理的中文维基百科
 
 > 通过 CloudFlare Workers 实现中国大陆网络环境直接访问
 

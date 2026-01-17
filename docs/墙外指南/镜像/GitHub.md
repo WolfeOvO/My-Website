@@ -2,7 +2,7 @@
 
 ## GitHub 代理下载合集
 
-
+<lc url="https://ghproxylist.com/" />
 
 稳定、快速地下载 GitHub Release、Archive、Raw 等文件，支持 [github.com](https://github.com/) 和 [raw.githubusercontent.com](https://raw.githubusercontent.com/) 链接，众多代理合集确保你再也不用担心 GitHub 文件下载问题。
 
@@ -26,13 +26,13 @@
 
 为了方便分享，您可以直接在我们的网址后面附加 GitHub 链接，无需手动输入：
 
-``` uri
+``` HTTP
 https://ghproxylist.com/https://github.com/user/repo/releases/download/tag/file
 ```
 
 系统会自动识别并处理您的 GitHub 链接，为您生成所有可用的代理下载链接。
 
-<font color="gray">支持 **github.com** 和 **raw.githubusercontent.com** 的所有文件链接。请确保在我们的域名后直接附加完整的 GitHub 链接（注意包含 ``https://``）。</font>
+支持 **github.com** 和 **raw.githubusercontent.com** 的所有文件链接。请确保在我们的域名后直接附加完整的 GitHub 链接（注意包含 ``https://``）。
 
 试试点击[这里](https://ghproxylist.com/https://github.com/kamranahmedse/developer-roadmap/blob/master/public/roadmaps/computer-science.png)？
 

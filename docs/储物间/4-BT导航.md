@@ -20,7 +20,7 @@
 - [BTSOW](https://tellme.pw/bts)
 - [KickassTorrents](https://katcr.to/) 【[备用地址](https://www.kickasstorrents.pw/)】
 - [Torrent Kitty](https://sosomagnet.com/)
-- [The Pirate Bay <font color="gray">海盗湾</font>](https://thepiratebay7.com/)【[备用地址](https://piratebayproxy.info/)】
+- [The Pirate Bay 海盗湾](https://thepiratebay7.com/)【[备用地址](https://piratebayproxy.info/)】
 - [BTDigg DHT Search Engine](https://www.btdig.com/)
 - [Bitsearch](https://bitsearch.to/)
 - [1377x](https://www.1377x.to/)
@@ -59,7 +59,7 @@
 - [迅雷👍](https://www.xunlei.com/)（国内知名 BT 下载软件）
 - [迅雷 11](https://www.lanzouo.com/b0f22rzif)（原来的各种「迅雷精简版」大多已经失效，11.0 版本是唯一可用的）
 - [qBittorrent👍](https://github.com/qbittorrent/qBittorrent)（开源 BT 磁力下载软件，推荐使用[增强版](https://www.lanzoui.com/b073dnr7g)，自带 Tracker）
-- [BitComet <font color="gray">比特彗星</font>👍](https://www.bitcomet.com/en)（全平台支持，推荐使用[增强版](https://lanzoui.com/b073c7g4f)，自带 Tracker）
+- [BitComet 比特彗星👍](https://www.bitcomet.com/en)（全平台支持，推荐使用[增强版](https://lanzoui.com/b073c7g4f)，自带 Tracker）
 - [Motrix👍](https://motrix.app/)（支持 BT 磁力下载的 Aria2 下载器，界面美观）
 - [PikPak 第三方客户端](https://shimily.notion.site/shimily/PikPak-Win-Mac_By_Shimily-752a6f6362424a7881a8d8ad0c5772e2)（**PikPak** 的官方版软件不好用，这个第三方版的更好，支持 Win 和 Mac）
 - [文件蜈蚣](https://www.filecxx.com/zh_CN/index.html#)（一款多功能的下载器，同时也支持 BT 磁力下载）

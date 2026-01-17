@@ -3,20 +3,23 @@ import DefaultTheme from 'vitepress/theme'
 import Spoiler from '../components/Spoiler.vue'
 import { enhanceAppWithTabs } from 'vitepress-plugin-tabs/client'
 import GitHubRelease from '../components/GitHubRelease.vue'
-import SubSidebar from '../components/SubSidebar.vue'
 import { injectTabs } from '../plugins/vitepress-tabbed.js'
 import NotionTags from '../components/NotionTags.vue'
+import LinkCard from '../components/LinkCard.vue'
+import Sidebar from '../components/Sidebar.vue'
 
 export default {
   extends: DefaultTheme,
   enhanceApp({ app, router }) {
     // 注册组件
-    app.component('sp', Spoiler)
+    injectTabs()
     enhanceAppWithTabs(app)
+    app.component('sp', Spoiler)
     app.component('gtl', GitHubRelease)
     app.component('sidebar', SubSidebar)
-    injectTabs()
     app.component('ntags', NotionTags)
+    app.component('lc', LinkCard)
+    app.component('sidebar', Sidebar)
     
     // 脚注功能
     if (typeof window !== 'undefined') {
