@@ -19,7 +19,7 @@ export default defineConfig({
       md.use(tabbed)
     },
 
-    config: (md) => {
+    config(md) {
       md.use(footnote)
     },
     
