@@ -79,11 +79,12 @@ function buildNestedTabs(items, start, end, targetLevel) {
     if (items[i].level === targetLevel) {
       const tab = {
         label: items[i].label,
-        content: items[i].contentLines.join('\n'),
+        contentBefore: [],  // 子 tabs 之前的内容
+        contentAfter: [],   // 子 tabs 之后的内容（一般没有）
         childrenHtml: ''
       }
       
-      // 找这个 tab 下的嵌套 tabs（level > targetLevel，直到下一个同级或结束）
+      // 找这个 tab 下的嵌套 tabs 范围
       let childStart = i + 1
       let childEnd = childStart
       while (childEnd < end && items[childEnd].level > targetLevel) {
@@ -92,7 +93,20 @@ function buildNestedTabs(items, start, end, targetLevel) {
       
       if (childEnd > childStart) {
         // 有嵌套的 tabs
+        // 找到第一个子 tab 的位置，它之前的内容属于父 tab
+        let firstChildIdx = childStart
+        while (firstChildIdx < childEnd && items[firstChildIdx].level !== targetLevel + 1) {
+          firstChildIdx++
+        }
+        
+        // 当前 tab 自己的内容（在子 tabs 之前）
+        tab.contentBefore = items[i].contentLines.slice()
+        
+        // 递归构建子 tabs
         tab.childrenHtml = buildNestedTabs(items, childStart, childEnd, targetLevel + 1)
+      } else {
+        // 没有嵌套，所有内容都是当前 tab 的
+        tab.contentBefore = items[i].contentLines.slice()
       }
       
       tabs.push(tab)
@@ -113,11 +127,14 @@ function buildNestedTabs(items, start, end, targetLevel) {
   html += `</div>\n`
   tabs.forEach((t, j) => {
     html += `<div class="vp-tabs-panel${j ? '' : ' active'}" data-i="${j}">\n\n`
+    // 先渲染内容（在子 tabs 之前）
+    const beforeContent = t.contentBefore.join('\n').trim()
+    if (beforeContent) {
+      html += beforeContent + '\n\n'
+    }
+    // 再渲染子 tabs
     if (t.childrenHtml) {
       html += t.childrenHtml + '\n'
-    }
-    if (t.content.trim()) {
-      html += t.content + '\n\n'
     }
     html += `</div>\n`
   })
