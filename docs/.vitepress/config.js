@@ -3,6 +3,7 @@ import { sidebar } from './sidebar'
 import { tabsMarkdownPlugin } from 'vitepress-plugin-tabs'
 import { tabbed } from './plugins/vitepress-tabbed.js'
 import footnote from 'markdown-it-footnote'
+import { customContainerColorPlugin } from './plugins/customContainerColor'
 
 export default defineConfig({
   title: "Wolfeの储物间",
