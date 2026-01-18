@@ -13,7 +13,7 @@ import Sidebar from '../components/SidebarDirectory.vue'
 // 插件
 import { enhanceAppWithTabs } from 'vitepress-plugin-tabs/client'
 import { injectTabs } from '../plugins/vitepress-tabbed.js'
-import { setupDetailsAnimation } from './detailsAnimation.js'
+import { setupDetailsAnimation } from '../plugins/detailsAnimation.js'
 
 export default {
   extends: DefaultTheme,
