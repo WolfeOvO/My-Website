@@ -150,6 +150,15 @@
   mask-position: center;
 }
 
+/* 当标题以 emoji 开头时隐藏默认图标 */
+.vp-doc .custom-block[data-has-emoji="true"] .custom-block-title::before {
+  display: none !important;
+}
+
+.vp-doc .custom-block.details[data-has-emoji="true"] summary::before {
+  display: none !important;
+}
+
 /* SVG 图标容器 */
 .vp-doc .custom-block .custom-block-title .container-icon {
   width: 20px;
