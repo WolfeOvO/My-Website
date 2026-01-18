@@ -1,16 +1,18 @@
+/**
+ * Details 展开/折叠动画
+ * 使用单一动画实例 + playbackRate 控制方向，支持任意频率点击
+ */
+
 export function setupDetailsAnimation() {
-  // 存储每个 details 的动画状态
-  const animationState = new WeakMap();
+  const DURATION = 280;
+  const EASING = 'cubic-bezier(0.4, 0, 0.2, 1)';
   
-  /**
-   * 初始化所有 details 元素
-   */
+  const states = new WeakMap();
+  
   function initDetails() {
-    const detailsElements = document.querySelectorAll('.custom-block.details');
-    
-    detailsElements.forEach(details => {
-      if (details.dataset.animationInit) return;
-      details.dataset.animationInit = 'true';
+    document.querySelectorAll('.custom-block.details').forEach(details => {
+      if (details.dataset.animInit) return;
+      details.dataset.animInit = 'true';
       
       const summary = details.querySelector('summary');
       const content = details.querySelector('.details-content');
@@ -18,99 +20,83 @@ export function setupDetailsAnimation() {
       
       if (!summary || !content || !inner) return;
       
-      // 初始化状态和箭头class
       const isOpen = details.open;
-      if (isOpen) {
-        details.classList.add('arrow-open');
-      }
       
-      animationState.set(details, {
-        isOpen: isOpen,
-        animation: null
+      // 初始化箭头
+      details.dataset.arrowOpen = isOpen ? 'true' : 'false';
+      
+      // 创建动画（fill: 'both' 保持首尾帧状态）
+      const gridAnim = content.animate(
+        [
+          { gridTemplateRows: '0fr' },
+          { gridTemplateRows: '1fr' }
+        ],
+        { duration: DURATION, easing: EASING, fill: 'both' }
+      );
+      
+      const fadeAnim = inner.animate(
+        [
+          { opacity: 0, transform: 'translateY(-6px)' },
+          { opacity: 1, transform: 'translateY(0)' }
+        ],
+        { duration: DURATION * 0.9, easing: EASING, fill: 'both' }
+      );
+      
+      // 设置初始位置并暂停
+      const gridDuration = DURATION;
+      const fadeDuration = DURATION * 0.9;
+      
+      if (isOpen) {
+        gridAnim.currentTime = gridDuration;
+        fadeAnim.currentTime = fadeDuration;
+      } else {
+        gridAnim.currentTime = 0;
+        fadeAnim.currentTime = 0;
+      }
+      gridAnim.pause();
+      fadeAnim.pause();
+      
+      states.set(details, {
+        isOpen,
+        gridAnim,
+        fadeAnim
       });
       
-      summary.addEventListener('click', (e) => {
+      summary.addEventListener('click', e => {
         e.preventDefault();
-        toggle(details, content, inner);
+        toggle(details);
       });
     });
   }
   
-  /**
-   * 切换展开/折叠
-   */
-  function toggle(details, content, inner) {
-    const state = animationState.get(details);
+  function toggle(details) {
+    const state = states.get(details);
+    const { gridAnim, fadeAnim } = state;
     
-    // 目标状态取反
-    const targetOpen = !state.isOpen;
-    state.isOpen = targetOpen;
+    // 反转目标状态
+    state.isOpen = !state.isOpen;
     
-    // 立即更新箭头状态
-    details.classList.toggle('arrow-open', targetOpen);
+    // 更新箭头（CSS transition 处理动画）
+    details.dataset.arrowOpen = state.isOpen ? 'true' : 'false';
     
-    // 如果有正在进行的动画，反转它
-    if (state.animation && state.animation.playState === 'running') {
-      state.animation.reverse();
-      return;
-    }
+    // 展开时确保 details 是打开的
+    details.open = true;
     
-    // 展开时先设置 open 属性
-    if (targetOpen) {
-      details.open = true;
-    }
+    // 设置播放方向：1=正向(展开), -1=反向(收起)
+    const rate = state.isOpen ? 1 : -1;
+    gridAnim.playbackRate = rate;
+    fadeAnim.playbackRate = rate;
     
-    // 创建动画关键帧
-    const gridKeyframes = targetOpen
-      ? [{ gridTemplateRows: '0fr' }, { gridTemplateRows: '1fr' }]
-      : [{ gridTemplateRows: '1fr' }, { gridTemplateRows: '0fr' }];
+    // 播放动画
+    gridAnim.play();
+    fadeAnim.play();
     
-    const fadeKeyframes = targetOpen
-      ? [
-          { opacity: 0, transform: 'translateY(-8px)' },
-          { opacity: 1, transform: 'translateY(0)' }
-        ]
-      : [
-          { opacity: 1, transform: 'translateY(0)' },
-          { opacity: 0, transform: 'translateY(-8px)' }
-        ];
-    
-    const timing = {
-      duration: 300,
-      easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
-      fill: 'forwards'
-    };
-    
-    // 执行动画组
-    const gridAnim = content.animate(gridKeyframes, timing);
-    const fadeAnim = inner.animate(fadeKeyframes, { ...timing, duration: 250 });
-    
-    // 存储主动画引用
-    state.animation = gridAnim;
-    
-    // 同步反转淡入淡出动画和箭头
-    const originalReverse = gridAnim.reverse.bind(gridAnim);
-    gridAnim.reverse = () => {
-      originalReverse();
-      fadeAnim.reverse();
-      state.isOpen = !state.isOpen;
-      // 反转箭头
-      details.classList.toggle('arrow-open', state.isOpen);
-    };
-    
-    // 动画完成后清理
+    // 动画结束时的处理
     gridAnim.onfinish = () => {
-      const finalOpen = state.isOpen;
-      
-      if (!finalOpen) {
+      // 收起完成后关闭 details
+      if (!state.isOpen) {
         details.open = false;
       }
-      
-      // 清除动画效果，让 CSS 接管
-      gridAnim.cancel();
-      fadeAnim.cancel();
-      
-      state.animation = null;
     };
   }
   
@@ -122,14 +108,8 @@ export function setupDetailsAnimation() {
   }
   
   // 监听 DOM 变化
-  const observer = new MutationObserver(() => {
-    setTimeout(initDetails, 100);
-  });
-  
-  observer.observe(document.body, {
-    childList: true,
-    subtree: true
-  });
+  const observer = new MutationObserver(() => setTimeout(initDetails, 50));
+  observer.observe(document.body, { childList: true, subtree: true });
   
   return () => observer.disconnect();
 }

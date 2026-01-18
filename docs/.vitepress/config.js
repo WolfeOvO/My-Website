@@ -43,7 +43,7 @@ export default defineConfig({
     externalLinkIcon: true,
     
     footer: {
-      message: '<a href="https://icp.gov.moe/?keyword=20260914" target="_blank">萌ICP备20260914号</a> | 使用 VitePress 搭建，遵循 MIT 协议开源',
+      message: '2010.9.15❤️ | 使用 VitePress 搭建，遵循 MIT 协议开源',
       copyright: 'Copyright © 2026 Wolfe Group'
     },
 
@@ -61,7 +61,8 @@ export default defineConfig({
     sidebar: sidebar,
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/WolfeOvO' }
+      { icon: 'github', link: 'https://github.com/WolfeOvO' },
+      { icon: 'twitter', link: 'https://x.com/_WolfeOvO_' }
     ],
 
     lastUpdated: {
