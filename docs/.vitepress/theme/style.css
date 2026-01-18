@@ -690,17 +690,9 @@
   min-height: 0;
 }
 
-/* 内容区域 - 左右padding直接设置 */
+/* 内容区域 - 只用 padding 控制左右间距 */
 .vp-doc .custom-block.details .details-inner {
   padding: 0 18px;
-}
-
-/* 上下间距用伪元素，会随grid收缩而隐藏 */
-.vp-doc .custom-block.details .details-inner::before,
-.vp-doc .custom-block.details .details-inner::after {
-  content: '';
-  display: block;
-  height: 16px;
 }
 
 /* 默认关闭时隐藏 */
@@ -712,19 +704,13 @@
   opacity: 1;
 }
 
-/* 子元素margin优化 - 排除伪元素 */
-.vp-doc .custom-block.details .details-inner>p,
-.vp-doc .custom-block.details .details-inner>ul,
-.vp-doc .custom-block.details .details-inner>ol,
-.vp-doc .custom-block.details .details-inner>div,
-.vp-doc .custom-block.details .details-inner>pre,
-.vp-doc .custom-block.details .details-inner>blockquote {
-  margin-top: 0;
-  margin-bottom: 0;
+/* 上下间距用子元素 margin（margin 会随 grid 收缩） */
+.vp-doc .custom-block.details .details-inner>*:first-child {
+  margin-top: 16px !important;
 }
 
-.vp-doc .custom-block.details .details-inner>*+* {
-  margin-top: 12px;
+.vp-doc .custom-block.details .details-inner>*:last-child {
+  margin-bottom: 16px !important;
 }
 
 /* 兼容无 .details-content 包裹的旧结构 */
