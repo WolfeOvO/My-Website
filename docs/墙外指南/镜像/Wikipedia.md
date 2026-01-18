@@ -13,7 +13,7 @@
 
 ## Proxy Free Chinese Wikipedia 无需代理的中文维基百科
 
-> 通过 CloudFlare Workers 实现中国大陆网络环境直接访问
+> 通过 CloudFlare Workers 实现中国大陆网络环境直接访问。
 
 ::: details 官网描述
 <h3>海纳百川·有容乃大</h3>
@@ -51,6 +51,6 @@
 :::
 
 - 当前官网：[https://wikipedia.zyhorg.cn/](https://wikipedia.zyhorg.cn/)
-- 项目地址：[https://github.com/zyhgov/Wikipedia-Proxy-Gateway](https://github.com/zyhgov/wikipedia-proxy-gateway)）
+- 项目地址：[https://github.com/zyhgov/Wikipedia-Proxy-Gateway](https://github.com/zyhgov/wikipedia-proxy-gateway)
 
 [^1]: 实际上为过去缓存，并非实际更新。
