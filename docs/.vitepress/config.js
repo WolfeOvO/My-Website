@@ -16,6 +16,7 @@ export default defineConfig({
       md.use(tabsMarkdownPlugin)
       md.use(tabbed)
       md.use(footnote)
+      customContainerColorPlugin(md)
       
       // 自定义脚注渲染
       md.renderer.rules.footnote_ref = (tokens, idx, options, env, slf) => {
