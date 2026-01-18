@@ -112,7 +112,8 @@
   border: 1px solid;
   background-color: transparent;
   position: relative;
-  overflow: hidden;
+  /* 修复: 使用 clip-path 替代 overflow:hidden，允许子元素动画溢出 */
+  overflow: visible;
   transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1),
     box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1),
     border-color 0.25s ease;
@@ -683,20 +684,40 @@
   grid-template-rows: 1fr;
 }
 
+/* 关闭动画状态 - 保持内容可见但触发收起动画 */
+.vp-doc .custom-block.details.closing .details-content {
+  grid-template-rows: 0fr;
+}
+
+.vp-doc .custom-block.details.closing .details-inner {
+  opacity: 0;
+  transform: translateY(-8px);
+}
+
 .vp-doc .custom-block.details .details-content>.details-inner {
   overflow: hidden;
 }
 
-.vp-doc .custom-block.details .details-content>.details-inner>* {
+/* 内容区域样式 - 直接应用于 details-inner */
+.vp-doc .custom-block.details .details-inner {
   padding: 16px 18px;
   opacity: 0;
   transform: translateY(-8px);
   transition: opacity 0.25s ease 0.1s, transform 0.25s ease 0.1s;
 }
 
-.vp-doc .custom-block.details[open] .details-content>.details-inner>* {
+.vp-doc .custom-block.details[open] .details-inner {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* 内容边距优化 */
+.vp-doc .custom-block.details .details-inner>*:first-child {
+  margin-top: 0;
+}
+
+.vp-doc .custom-block.details .details-inner>*:last-child {
+  margin-bottom: 0;
 }
 
 /* 兼容无 .details-content 包裹的旧结构 */

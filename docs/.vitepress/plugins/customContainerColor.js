@@ -1,4 +1,3 @@
-
 // 支持的颜色列表
 const SUPPORTED_COLORS = [
   'red', 'orange', 'yellow', 'green', 'cyan', 'blue', 'purple', 'pink', 'gray',
@@ -68,7 +67,8 @@ export function customContainerColorPlugin(md) {
       const emojiAttr = hasEmoji ? ' data-has-emoji="true"' : '';
       
       if (type === 'details') {
-        return `<details class="custom-block details"${colorAttr}${emojiAttr}>\n<summary>${title}</summary>\n<div class="details-content"><div class="details-inner"><div>\n`;
+        // 修复: 移除多余的 <div> 层级，避免底部空白
+        return `<details class="custom-block details"${colorAttr}${emojiAttr}>\n<summary>${title}</summary>\n<div class="details-content"><div class="details-inner">\n`;
       } else {
         return `<div class="custom-block ${type}"${colorAttr}${emojiAttr}>\n<p class="custom-block-title">${title}</p>\n`;
       }
@@ -76,7 +76,8 @@ export function customContainerColorPlugin(md) {
     
     md.renderer.rules[closeKey] = function() {
       if (type === 'details') {
-        return '</div></div></div></details>\n';
+        // 修复: 对应减少一层 </div>
+        return '</div></div></details>\n';
       } else {
         return '</div>\n';
       }

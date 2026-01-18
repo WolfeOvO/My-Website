@@ -12,7 +12,7 @@
 
 <lc url="https://ghproxylist.com/" />
 
-::: details 点击展开。折叠查看详细说明
+::: details 点击展开/折叠查看详细说明
 <h3>文件分享</h3>
 
 为了方便分享，您可以直接在我们的网址后面附加 GitHub 链接，无需手动输入：
@@ -78,6 +78,7 @@ wget [复制一键生成的链接]
 ``` Bash
 curl -O [复制一键生成的链接]
 ```
+:::
 
 ## Github Proxy
 
