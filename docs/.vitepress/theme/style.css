@@ -133,9 +133,21 @@
   gap: 10px;
 }
 
-/* 移除默认图标 */
+/* 图标基础样式 */
 .vp-doc .custom-block .custom-block-title::before {
-  content: none !important;
+  content: "" !important;
+  display: inline-block !important;
+  width: 20px !important;
+  height: 20px !important;
+  flex-shrink: 0;
+  background-color: currentColor;
+  transition: transform 0.3s ease;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
 }
 
 /* SVG 图标容器 */
