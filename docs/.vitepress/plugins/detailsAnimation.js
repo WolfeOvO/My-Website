@@ -1,10 +1,6 @@
-
 export function setupDetailsAnimation() {
-  // 动画持续时间（与 CSS 保持一致）
-  const ANIMATION_DURATION = 350;
-  
-  // 存储正在动画中的元素
-  const animatingElements = new WeakSet();
+  // 存储每个 details 的动画状态
+  const animationState = new WeakMap();
   
   /**
    * 初始化所有 details 元素
@@ -13,64 +9,109 @@ export function setupDetailsAnimation() {
     const detailsElements = document.querySelectorAll('.custom-block.details');
     
     detailsElements.forEach(details => {
-      // 避免重复绑定
       if (details.dataset.animationInit) return;
       details.dataset.animationInit = 'true';
       
       const summary = details.querySelector('summary');
       const content = details.querySelector('.details-content');
+      const inner = details.querySelector('.details-inner');
       
-      if (!summary || !content) return;
+      if (!summary || !content || !inner) return;
       
-      // 阻止默认的点击行为，改用自定义动画
+      // 初始化状态和箭头class
+      const isOpen = details.open;
+      if (isOpen) {
+        details.classList.add('arrow-open');
+      }
+      
+      animationState.set(details, {
+        isOpen: isOpen,
+        animation: null
+      });
+      
       summary.addEventListener('click', (e) => {
         e.preventDefault();
-        
-        // 如果正在动画中，忽略点击
-        if (animatingElements.has(details)) return;
-        
-        if (details.open) {
-          closeDetails(details, content);
-        } else {
-          openDetails(details, content);
-        }
+        toggle(details, content, inner);
       });
     });
   }
   
   /**
-   * 展开 details
+   * 切换展开/折叠
    */
-  function openDetails(details, content) {
-    animatingElements.add(details);
+  function toggle(details, content, inner) {
+    const state = animationState.get(details);
     
-    // 先设置 open 属性，让内容可见
-    details.open = true;
+    // 目标状态取反
+    const targetOpen = !state.isOpen;
+    state.isOpen = targetOpen;
     
-    // 强制重绘以触发动画
-    content.offsetHeight;
+    // 立即更新箭头状态
+    details.classList.toggle('arrow-open', targetOpen);
     
-    // 动画完成后移除标记
-    setTimeout(() => {
-      animatingElements.delete(details);
-    }, ANIMATION_DURATION);
-  }
-  
-  /**
-   * 折叠 details (带动画)
-   */
-  function closeDetails(details, content) {
-    animatingElements.add(details);
+    // 如果有正在进行的动画，反转它
+    if (state.animation && state.animation.playState === 'running') {
+      state.animation.reverse();
+      return;
+    }
     
-    // 添加关闭动画类
-    details.classList.add('closing');
+    // 展开时先设置 open 属性
+    if (targetOpen) {
+      details.open = true;
+    }
     
-    // 等待动画完成后再真正关闭
-    setTimeout(() => {
-      details.open = false;
-      details.classList.remove('closing');
-      animatingElements.delete(details);
-    }, ANIMATION_DURATION);
+    // 创建动画关键帧
+    const gridKeyframes = targetOpen
+      ? [{ gridTemplateRows: '0fr' }, { gridTemplateRows: '1fr' }]
+      : [{ gridTemplateRows: '1fr' }, { gridTemplateRows: '0fr' }];
+    
+    const fadeKeyframes = targetOpen
+      ? [
+          { opacity: 0, transform: 'translateY(-8px)' },
+          { opacity: 1, transform: 'translateY(0)' }
+        ]
+      : [
+          { opacity: 1, transform: 'translateY(0)' },
+          { opacity: 0, transform: 'translateY(-8px)' }
+        ];
+    
+    const timing = {
+      duration: 300,
+      easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
+      fill: 'forwards'
+    };
+    
+    // 执行动画组
+    const gridAnim = content.animate(gridKeyframes, timing);
+    const fadeAnim = inner.animate(fadeKeyframes, { ...timing, duration: 250 });
+    
+    // 存储主动画引用
+    state.animation = gridAnim;
+    
+    // 同步反转淡入淡出动画和箭头
+    const originalReverse = gridAnim.reverse.bind(gridAnim);
+    gridAnim.reverse = () => {
+      originalReverse();
+      fadeAnim.reverse();
+      state.isOpen = !state.isOpen;
+      // 反转箭头
+      details.classList.toggle('arrow-open', state.isOpen);
+    };
+    
+    // 动画完成后清理
+    gridAnim.onfinish = () => {
+      const finalOpen = state.isOpen;
+      
+      if (!finalOpen) {
+        details.open = false;
+      }
+      
+      // 清除动画效果，让 CSS 接管
+      gridAnim.cancel();
+      fadeAnim.cancel();
+      
+      state.animation = null;
+    };
   }
   
   // 初始化
@@ -80,14 +121,9 @@ export function setupDetailsAnimation() {
     initDetails();
   }
   
-  // 监听DOM变化，处理动态添加的 details
-  const observer = new MutationObserver((mutations) => {
-    mutations.forEach(mutation => {
-      if (mutation.addedNodes.length) {
-        // 延迟执行以确保DOM完全渲染
-        setTimeout(initDetails, 100);
-      }
-    });
+  // 监听 DOM 变化
+  const observer = new MutationObserver(() => {
+    setTimeout(initDetails, 100);
   });
   
   observer.observe(document.body, {
@@ -95,10 +131,7 @@ export function setupDetailsAnimation() {
     subtree: true
   });
   
-  // 返回清理函数
-  return () => {
-    observer.disconnect();
-  };
+  return () => observer.disconnect();
 }
 
 export default setupDetailsAnimation;
