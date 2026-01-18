@@ -54,7 +54,7 @@ export const sidebar = {
           text: '2026 年',
           collapsed: true,
           items: [
-            { text: '1 月', link: '2026年/2026年1月' }
+            { text: '1 月', link: '2026/2026-1' }
           ]
         }
       ]
