@@ -31,7 +31,7 @@
 | <gtl owner="KaringX" repo="clashmi" mode="button" label="安装包" arch="exe" match="windows_x64.exe" /> <gtl owner="KaringX" repo="clashmi" mode="button" label="压缩包" arch="zip" match="windows_x64.zip" /> | <gtl owner="KaringX" repo="clashmi" :prerelease="true" mode="button" label="安装包" arch="exe" match="windows_x64.exe" /> <gtl owner="KaringX" repo="clashmi" :prerelease="true" mode="button" label="压缩包" arch="zip" match="windows_x64.zip" /> |
 
 
-## Android/HarmonyOS
+### Android/HarmonyOS
 
 ::: tip
 小米/MIUI 用户如遇无法安装的情况，可尝试先关网或打开`飞行模式`和关闭``安全守护``-``增强防护``再安装。

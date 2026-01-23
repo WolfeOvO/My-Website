@@ -889,9 +889,9 @@ onMounted(fetchRelease)
 /* ========== 下载按钮 ========== */
 .gh-dl-btn {
     display: inline-flex;
-    border-radius: 4px;
-    overflow: hidden;
-    font-size: 12px;
+    border-radius: 0.25em;
+    overflow: visible;
+    font-size: inherit;  /* 继承父元素字体大小 */
     line-height: 1;
     cursor: pointer;
     border: none;
@@ -899,6 +899,7 @@ onMounted(fetchRelease)
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
     transition: all 0.2s;
     vertical-align: middle;
+    position: relative;
 }
 
 .gh-dl-btn:hover:not(.disabled) {
@@ -916,43 +917,49 @@ onMounted(fetchRelease)
 }
 
 .gh-dl-label {
-    padding: 5px 8px;
+    padding: 0.35em 0.6em;
     color: #fff;
     font-weight: 500;
     position: relative;
+    border-radius: 0.25em 0 0 0.25em;
 }
 
 .gh-btn-pre-tag {
     position: absolute;
-    top: -2px;
-    right: -2px;
-    font-size: 9px;
+    top: -0.15em;
+    right: -0.15em;
+    font-size: 0.65em;
     font-weight: 700;
     color: #fff;
     background: #dc2626;
-    border-radius: 4px;
-    padding: 1px 3px;
+    border-radius: 0.25em;
+    padding: 0.1em 0.2em;
     line-height: 1;
 }
 
 .gh-dl-arch {
-    padding: 5px 8px;
+    padding: 0.35em 0.6em;
     color: #fff;
     font-weight: 500;
     position: relative;
+    border-radius: 0 0.25em 0.25em 0;
 }
 
 .gh-multi-badge {
     position: absolute;
-    top: -4px;
-    right: -4px;
+    top: -0.4em;
+    right: -0.4em;
     background: #ef4444;
     color: #fff;
-    font-size: 10px;
+    font-size: 0.7em;
     font-weight: 600;
-    padding: 1px 4px;
-    border-radius: 8px;
+    padding: 0.15em 0.35em;
+    border-radius: 0.7em;
     line-height: 1;
+    min-width: 1.2em;
+    text-align: center;
+    box-shadow: 0 1px 3px rgba(239, 68, 68, 0.4);
+    z-index: 1;
 }
 
 /* ========== 弹窗样式 ========== */
