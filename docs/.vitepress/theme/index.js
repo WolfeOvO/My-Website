@@ -4,7 +4,7 @@ import { onMounted, watch } from 'vue'
 import { useRoute } from 'vitepress'
 
 // 组件
-import gitHubRelease from '../components/gitHubRelease.vue'
+import GitHubRelease from '../components/GitHubRelease.vue'
 import notionTags from '../components/notionTags.vue'
 import linkCard from '../components/linkCard.vue'
 import sidebar from '../components/sidebarDirectory.vue'
@@ -27,7 +27,6 @@ export default {
     app.component('ntags', notionTags)
     app.component('lc', linkCard)
     app.component('sidebar', sidebar)
-    app.component
   },
   
   setup() {
@@ -39,6 +38,14 @@ export default {
       
       // 初始化脚注
       initFootnotes()
+
+      // 监听 Spoiler (黑幕) 点击事件
+      document.addEventListener('click', e => {
+        const target = e.target.closest('.spoiler-inline')
+        if (target) {
+          target.classList.toggle('revealed')
+        }
+      })
     })
     
     // 路由变化时重新初始化脚注
@@ -51,6 +58,9 @@ export default {
 
 // 脚注初始化函数
 function initFootnotes() {
+  // 再次检查环境，确保安全
+  if (typeof document === 'undefined') return
+
   const footnoteLinks = document.querySelectorAll('.footnote-link')
   
   footnoteLinks.forEach(link => {
@@ -111,7 +121,3 @@ function initFootnotes() {
     })
   })
 }
-
-document.addEventListener('click', e => {
-  e.target.closest('.spoiler-inline')?.classList.toggle('revealed')
-})
