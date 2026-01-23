@@ -14,7 +14,6 @@ import Sidebar from '../components/SidebarDirectory.vue'
 import { enhanceAppWithTabs } from 'vitepress-plugin-tabs/client'
 import { injectTabs } from '../plugins/vitepress-tabbed.js'
 import { setupDetailsAnimation } from '../plugins/detailsAnimation.js'
-import { licenseDeclarationPlugin } from '../styles/licenseDeclaration.js'
 
 export default {
   extends: DefaultTheme,
@@ -30,6 +29,7 @@ export default {
     app.component('ntags', NotionTags)
     app.component('lc', LinkCard)
     app.component('sidebar', Sidebar)
+    app.component
   },
   
   setup() {

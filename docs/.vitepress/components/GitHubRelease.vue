@@ -15,6 +15,9 @@ const props = defineProps({
     labelColor: { type: String, default: '' },
     archColor: { type: String, default: '' },
     gradient: { type: Boolean, default: true },
+    // 新增 props
+    showToggle: { type: Boolean, default: false },      // 显示版本切换开关
+    showBothVersions: { type: Boolean, default: false }, // 同时显示两个版本的徽章
 })
 
 // 预定义渐变色
@@ -31,12 +34,12 @@ const gradientPresets = [
 
 // 详情区域的颜色配置
 const detailColors = [
-    { bg: '#f0f7ff', border: '#c6deff' }, // 蓝色系
-    { bg: '#f0fdf4', border: '#bbf7d0' }, // 绿色系
-    { bg: '#fefce8', border: '#fef08a' }, // 黄色系
-    { bg: '#fdf2f8', border: '#fbcfe8' }, // 粉色系
-    { bg: '#f5f3ff', border: '#ddd6fe' }, // 紫色系
-    { bg: '#fff7ed', border: '#fed7aa' }, // 橙色系
+    { bg: '#f0f7ff', border: '#c6deff' },
+    { bg: '#f0fdf4', border: '#bbf7d0' },
+    { bg: '#fefce8', border: '#fef08a' },
+    { bg: '#fdf2f8', border: '#fbcfe8' },
+    { bg: '#f5f3ff', border: '#ddd6fe' },
+    { bg: '#fff7ed', border: '#fed7aa' },
 ]
 
 const hashString = (str) => {
@@ -54,15 +57,65 @@ const getGradient = computed(() => {
     return `linear-gradient(135deg, ${preset[0]} 0%, ${preset[1]} 100%)`
 })
 
-const release = ref(null)
+// 状态
 const loading = ref(true)
 const error = ref(null)
-const totalDownloads = ref(0)
-const matchedAssets = ref([])
 const showModal = ref(false)
 const selectedAsset = ref(null)
 const showFileList = ref(false)
 const savedScrollPosition = ref(0)
+
+// 版本切换相关
+const isPrerelease = ref(props.prerelease)
+const stableRelease = ref(null)
+const prereleaseRelease = ref(null)
+const allReleases = ref([])
+
+// 当前活动的 release（根据切换状态）
+const release = computed(() => {
+    if (props.showBothVersions) {
+        // 同时显示模式下，默认返回当前选中的版本
+        return isPrerelease.value ? prereleaseRelease.value : stableRelease.value
+    }
+    return isPrerelease.value ? prereleaseRelease.value : stableRelease.value
+})
+
+// 计算下载数和匹配文件
+const totalDownloads = computed(() => {
+    if (!release.value?.assets) return 0
+    return release.value.assets.reduce((sum, asset) => sum + (asset.download_count || 0), 0)
+})
+
+const matchedAssets = computed(() => {
+    if (!release.value?.assets || !props.match) return []
+    return release.value.assets.filter(a => isMatch(a.name))
+})
+
+// Stable 版本的数据
+const stableTotalDownloads = computed(() => {
+    if (!stableRelease.value?.assets) return 0
+    return stableRelease.value.assets.reduce((sum, asset) => sum + (asset.download_count || 0), 0)
+})
+
+const stableMatchedAssets = computed(() => {
+    if (!stableRelease.value?.assets || !props.match) return []
+    return stableRelease.value.assets.filter(a => isMatch(a.name))
+})
+
+// Pre-release 版本的数据
+const prereleaseTotalDownloads = computed(() => {
+    if (!prereleaseRelease.value?.assets) return 0
+    return prereleaseRelease.value.assets.reduce((sum, asset) => sum + (asset.download_count || 0), 0)
+})
+
+const prereleaseMatchedAssets = computed(() => {
+    if (!prereleaseRelease.value?.assets || !props.match) return []
+    return prereleaseRelease.value.assets.filter(a => isMatch(a.name))
+})
+
+// 是否有预发布版本
+const hasPrereleaseVersion = computed(() => prereleaseRelease.value !== null)
+const hasStableVersion = computed(() => stableRelease.value !== null)
 
 // 格式化下载数
 const formatDownloads = (num) => {
@@ -88,10 +141,9 @@ const formatTime = (dateStr) => {
     })
 }
 
-// 解析 match 参数（支持正则）
+// 解析 match 参数
 const parseMatch = (matchStr) => {
     if (!matchStr) return null
-    // 检查是否为正则表达式格式: /pattern/flags
     const regexMatch = matchStr.match(/^\/(.+)\/([gimsuy]*)$/)
     if (regexMatch) {
         try {
@@ -101,7 +153,6 @@ const parseMatch = (matchStr) => {
             return null
         }
     }
-    // 普通字符串匹配（多关键词用 | 分隔）
     return matchStr
 }
 
@@ -109,29 +160,25 @@ const parseMatch = (matchStr) => {
 const isMatch = (assetName) => {
     const matcher = parseMatch(props.match)
     if (!matcher) return false
-
     if (matcher instanceof RegExp) {
         return matcher.test(assetName)
     }
-    // 多关键词匹配
     const keywords = matcher.toLowerCase().split('|').map(k => k.trim())
     const name = assetName.toLowerCase()
     return keywords.every(keyword => name.includes(keyword))
 }
 
-// 获取 Release 信息
+// 获取 Release 信息（增强版）
 const fetchRelease = async () => {
     try {
         loading.value = true
         error.value = null
 
-        const endpoint = props.prerelease
-            ? `https://api.github.com/repos/${props.owner}/${props.repo}/releases`
-            : `https://api.github.com/repos/${props.owner}/${props.repo}/releases/latest`
-
-        const res = await fetch(endpoint, {
-            headers: { 'Accept': 'application/vnd.github.v3+json' }
-        })
+        // 始终获取所有 releases 以支持切换功能
+        const res = await fetch(
+            `https://api.github.com/repos/${props.owner}/${props.repo}/releases`,
+            { headers: { 'Accept': 'application/vnd.github.v3+json' } }
+        )
 
         if (!res.ok) {
             if (res.status === 404) throw new Error('仓库不存在')
@@ -140,18 +187,34 @@ const fetchRelease = async () => {
         }
 
         const data = await res.json()
-        release.value = props.prerelease
-            ? (data.find(r => r.prerelease) || data[0])
-            : data
+        allReleases.value = data
 
-        if (release.value?.assets) {
-            totalDownloads.value = release.value.assets.reduce(
-                (sum, asset) => sum + (asset.download_count || 0), 0
+        // 找到最新的稳定版（非 prerelease 且非 draft）
+        stableRelease.value = data.find(r => !r.prerelease && !r.draft) || null
+
+        // 找到最新的预发布版
+        prereleaseRelease.value = data.find(r => r.prerelease && !r.draft) || null
+
+        // 如果没有找到预发布版，但有稳定版中包含 alpha/beta/rc 等标记的
+        if (!prereleaseRelease.value) {
+            const possiblePrerelease = data.find(r => 
+                !r.draft && /alpha|beta|rc|preview|dev|nightly|canary/i.test(r.tag_name)
             )
-            if (props.match) {
-                matchedAssets.value = release.value.assets.filter(a => isMatch(a.name))
+            if (possiblePrerelease && possiblePrerelease !== stableRelease.value) {
+                prereleaseRelease.value = possiblePrerelease
             }
         }
+
+        // 设置初始选中状态
+        if (props.prerelease && prereleaseRelease.value) {
+            isPrerelease.value = true
+        } else if (!props.prerelease && stableRelease.value) {
+            isPrerelease.value = false
+        } else {
+            // 回退逻辑：如果指定的版本类型不存在，使用另一个
+            isPrerelease.value = !stableRelease.value && !!prereleaseRelease.value
+        }
+
     } catch (e) {
         error.value = e.message
     } finally {
@@ -159,17 +222,32 @@ const fetchRelease = async () => {
     }
 }
 
+// 切换版本
+const toggleVersion = () => {
+    if (isPrerelease.value && hasStableVersion.value) {
+        isPrerelease.value = false
+    } else if (!isPrerelease.value && hasPrereleaseVersion.value) {
+        isPrerelease.value = true
+    }
+}
+
 // 计算属性
-const computedTagLabel = computed(() => props.tagLabel || (props.prerelease ? '@autobuild' : '@latest'))
-const tagBgColor = computed(() => props.prerelease ? '#e6a23c' : '#67c23a')
+const computedTagLabel = computed(() => {
+    if (props.tagLabel) return props.tagLabel
+    return isPrerelease.value ? '@pre-release' : '@latest'
+})
+
+const tagBgColor = computed(() => isPrerelease.value ? '#e6a23c' : '#67c23a')
 const version = computed(() => release.value?.tag_name || 'N/A')
 const releaseUrl = computed(() => release.value?.html_url || `https://github.com/${props.owner}/${props.repo}/releases`)
 const btnLabelColor = computed(() => props.labelColor || '#555')
+
 const archBgStyle = computed(() => {
     if (props.archColor) return { backgroundColor: props.archColor }
     if (props.gradient) return { background: getGradient.value }
     return { backgroundColor: '#67c23a' }
 })
+
 const showBadge = computed(() => props.mode === 'badge' || props.mode === 'all')
 const showButton = computed(() => (props.mode === 'button' || props.mode === 'all') && props.match)
 const hasMultipleFiles = computed(() => matchedAssets.value.length > 1)
@@ -180,17 +258,32 @@ const projectUrl = computed(() => `https://github.com/${props.owner}/${props.rep
 const releasesUrl = computed(() => `https://github.com/${props.owner}/${props.repo}/releases`)
 const latestUrl = computed(() => `https://github.com/${props.owner}/${props.repo}/releases/latest`)
 
-// 监听弹窗状态，锁定/解锁背景滚动
+// Stable 版本相关计算属性
+const stableVersion = computed(() => stableRelease.value?.tag_name || 'N/A')
+const stableReleaseUrl = computed(() => stableRelease.value?.html_url || releasesUrl.value)
+const stableHasMultipleFiles = computed(() => stableMatchedAssets.value.length > 1)
+const stableFirstAsset = computed(() => stableMatchedAssets.value[0] || null)
+
+// Pre-release 版本相关计算属性
+const prereleaseVersion = computed(() => prereleaseRelease.value?.tag_name || 'N/A')
+const prereleaseReleaseUrl = computed(() => prereleaseRelease.value?.html_url || releasesUrl.value)
+const prereleaseHasMultipleFiles = computed(() => prereleaseMatchedAssets.value.length > 1)
+const prereleaseFirstAsset = computed(() => prereleaseMatchedAssets.value[0] || null)
+
+// 弹窗当前选中的版本类型
+const modalIsPrerelease = ref(false)
+const modalRelease = computed(() => modalIsPrerelease.value ? prereleaseRelease.value : stableRelease.value)
+const modalMatchedAssets = computed(() => modalIsPrerelease.value ? prereleaseMatchedAssets.value : stableMatchedAssets.value)
+
+// 监听弹窗状态
 watch(showModal, (val) => {
     if (val) {
-        // 保存当前滚动位置
         savedScrollPosition.value = window.scrollY
         document.body.style.overflow = 'hidden'
         document.body.style.position = 'fixed'
         document.body.style.top = `-${savedScrollPosition.value}px`
         document.body.style.width = '100%'
     } else {
-        // 恢复滚动
         document.body.style.overflow = ''
         document.body.style.position = ''
         document.body.style.top = ''
@@ -199,18 +292,43 @@ watch(showModal, (val) => {
     }
 })
 
-// 点击按钮
+// 点击按钮（普通模式）
 const handleButtonClick = (e) => {
     e.preventDefault()
     e.stopPropagation()
     if (loading.value || error.value || matchedAssets.value.length === 0) return
 
+    modalIsPrerelease.value = isPrerelease.value
+    
     if (hasMultipleFiles.value) {
         showFileList.value = true
         showModal.value = true
         selectedAsset.value = null
     } else {
         selectedAsset.value = firstAsset.value
+        showFileList.value = false
+        showModal.value = true
+    }
+}
+
+// 点击按钮（指定版本类型）
+const handleVersionButtonClick = (e, isPre) => {
+    e.preventDefault()
+    e.stopPropagation()
+    
+    const targetRelease = isPre ? prereleaseRelease.value : stableRelease.value
+    const targetAssets = isPre ? prereleaseMatchedAssets.value : stableMatchedAssets.value
+    
+    if (loading.value || error.value || targetAssets.length === 0) return
+
+    modalIsPrerelease.value = isPre
+    
+    if (targetAssets.length > 1) {
+        showFileList.value = true
+        showModal.value = true
+        selectedAsset.value = null
+    } else {
+        selectedAsset.value = targetAssets[0]
         showFileList.value = false
         showModal.value = true
     }
@@ -254,10 +372,11 @@ const copyToClipboard = async (text) => {
 // 转义正则特殊字符
 const escapeRegex = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 
-// 获取 SHA256（从 release body 中解析）
+// 获取 SHA256
 const getSHA256 = (assetName) => {
-    if (!release.value?.body) return null
-    const body = release.value.body
+    const targetRelease = modalRelease.value
+    if (!targetRelease?.body) return null
+    const body = targetRelease.body
     const patterns = [
         new RegExp(`${escapeRegex(assetName)}[\\s\\S]*?([a-f0-9]{64})`, 'i'),
         new RegExp(`([a-f0-9]{64})[\\s\\S]*?${escapeRegex(assetName)}`, 'i'),
@@ -281,65 +400,199 @@ onMounted(fetchRelease)
 
 <template>
     <span class="gh-release">
-        <!-- 徽章模式 -->
-        <template v-if="showBadge">
-            <a v-if="showDownloads" :href="releaseUrl" target="_blank" class="gh-badge-link"
-                :title="`总下载: ${totalDownloads}`">
-                <span class="gh-badge">
-                    <span class="gh-badge-label" :style="{ backgroundColor: tagBgColor }">{{ computedTagLabel }}</span>
-                    <span class="gh-badge-value gh-badge-count">
-                        <template v-if="loading">···</template>
-                        <template v-else-if="error">err</template>
-                        <template v-else>{{ formatDownloads(totalDownloads) }}</template>
-                    </span>
+        <!-- 版本切换开关 -->
+        <span v-if="showToggle && !loading && !error && (hasStableVersion || hasPrereleaseVersion)" class="gh-version-toggle">
+            <button 
+                :class="['gh-toggle-btn', { active: !isPrerelease, disabled: !hasStableVersion }]"
+                @click="hasStableVersion && (isPrerelease = false)"
+                :disabled="!hasStableVersion"
+            >
+                <span class="gh-toggle-icon">🏷️</span>
+                <span class="gh-toggle-text">Stable</span>
+            </button>
+            <button 
+                :class="['gh-toggle-btn', 'gh-toggle-pre', { active: isPrerelease, disabled: !hasPrereleaseVersion }]"
+                @click="hasPrereleaseVersion && (isPrerelease = true)"
+                :disabled="!hasPrereleaseVersion"
+            >
+                <span class="gh-toggle-icon">🧪</span>
+                <span class="gh-toggle-text">Pre-release</span>
+            </button>
+        </span>
+
+        <!-- ========== 同时显示两个版本模式 ========== -->
+        <template v-if="showBothVersions">
+            <!-- Stable 徽章组 -->
+            <span v-if="hasStableVersion" class="gh-version-group gh-stable-group">
+                <span class="gh-version-label">
+                    <span class="gh-label-icon">🏷️</span>
+                    <span>Stable</span>
                 </span>
-            </a>
-            <a v-if="showVersion" :href="releaseUrl" target="_blank" class="gh-badge-link" :title="`版本: ${version}`">
-                <span class="gh-badge">
-                    <span class="gh-badge-label gh-release-label">release</span>
-                    <span class="gh-badge-value gh-version-value">
+                <template v-if="showBadge">
+                    <a v-if="showDownloads" :href="stableReleaseUrl" target="_blank" class="gh-badge-link"
+                        :title="`Stable 总下载: ${stableTotalDownloads}`">
+                        <span class="gh-badge">
+                            <span class="gh-badge-label gh-stable-label">@latest</span>
+                            <span class="gh-badge-value gh-badge-count">
+                                <template v-if="loading">···</template>
+                                <template v-else-if="error">err</template>
+                                <template v-else>{{ formatDownloads(stableTotalDownloads) }}</template>
+                            </span>
+                        </span>
+                    </a>
+                    <a v-if="showVersion" :href="stableReleaseUrl" target="_blank" class="gh-badge-link" 
+                        :title="`Stable 版本: ${stableVersion}`">
+                        <span class="gh-badge">
+                            <span class="gh-badge-label gh-release-label">release</span>
+                            <span class="gh-badge-value gh-version-value">
+                                <template v-if="loading">···</template>
+                                <template v-else-if="error">err</template>
+                                <template v-else>{{ stableVersion }}</template>
+                            </span>
+                        </span>
+                    </a>
+                </template>
+                <button v-if="showButton && stableMatchedAssets.length > 0" type="button"
+                    :class="['gh-dl-btn', { disabled: loading || error }]"
+                    :title="stableFirstAsset?.name || ''" @click="handleVersionButtonClick($event, false)">
+                    <span class="gh-dl-label" :style="{ backgroundColor: btnLabelColor }">{{ label }}</span>
+                    <span class="gh-dl-arch" :style="loading ? { backgroundColor: '#999' } : archBgStyle">
                         <template v-if="loading">···</template>
-                        <template v-else-if="error">err</template>
-                        <template v-else>{{ version }}</template>
+                        <template v-else>
+                            {{ arch }}
+                            <span v-if="stableHasMultipleFiles" class="gh-multi-badge">{{ stableMatchedAssets.length }}</span>
+                        </template>
                     </span>
+                </button>
+            </span>
+
+            <!-- Pre-release 徽章组 -->
+            <span v-if="hasPrereleaseVersion" class="gh-version-group gh-prerelease-group">
+                <span class="gh-version-label gh-pre-label">
+                    <span class="gh-label-icon">🧪</span>
+                    <span>Pre-release</span>
                 </span>
-            </a>
+                <template v-if="showBadge">
+                    <a v-if="showDownloads" :href="prereleaseReleaseUrl" target="_blank" class="gh-badge-link"
+                        :title="`Pre-release 总下载: ${prereleaseTotalDownloads}`">
+                        <span class="gh-badge gh-prerelease-badge">
+                            <span class="gh-badge-label gh-prerelease-label">@pre-release</span>
+                            <span class="gh-badge-value gh-badge-count">
+                                <template v-if="loading">···</template>
+                                <template v-else-if="error">err</template>
+                                <template v-else>{{ formatDownloads(prereleaseTotalDownloads) }}</template>
+                            </span>
+                        </span>
+                    </a>
+                    <a v-if="showVersion" :href="prereleaseReleaseUrl" target="_blank" class="gh-badge-link"
+                        :title="`Pre-release 版本: ${prereleaseVersion}`">
+                        <span class="gh-badge gh-prerelease-badge">
+                            <span class="gh-badge-label gh-release-label gh-pre-release-label">release</span>
+                            <span class="gh-badge-value gh-version-value">
+                                <template v-if="loading">···</template>
+                                <template v-else-if="error">err</template>
+                                <template v-else>{{ prereleaseVersion }}</template>
+                            </span>
+                        </span>
+                    </a>
+                </template>
+                <button v-if="showButton && prereleaseMatchedAssets.length > 0" type="button"
+                    :class="['gh-dl-btn', 'gh-dl-btn-pre', { disabled: loading || error }]"
+                    :title="prereleaseFirstAsset?.name || ''" @click="handleVersionButtonClick($event, true)">
+                    <span class="gh-dl-label gh-dl-label-pre" :style="{ backgroundColor: '#d97706' }">{{ label }}</span>
+                    <span class="gh-dl-arch" :style="loading ? { backgroundColor: '#999' } : { background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)' }">
+                        <template v-if="loading">···</template>
+                        <template v-else>
+                            {{ arch }}
+                            <span v-if="prereleaseHasMultipleFiles" class="gh-multi-badge">{{ prereleaseMatchedAssets.length }}</span>
+                        </template>
+                    </span>
+                </button>
+            </span>
         </template>
 
-        <!-- 下载按钮 -->
-        <button v-if="showButton" type="button"
-            :class="['gh-dl-btn', { disabled: loading || error || matchedAssets.length === 0 }]"
-            :title="firstAsset?.name || error || '加载中...'" @click="handleButtonClick">
-            <span class="gh-dl-label" :style="{ backgroundColor: btnLabelColor }">{{ label }}</span>
-            <span class="gh-dl-arch"
-                :style="loading ? { backgroundColor: '#999' } : (error || matchedAssets.length === 0 ? { backgroundColor: '#f56c6c' } : archBgStyle)">
-                <template v-if="loading">···</template>
-                <template v-else-if="error || matchedAssets.length === 0">错误</template>
-                <template v-else>
-                    {{ arch }}
-                    <span v-if="hasMultipleFiles" class="gh-multi-badge">{{ matchedAssets.length }}</span>
-                </template>
-            </span>
-        </button>
+        <!-- ========== 普通模式（单版本显示） ========== -->
+        <template v-else>
+            <!-- 徽章模式 -->
+            <template v-if="showBadge">
+                <a v-if="showDownloads" :href="releaseUrl" target="_blank" class="gh-badge-link"
+                    :title="`总下载: ${totalDownloads}`">
+                    <span :class="['gh-badge', { 'gh-prerelease-badge': isPrerelease }]">
+                        <span class="gh-badge-label" :style="{ backgroundColor: tagBgColor }">{{ computedTagLabel }}</span>
+                        <span class="gh-badge-value gh-badge-count">
+                            <template v-if="loading">···</template>
+                            <template v-else-if="error">err</template>
+                            <template v-else>{{ formatDownloads(totalDownloads) }}</template>
+                        </span>
+                    </span>
+                </a>
+                <a v-if="showVersion" :href="releaseUrl" target="_blank" class="gh-badge-link" :title="`版本: ${version}`">
+                    <span :class="['gh-badge', { 'gh-prerelease-badge': isPrerelease }]">
+                        <span :class="['gh-badge-label', 'gh-release-label', { 'gh-pre-release-label': isPrerelease }]">release</span>
+                        <span class="gh-badge-value gh-version-value">
+                            <template v-if="loading">···</template>
+                            <template v-else-if="error">err</template>
+                            <template v-else>{{ version }}</template>
+                        </span>
+                    </span>
+                </a>
+                <!-- Pre-release 标识 -->
+                <span v-if="isPrerelease && !loading && !error" class="gh-pre-indicator" title="这是预发布版本">
+                    🧪
+                </span>
+            </template>
 
-        <!-- 弹窗遮罩 -->
+            <!-- 下载按钮 -->
+            <button v-if="showButton" type="button"
+                :class="['gh-dl-btn', { disabled: loading || error || matchedAssets.length === 0, 'gh-dl-btn-pre': isPrerelease }]"
+                :title="firstAsset?.name || error || '加载中...'" @click="handleButtonClick">
+                <span class="gh-dl-label" :style="{ backgroundColor: isPrerelease ? '#d97706' : btnLabelColor }">
+                    {{ label }}
+                    <span v-if="isPrerelease" class="gh-btn-pre-tag">β</span>
+                </span>
+                <span class="gh-dl-arch"
+                    :style="loading ? { backgroundColor: '#999' } : (error || matchedAssets.length === 0 ? { backgroundColor: '#f56c6c' } : (isPrerelease ? { background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)' } : archBgStyle))">
+                    <template v-if="loading">···</template>
+                    <template v-else-if="error || matchedAssets.length === 0">错误</template>
+                    <template v-else>
+                        {{ arch }}
+                        <span v-if="hasMultipleFiles" class="gh-multi-badge">{{ matchedAssets.length }}</span>
+                    </template>
+                </span>
+            </button>
+        </template>
+
+        <!-- 弹窗 -->
         <Teleport to="body">
             <Transition name="modal">
                 <div v-if="showModal" class="gh-modal-overlay" @click.self="closeModal">
                     <div class="gh-modal">
                         <!-- 弹窗头部 -->
-                        <div class="gh-modal-header">
+                        <div :class="['gh-modal-header', { 'gh-modal-header-pre': modalIsPrerelease }]">
                             <div class="gh-modal-title">
-                                <span v-if="showFileList">📁 选择文件 ({{ matchedAssets.length }})</span>
+                                <span v-if="showFileList">📁 选择文件 ({{ modalMatchedAssets.length }})</span>
                                 <span v-else>📄 文件详情</span>
+                                <!-- Pre-release 标记 -->
+                                <span v-if="modalIsPrerelease" class="gh-modal-pre-tag">
+                                    🧪 Pre-release
+                                </span>
                             </div>
                             <button class="gh-modal-close" @click="closeModal">✕</button>
+                        </div>
+
+                        <!-- 版本信息条 -->
+                        <div :class="['gh-version-bar', { 'gh-version-bar-pre': modalIsPrerelease }]">
+                            <span class="gh-version-bar-icon">{{ modalIsPrerelease ? '🧪' : '🏷️' }}</span>
+                            <span class="gh-version-bar-text">
+                                {{ modalRelease?.name || modalRelease?.tag_name || 'Unknown' }}
+                            </span>
+                            <span class="gh-version-bar-tag">{{ modalRelease?.tag_name }}</span>
                         </div>
 
                         <!-- 文件列表 -->
                         <div v-if="showFileList" class="gh-modal-body">
                             <div class="gh-file-list">
-                                <div v-for="asset in matchedAssets" :key="asset.id" class="gh-file-item"
+                                <div v-for="asset in modalMatchedAssets" :key="asset.id" class="gh-file-item"
                                     @click="selectFile(asset)">
                                     <div class="gh-file-icon">📦</div>
                                     <div class="gh-file-info">
@@ -357,7 +610,7 @@ onMounted(fetchRelease)
 
                         <!-- 文件详情 -->
                         <div v-else-if="selectedAsset" class="gh-modal-body">
-                            <div v-if="hasMultipleFiles" class="gh-back-btn" @click="backToList">
+                            <div v-if="modalMatchedAssets.length > 1" class="gh-back-btn" @click="backToList">
                                 ← 返回列表
                             </div>
 
@@ -381,8 +634,7 @@ onMounted(fetchRelease)
                                     <div class="gh-detail-item"
                                         :style="{ backgroundColor: getRowColor(2).bg, borderColor: getRowColor(2).border }">
                                         <div class="gh-detail-label">📥 下载次数</div>
-                                        <div class="gh-detail-value">{{ selectedAsset.download_count.toLocaleString() }}
-                                            次</div>
+                                        <div class="gh-detail-value">{{ selectedAsset.download_count.toLocaleString() }} 次</div>
                                     </div>
                                     <div class="gh-detail-item"
                                         :style="{ backgroundColor: getRowColor(3).bg, borderColor: getRowColor(3).border }">
@@ -448,55 +700,28 @@ onMounted(fetchRelease)
                                 <div class="gh-detail-title">🔐 校验信息</div>
                                 <div class="gh-detail-grid">
                                     <div class="gh-detail-item gh-detail-full"
-                                        :style="{ backgroundColor: getRowColor(4).bg, borderColor: getRowColor(4).border }">
-                                        <div class="gh-detail-label">🔒 SHA256</div>
-                                        <div v-if="getSHA256(selectedAsset.name)"
-                                            class="gh-detail-value gh-copyable gh-hash"
+                                        :style="{ backgroundColor: getRowColor(0).bg, borderColor: getRowColor(0).border }">
+                                        <div class="gh-detail-label">🔑 SHA256</div>
+                                        <div v-if="getSHA256(selectedAsset.name)" class="gh-detail-value gh-copyable gh-hash"
                                             @click="copyToClipboard(getSHA256(selectedAsset.name))">
                                             {{ getSHA256(selectedAsset.name) }}
                                             <span class="gh-copy-hint">点击复制</span>
                                         </div>
-                                        <div v-else class="gh-detail-value gh-na">
-                                            未在 Release Notes 中找到
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="gh-detail-section">
-                                <div class="gh-detail-title">📋 版本信息</div>
-                                <div class="gh-detail-grid">
-                                    <div class="gh-detail-item"
-                                        :style="{ backgroundColor: getRowColor(0).bg, borderColor: getRowColor(0).border }">
-                                        <div class="gh-detail-label">🏷️ 版本号</div>
-                                        <div class="gh-detail-value">{{ release?.tag_name }}</div>
-                                    </div>
-                                    <div class="gh-detail-item"
-                                        :style="{ backgroundColor: getRowColor(1).bg, borderColor: getRowColor(1).border }">
-                                        <div class="gh-detail-label">📛 发布名称</div>
-                                        <div class="gh-detail-value">{{ release?.name || release?.tag_name }}</div>
-                                    </div>
-                                    <div class="gh-detail-item"
-                                        :style="{ backgroundColor: getRowColor(2).bg, borderColor: getRowColor(2).border }">
-                                        <div class="gh-detail-label">📅 发布时间</div>
-                                        <div class="gh-detail-value">{{ formatTime(release?.published_at) }}</div>
-                                    </div>
-                                    <div class="gh-detail-item"
-                                        :style="{ backgroundColor: getRowColor(3).bg, borderColor: getRowColor(3).border }">
-                                        <div class="gh-detail-label">🧪 预发布</div>
-                                        <div class="gh-detail-value">{{ release?.prerelease ? '是' : '否' }}</div>
+                                        <div v-else class="gh-detail-value gh-na">未提供</div>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- 弹窗底部 - 只在文件详情时显示 -->
-                        <div v-if="selectedAsset" class="gh-modal-footer">
-                            <a :href="selectedAsset.browser_download_url" class="gh-download-btn" target="_blank">
-                                <span class="gh-download-icon">⬇</span>
-                                下载文件
+                        <!-- 弹窗底部 -->
+                        <div :class="['gh-modal-footer', { 'gh-modal-footer-pre': modalIsPrerelease }]">
+                            <a v-if="selectedAsset" :href="selectedAsset.browser_download_url" 
+                               :class="['gh-download-btn', { 'gh-download-btn-pre': modalIsPrerelease }]" 
+                               target="_blank">
+                                <span class="gh-download-icon">⬇️</span>
+                                <span>下载文件</span>
                             </a>
-                            <a :href="releaseUrl" class="gh-github-btn" target="_blank">
+                            <a :href="modalRelease?.html_url || releaseUrl" class="gh-github-btn" target="_blank">
                                 在 GitHub 查看
                             </a>
                         </div>
@@ -510,134 +735,248 @@ onMounted(fetchRelease)
 <style scoped>
 .gh-release {
     display: inline-flex;
-    gap: 8px;
     align-items: center;
+    gap: 6px;
     flex-wrap: wrap;
 }
 
-/* 徽章样式 */
+/* ========== 版本切换开关 ========== */
+.gh-version-toggle {
+    display: inline-flex;
+    background: var(--vp-c-bg-soft, #f1f5f9);
+    border-radius: 8px;
+    padding: 3px;
+    gap: 2px;
+    margin-right: 8px;
+}
+
+.gh-toggle-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    border: none;
+    background: transparent;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--vp-c-text-2, #64748b);
+    transition: all 0.2s;
+}
+
+.gh-toggle-btn:hover:not(.disabled) {
+    background: var(--vp-c-bg-mute, #e2e8f0);
+}
+
+.gh-toggle-btn.active {
+    background: #fff;
+    color: var(--vp-c-text-1, #1a202c);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.gh-toggle-btn.active.gh-toggle-pre {
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    color: #92400e;
+}
+
+.gh-toggle-btn.disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.gh-toggle-icon {
+    font-size: 14px;
+}
+
+.gh-toggle-text {
+    font-size: 11px;
+}
+
+/* ========== 版本组（同时显示模式） ========== */
+.gh-version-group {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 8px;
+    background: var(--vp-c-bg-soft, #f8fafc);
+    border-radius: 8px;
+    margin-right: 8px;
+}
+
+.gh-prerelease-group {
+    background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+}
+
+.gh-version-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--vp-c-text-2, #64748b);
+    padding-right: 6px;
+    border-right: 1px solid var(--vp-c-divider, #e2e8f0);
+}
+
+.gh-pre-label {
+    color: #d97706;
+}
+
+.gh-label-icon {
+    font-size: 14px;
+}
+
+/* ========== 徽章样式 ========== */
 .gh-badge-link {
     text-decoration: none;
 }
 
 .gh-badge {
     display: inline-flex;
-    font-size: 12px;
-    line-height: 1;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     border-radius: 4px;
     overflow: hidden;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
-    transition: all 0.2s ease;
-}
-
-.gh-badge:hover {
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-    transform: translateY(-1px);
+    font-size: 12px;
+    line-height: 1;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    vertical-align: middle;
 }
 
 .gh-badge-label {
-    padding: 5px 8px;
+    padding: 4px 6px;
     color: #fff;
-    font-weight: 600;
+    font-weight: 500;
 }
 
 .gh-badge-value {
-    padding: 5px 8px;
-    color: #fff;
+    padding: 4px 6px;
+    background: #f1f5f9;
+    color: #475569;
     font-weight: 500;
 }
 
-.gh-badge-count {
-    background-color: #555;
+.gh-stable-label {
+    background: #67c23a;
+}
+
+.gh-prerelease-label {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
 }
 
 .gh-release-label {
-    background-color: #409eff;
+    background: #409eff;
 }
 
-.gh-version-value {
-    background-color: #67c23a;
+.gh-pre-release-label {
+    background: linear-gradient(135deg, #fb923c 0%, #f97316 100%);
 }
 
-/* 下载按钮样式 - 改为 button 并自适应高度 */
+.gh-prerelease-badge {
+    box-shadow: 0 1px 3px rgba(245, 158, 11, 0.3);
+}
+
+.gh-pre-indicator {
+    font-size: 14px;
+    margin-left: 2px;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+}
+
+/* ========== 下载按钮 ========== */
 .gh-dl-btn {
     display: inline-flex;
-    border: none;
-    padding: 0;
-    margin: 0;
-    font-size: 13px;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     border-radius: 4px;
     overflow: hidden;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
-    transition: all 0.2s ease;
+    font-size: 12px;
+    line-height: 1;
     cursor: pointer;
-    background: none;
+    border: none;
+    padding: 0;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s;
+    vertical-align: middle;
 }
 
 .gh-dl-btn:hover:not(.disabled) {
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
 }
 
 .gh-dl-btn.disabled {
+    opacity: 0.6;
     cursor: not-allowed;
-    opacity: 0.7;
+}
+
+.gh-dl-btn-pre {
+    box-shadow: 0 1px 3px rgba(217, 119, 6, 0.3);
 }
 
 .gh-dl-label {
-    padding: 0.35em 0.65em;
+    padding: 5px 8px;
     color: #fff;
     font-weight: 500;
-    line-height: 1.4;
+    position: relative;
+}
+
+.gh-btn-pre-tag {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    font-size: 9px;
+    font-weight: 700;
+    color: #fff;
+    background: #dc2626;
+    border-radius: 4px;
+    padding: 1px 3px;
+    line-height: 1;
 }
 
 .gh-dl-arch {
-    padding: 0.35em 0.65em;
+    padding: 5px 8px;
     color: #fff;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    line-height: 1.4;
-    /* 添加文字阴影提高可读性 */
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 0 4px rgba(0, 0, 0, 0.15);
+    font-weight: 500;
+    position: relative;
 }
 
 .gh-multi-badge {
-    background: rgba(255, 255, 255, 0.3);
-    padding: 0.1em 0.45em;
-    border-radius: 10px;
-    font-size: 0.85em;
-    text-shadow: none;
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    background: #ef4444;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 1px 4px;
+    border-radius: 8px;
+    line-height: 1;
 }
 
-/* 弹窗样式 */
+/* ========== 弹窗样式 ========== */
 .gh-modal-overlay {
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    inset: 0;
     background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(4px);
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 9999;
     padding: 20px;
+    backdrop-filter: blur(4px);
 }
 
 .gh-modal {
     background: var(--vp-c-bg, #fff);
     border-radius: 16px;
     width: 100%;
-    max-width: 520px;
-    max-height: 85vh;
+    max-width: 500px;
+    max-height: 80vh;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
     overflow: hidden;
 }
 
@@ -647,19 +986,37 @@ onMounted(fetchRelease)
     justify-content: space-between;
     padding: 16px 20px;
     border-bottom: 1px solid var(--vp-c-divider, #e2e8f0);
+    background: var(--vp-c-bg-soft, #f8fafc);
+}
+
+.gh-modal-header-pre {
+    background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+    border-bottom-color: #fde68a;
 }
 
 .gh-modal-title {
-    font-size: 16px;
     font-weight: 600;
+    font-size: 16px;
     color: var(--vp-c-text-1, #1a202c);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.gh-modal-pre-tag {
+    font-size: 11px;
+    font-weight: 600;
+    color: #92400e;
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    padding: 3px 8px;
+    border-radius: 12px;
+    border: 1px solid #fcd34d;
 }
 
 .gh-modal-close {
-    width: 28px;
-    height: 28px;
+    background: none;
     border: none;
-    background: var(--vp-c-bg-soft, #f1f5f9);
+    padding: 6px 10px;
     border-radius: 6px;
     cursor: pointer;
     font-size: 14px;
@@ -672,13 +1029,56 @@ onMounted(fetchRelease)
     color: var(--vp-c-text-1, #1a202c);
 }
 
+/* ========== 版本信息条 ========== */
+.gh-version-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+    border-bottom: 1px solid #bbf7d0;
+    font-size: 13px;
+}
+
+.gh-version-bar-pre {
+    background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+    border-bottom-color: #fde68a;
+}
+
+.gh-version-bar-icon {
+    font-size: 16px;
+}
+
+.gh-version-bar-text {
+    flex: 1;
+    font-weight: 500;
+    color: var(--vp-c-text-1, #1a202c);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.gh-version-bar-tag {
+    font-size: 11px;
+    font-weight: 600;
+    color: #166534;
+    background: rgba(22, 163, 74, 0.1);
+    padding: 2px 8px;
+    border-radius: 10px;
+}
+
+.gh-version-bar-pre .gh-version-bar-tag {
+    color: #92400e;
+    background: rgba(217, 119, 6, 0.1);
+}
+
 .gh-modal-body {
     flex: 1;
     overflow-y: auto;
     padding: 16px 20px;
 }
 
-/* 文件列表 */
+/* ========== 文件列表 ========== */
 .gh-file-list {
     display: flex;
     flex-direction: column;
@@ -733,7 +1133,7 @@ onMounted(fetchRelease)
     font-size: 16px;
 }
 
-/* 返回按钮 */
+/* ========== 返回按钮 ========== */
 .gh-back-btn {
     display: inline-flex;
     align-items: center;
@@ -753,7 +1153,7 @@ onMounted(fetchRelease)
     color: var(--vp-c-brand, #3b82f6);
 }
 
-/* 详情区域 */
+/* ========== 详情区域 ========== */
 .gh-detail-section {
     margin-bottom: 16px;
 }
@@ -845,13 +1245,18 @@ onMounted(fetchRelease)
     font-style: italic;
 }
 
-/* 弹窗底部 */
+/* ========== 弹窗底部 ========== */
 .gh-modal-footer {
     display: flex;
     gap: 10px;
     padding: 14px 20px;
     border-top: 1px solid var(--vp-c-divider, #e2e8f0);
     background: var(--vp-c-bg-soft, #f8fafc);
+}
+
+.gh-modal-footer-pre {
+    background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+    border-top-color: #fde68a;
 }
 
 .gh-download-btn {
@@ -876,6 +1281,15 @@ onMounted(fetchRelease)
     box-shadow: 0 6px 20px rgba(59, 130, 246, 0.5);
 }
 
+.gh-download-btn-pre {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    box-shadow: 0 4px 14px rgba(217, 119, 6, 0.4);
+}
+
+.gh-download-btn-pre:hover {
+    box-shadow: 0 6px 20px rgba(217, 119, 6, 0.5);
+}
+
 .gh-download-icon {
     font-size: 14px;
 }
@@ -897,7 +1311,7 @@ onMounted(fetchRelease)
     border-color: var(--vp-c-brand, #3b82f6);
 }
 
-/* 动画 */
+/* ========== 动画 ========== */
 .modal-enter-active,
 .modal-leave-active {
     transition: opacity 0.25s ease;
@@ -918,7 +1332,7 @@ onMounted(fetchRelease)
     transform: scale(0.95) translateY(10px);
 }
 
-/* 深色模式 */
+/* ========== 深色模式 ========== */
 .dark .gh-badge,
 .dark .gh-dl-btn {
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
@@ -933,7 +1347,69 @@ onMounted(fetchRelease)
     border-color: var(--vp-c-divider, #334155) !important;
 }
 
-/* 响应式 */
+.dark .gh-version-toggle {
+    background: var(--vp-c-bg-mute, #1e293b);
+}
+
+.dark .gh-toggle-btn.active {
+    background: var(--vp-c-bg, #0f172a);
+    color: var(--vp-c-text-1, #f1f5f9);
+}
+
+.dark .gh-toggle-btn.active.gh-toggle-pre {
+    background: linear-gradient(135deg, #78350f 0%, #92400e 100%);
+    color: #fef3c7;
+}
+
+.dark .gh-version-group {
+    background: var(--vp-c-bg-mute, #1e293b);
+}
+
+.dark .gh-prerelease-group {
+    background: linear-gradient(135deg, #78350f 0%, #451a03 100%);
+}
+
+.dark .gh-pre-label {
+    color: #fcd34d;
+}
+
+.dark .gh-modal-header-pre {
+    background: linear-gradient(135deg, #78350f 0%, #451a03 100%);
+    border-bottom-color: #92400e;
+}
+
+.dark .gh-modal-pre-tag {
+    background: linear-gradient(135deg, #92400e 0%, #78350f 100%);
+    color: #fef3c7;
+    border-color: #b45309;
+}
+
+.dark .gh-version-bar {
+    background: linear-gradient(135deg, #14532d 0%, #166534 100%);
+    border-bottom-color: #16a34a;
+}
+
+.dark .gh-version-bar-tag {
+    color: #bbf7d0;
+    background: rgba(134, 239, 172, 0.1);
+}
+
+.dark .gh-version-bar-pre {
+    background: linear-gradient(135deg, #78350f 0%, #92400e 100%);
+    border-bottom-color: #b45309;
+}
+
+.dark .gh-version-bar-pre .gh-version-bar-tag {
+    color: #fef3c7;
+    background: rgba(253, 224, 71, 0.1);
+}
+
+.dark .gh-modal-footer-pre {
+    background: linear-gradient(135deg, #78350f 0%, #451a03 100%);
+    border-top-color: #92400e;
+}
+
+/* ========== 响应式 ========== */
 @media (max-width: 640px) {
     .gh-modal {
         max-height: 90vh;
@@ -950,6 +1426,18 @@ onMounted(fetchRelease)
 
     .gh-modal-footer {
         flex-direction: column;
+    }
+
+    .gh-version-toggle {
+        flex-wrap: wrap;
+    }
+
+    .gh-toggle-text {
+        display: none;
+    }
+
+    .gh-version-group {
+        flex-wrap: wrap;
     }
 }
 </style>

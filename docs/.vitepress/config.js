@@ -45,7 +45,7 @@ export default defineConfig({
     externalLinkIcon: true,
     
     footer: {
-      message: '2010.9.15❤️ | 使用 VitePress 搭建，遵循 MIT 协议开源',
+      message: '2010.9.15 wzy❤️ | 使用 VitePress 搭建，遵循 MIT 协议开源',
       copyright: 'Copyright © 2026 Wolfe Group'
     },
 
