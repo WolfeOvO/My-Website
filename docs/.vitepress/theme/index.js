@@ -23,7 +23,7 @@ export default {
     enhanceAppWithTabs(app)
     
     // 注册组件
-    app.component('gtl', gitHubRelease)
+    app.component('gtl', GitHubRelease)
     app.component('ntags', notionTags)
     app.component('lc', linkCard)
     app.component('sidebar', sidebar)
