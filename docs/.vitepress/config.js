@@ -19,6 +19,7 @@ export default defineConfig({
       md.use(tabsMarkdownPlugin)
       md.use(tabbed)
       md.use(footnote)
+      md.use(spoiler)
       md.use(licenseDeclarationPlugin)
       customContainerColorPlugin(md)
       

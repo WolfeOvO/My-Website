@@ -1,4 +1,4 @@
-export default function spoilerPlugin(md) {
+export function spoiler(md) {
   function tokenize(state, silent) {
     const start = state.pos
     const max = state.posMax
