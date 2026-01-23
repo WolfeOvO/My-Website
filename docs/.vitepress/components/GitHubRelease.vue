@@ -736,8 +736,9 @@ onMounted(fetchRelease)
 .gh-release {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 0.5em;
     flex-wrap: wrap;
+    line-height: 1.8;  /* 增加行高 */
 }
 
 /* ========== 版本切换开关 ========== */
@@ -891,11 +892,12 @@ onMounted(fetchRelease)
     display: inline-flex;
     border-radius: 0.25em;
     overflow: visible;
-    font-size: inherit;  /* 继承父元素字体大小 */
+    font-size: inherit;
     line-height: 1;
     cursor: pointer;
     border: none;
     padding: 0;
+    margin: 0.2em 0.4em 0.2em 0;  /* 增加按钮间距和行间距 */
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
     transition: all 0.2s;
     vertical-align: middle;
