@@ -1,7 +1,7 @@
 <script setup>
 import { computed } from 'vue'
 import { useData, useRoute } from 'vitepress'
-import RecursiveRow from './RecursiveRow.vue'
+import RecursiveRow from './recursiveRow.vue'
 
 const props = defineProps({
     title: { type: String, default: '目录导航' },
