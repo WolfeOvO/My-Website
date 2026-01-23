@@ -1996,3 +1996,64 @@
     padding: 3px 10px;
   }
 }
+
+/* Spoiler 剧透样式 */
+
+.spoiler {
+  background-color: var(--vp-c-bg-alt);
+  color: transparent;
+  border: 1px dashed var(--vp-c-divider);
+  border-radius: 4px;
+  padding: 0 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+  user-select: none;
+}
+
+/* 遮盖所有子元素 */
+.spoiler * {
+  color: transparent !important;
+  background: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  text-decoration-color: transparent !important;
+}
+
+.spoiler img {
+  opacity: 0 !important;
+}
+
+/* 揭示状态 */
+.spoiler:hover,
+.spoiler.revealed {
+  color: var(--vp-c-text-1);
+  background: transparent;
+  border-color: transparent;
+  user-select: auto;
+}
+
+.spoiler:hover *,
+.spoiler.revealed * {
+  color: inherit !important;
+  background: revert !important;
+  border-color: revert !important;
+  box-shadow: revert !important;
+  text-decoration-color: inherit !important;
+}
+
+.spoiler:hover img,
+.spoiler.revealed img {
+  opacity: 1 !important;
+}
+
+/* 恢复特定元素样式 */
+.spoiler:hover a,
+.spoiler.revealed a {
+  color: var(--vp-c-brand-1) !important;
+}
+
+.spoiler:hover code,
+.spoiler.revealed code {
+  color: var(--vp-c-text-code, var(--vp-c-text-1)) !important;
+  background: var(--vp-c-mute, rgba(142, 150, 170, 0.14)) !important;
+}

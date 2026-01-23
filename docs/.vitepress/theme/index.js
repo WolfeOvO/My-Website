@@ -4,11 +4,10 @@ import { onMounted, watch } from 'vue'
 import { useRoute } from 'vitepress'
 
 // 组件
-import Spoiler from '../components/Spoiler.vue'
-import GitHubRelease from '../components/GitHubRelease.vue'
-import NotionTags from '../components/NotionTags.vue'
-import LinkCard from '../components/LinkCard.vue'
-import Sidebar from '../components/SidebarDirectory.vue'
+import gitHubRelease from '../components/gitHubRelease.vue'
+import notionTags from '../components/notionTags.vue'
+import linkCard from '../components/labelinkCard.vue'
+import sidebar from '../components/sidebarDirectory.vue'
 
 // 插件
 import { enhanceAppWithTabs } from 'vitepress-plugin-tabs/client'
@@ -24,11 +23,10 @@ export default {
     enhanceAppWithTabs(app)
     
     // 注册组件
-    app.component('sp', Spoiler)
-    app.component('gtl', GitHubRelease)
-    app.component('ntags', NotionTags)
-    app.component('lc', LinkCard)
-    app.component('sidebar', Sidebar)
+    app.component('gtl', gitHubRelease)
+    app.component('ntags', notionTags)
+    app.component('lc', linkCard)
+    app.component('sidebar', sidebar)
     app.component
   },
   
@@ -113,3 +111,7 @@ function initFootnotes() {
     })
   })
 }
+
+document.addEventListener('click', e => {
+  e.target.closest('.spoiler-inline')?.classList.toggle('revealed')
+})

@@ -1,10 +1,11 @@
 import { defineConfig } from 'vitepress'
+import footnote from 'markdown-it-footnote'
 import { sidebar } from './sidebar'
 import { tabsMarkdownPlugin } from 'vitepress-plugin-tabs'
-import { tabbed } from './plugins/vitepress-tabbed.js'
-import footnote from 'markdown-it-footnote'
+import { tabbed } from './plugins/vitepress-tabbed'
 import { customContainerColorPlugin } from './plugins/customContainerColor'
 import { licenseDeclarationPlugin } from './plugins/licenseDeclaration'
+import { spoiler } from './plugins/spoiler'
 
 export default defineConfig({
   title: "Wolfeの储物间",
