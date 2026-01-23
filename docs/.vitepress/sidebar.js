@@ -67,7 +67,7 @@ export const sidebar = {
           text: '客户端',
           collapsed: true,
           items: [
-            { text: '合集', link: 'client' },
+            { text: '合集（一定要先读完我再下载！）', link: 'client' },
             { text: 'Clash', link: 'Clash' },
             { text: 'Clash Mi', link: 'ClashMi' },
             { text: 'Clash Verge Rev', link: 'ClashVergeRev' },

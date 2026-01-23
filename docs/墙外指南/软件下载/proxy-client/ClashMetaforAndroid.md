@@ -21,10 +21,6 @@
 
 ## 下载
 
-::: tip
-如果不知道自己的系统架构可以参考[这里](client.md#android-系统架构区别)的说明。
-:::
-
 <lc url="https://f-droid.org/packages/com.github.metacubex.clash.meta/" />
 
 | 系统架构 | 下载地址 |

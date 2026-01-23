@@ -42,11 +42,10 @@ export default defineConfig({
     darkModeSwitchTitle: '切换到深色模式',
     sidebarMenuLabel: '侧边栏',
     returnToTopLabel: '返回顶部',
-    externalLinkIcon: true,
     
     footer: {
       message: '2010.9.15 wzy❤️ | 使用 VitePress 搭建，遵循 MIT 协议开源',
-      copyright: 'Copyright © 2026 Wolfe Group'
+      copyright: 'Copyright © 2026 Wolfe Group | All Rights Reserved.'
     },
 
     outline: {

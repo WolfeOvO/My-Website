@@ -1,8 +1,3 @@
-/**
- * Details 展开/折叠动画
- * 使用单一动画实例 + playbackRate 控制方向，支持任意频率点击
- */
-
 export function setupDetailsAnimation() {
   const DURATION = 280;
   const EASING = 'cubic-bezier(0.4, 0, 0.2, 1)';
