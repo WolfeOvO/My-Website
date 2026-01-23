@@ -6,7 +6,7 @@ import { useRoute } from 'vitepress'
 // 组件
 import gitHubRelease from '../components/gitHubRelease.vue'
 import notionTags from '../components/notionTags.vue'
-import linkCard from '../components/labelinkCard.vue'
+import linkCard from '../components/linkCard.vue'
 import sidebar from '../components/sidebarDirectory.vue'
 
 // 插件
