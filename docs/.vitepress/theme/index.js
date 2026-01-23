@@ -14,6 +14,7 @@ import Sidebar from '../components/SidebarDirectory.vue'
 import { enhanceAppWithTabs } from 'vitepress-plugin-tabs/client'
 import { injectTabs } from '../plugins/vitepress-tabbed.js'
 import { setupDetailsAnimation } from '../plugins/detailsAnimation.js'
+import { licenseDeclarationPlugin } from './styles/licenseDeclaration.css'
 
 export default {
   extends: DefaultTheme,

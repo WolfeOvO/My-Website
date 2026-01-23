@@ -4,6 +4,7 @@ import { tabsMarkdownPlugin } from 'vitepress-plugin-tabs'
 import { tabbed } from './plugins/vitepress-tabbed.js'
 import footnote from 'markdown-it-footnote'
 import { customContainerColorPlugin } from './plugins/customContainerColor'
+import { licenseDeclarationPlugin } from './plugins/licenseDeclaration'
 
 export default defineConfig({
   title: "Wolfeの储物间",
@@ -17,6 +18,7 @@ export default defineConfig({
       md.use(tabsMarkdownPlugin)
       md.use(tabbed)
       md.use(footnote)
+      md.use(licenseDeclarationPlugin)
       customContainerColorPlugin(md)
       
       // 自定义脚注渲染

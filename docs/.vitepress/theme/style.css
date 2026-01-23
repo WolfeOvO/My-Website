@@ -1,4 +1,8 @@
+/* ================================================================
+   CSS 变量定义
+   ================================================================ */
 :root {
+  /* 品牌色 */
   --vp-c-brand-1: #6CAFD6;
   --vp-c-brand-2: #84C1E3;
   --vp-c-brand-3: #9ED3F0;
@@ -6,6 +10,8 @@
   --vp-home-hero-name-background: -webkit-linear-gradient(120deg, #6CAFD6 30%, #55687F 90%);
   --vp-home-hero-name-color: transparent;
   --vp-button-brand-shadow: rgba(108, 175, 214, 0.5);
+
+  /* 容器纯色 */
   --container-red: #e53935;
   --container-red-light: #ffebee;
   --container-red-dark: #3d2020;
@@ -33,6 +39,8 @@
   --container-gray: #546e7a;
   --container-gray-light: #eceff1;
   --container-gray-dark: #263238;
+
+  /* 容器渐变色 */
   --container-gradient-sunset: linear-gradient(135deg, #ff6b6b, #feca57);
   --container-gradient-ocean: linear-gradient(135deg, #667eea, #764ba2);
   --container-gradient-forest: linear-gradient(135deg, #11998e, #38ef7d);
@@ -41,18 +49,56 @@
   --container-gradient-rose: linear-gradient(135deg, #ee9ca7, #ffdde1);
   --container-gradient-purple: linear-gradient(135deg, #667eea, #764ba2);
   --container-gradient-mint: linear-gradient(135deg, #00b09b, #96c93d);
+
+  /* AI 声明颜色 */
+  --license-ai-primary: #8b5cf6;
+  --license-ai-light: #f3e8ff;
+  --license-ai-dark: #2e1065;
+  --license-ai-text: #581c87;
+  --license-ai-text-light: #7c3aed;
+
+  /* CC 声明颜色 */
+  --license-cc-primary: #059669;
+  --license-cc-light: #ecfdf5;
+  --license-cc-dark: #064e3b;
+  --license-cc-text: #065f46;
+  --license-cc-text-light: #10b981;
+
+  /* 通用 */
+  --license-radius: 10px;
+  --license-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .dark {
   --vp-c-brand-1: #6CAFD6;
   --vp-c-brand-2: #84C1E3;
   --vp-c-brand-soft: rgba(85, 104, 127, 0.25);
+
+  /* AI 声明颜色 - 暗色 */
+  --license-ai-primary: #a78bfa;
+  --license-ai-light: rgba(139, 92, 246, 0.15);
+  --license-ai-dark: #1e1b4b;
+  --license-ai-text: #c4b5fd;
+  --license-ai-text-light: #ddd6fe;
+
+  /* CC 声明颜色 - 暗色 */
+  --license-cc-primary: #34d399;
+  --license-cc-light: rgba(52, 211, 153, 0.15);
+  --license-cc-dark: #022c22;
+  --license-cc-text: #6ee7b7;
+  --license-cc-text-light: #a7f3d0;
 }
 
+/* ================================================================
+   基础样式
+   ================================================================ */
 .header-anchor {
   content: "#" !important;
 }
 
+/* ================================================================
+   脚注样式
+   ================================================================ */
 .footnote-ref {
   font-size: 0.85em;
 }
@@ -105,6 +151,9 @@
   color: var(--vp-c-text-2);
 }
 
+/* ================================================================
+   自定义容器 - 基础样式
+   ================================================================ */
 .vp-doc .custom-block {
   border-radius: 8px;
   padding: 16px 20px;
@@ -112,7 +161,6 @@
   border: 1px solid;
   background-color: transparent;
   position: relative;
-  /* 修复: 使用 clip-path 替代 overflow:hidden，允许子元素动画溢出 */
   overflow: visible;
   transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1),
     box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1),
@@ -180,7 +228,9 @@
   height: 100%;
 }
 
-/* ========== SVG 图标定义 (通过伪元素插入) ========== */
+/* ================================================================
+   自定义容器 - SVG 图标定义
+   ================================================================ */
 
 /* Tip 图标 - 灯泡 */
 .vp-doc .custom-block.tip .custom-block-title::before {
@@ -250,7 +300,9 @@
   transform: scale(1.15);
 }
 
-/* ========== 默认容器颜色 ========== */
+/* ================================================================
+   自定义容器 - 默认颜色
+   ================================================================ */
 
 /* Tip - 默认绿色 */
 .vp-doc .custom-block.tip {
@@ -340,9 +392,11 @@
   color: #b71c1c;
 }
 
-/* ========== 自定义颜色支持 ========== */
+/* ================================================================
+   自定义容器 - 自定义颜色支持
+   ================================================================ */
 
-/* ----- 红色 ----- */
+/* 红色 */
 .vp-doc .custom-block[data-color="red"] {
   border-color: var(--container-red);
   background-color: var(--container-red-light);
@@ -358,7 +412,7 @@
   color: #b71c1c;
 }
 
-/* ----- 橙色 ----- */
+/* 橙色 */
 .vp-doc .custom-block[data-color="orange"] {
   border-color: var(--container-orange);
   background-color: var(--container-orange-light);
@@ -374,7 +428,7 @@
   color: #bf360c;
 }
 
-/* ----- 黄色 (高亮度，需要阴影) ----- */
+/* 黄色 */
 .vp-doc .custom-block[data-color="yellow"] {
   border-color: var(--container-yellow);
   background-color: var(--container-yellow-light);
@@ -391,7 +445,7 @@
   color: #827717;
 }
 
-/* ----- 绿色 ----- */
+/* 绿色 */
 .vp-doc .custom-block[data-color="green"] {
   border-color: var(--container-green);
   background-color: var(--container-green-light);
@@ -407,7 +461,7 @@
   color: #1b5e20;
 }
 
-/* ----- 青色 ----- */
+/* 青色 */
 .vp-doc .custom-block[data-color="cyan"] {
   border-color: var(--container-cyan);
   background-color: var(--container-cyan-light);
@@ -423,7 +477,7 @@
   color: #006064;
 }
 
-/* ----- 蓝色 ----- */
+/* 蓝色 */
 .vp-doc .custom-block[data-color="blue"] {
   border-color: var(--container-blue);
   background-color: var(--container-blue-light);
@@ -439,7 +493,7 @@
   color: #0d47a1;
 }
 
-/* ----- 紫色 ----- */
+/* 紫色 */
 .vp-doc .custom-block[data-color="purple"] {
   border-color: var(--container-purple);
   background-color: var(--container-purple-light);
@@ -455,7 +509,7 @@
   color: #4a148c;
 }
 
-/* ----- 粉色 ----- */
+/* 粉色 */
 .vp-doc .custom-block[data-color="pink"] {
   border-color: var(--container-pink);
   background-color: var(--container-pink-light);
@@ -471,7 +525,7 @@
   color: #880e4f;
 }
 
-/* ----- 灰色 ----- */
+/* 灰色 */
 .vp-doc .custom-block[data-color="gray"] {
   border-color: var(--container-gray);
   background-color: var(--container-gray-light);
@@ -487,9 +541,11 @@
   color: #263238;
 }
 
-/* ========== 渐变色支持 (高亮度，需要阴影) ========== */
+/* ================================================================
+   自定义容器 - 渐变色支持
+   ================================================================ */
 
-/* ----- 日落渐变 ----- */
+/* 日落渐变 */
 .vp-doc .custom-block[data-color="sunset"] {
   background: linear-gradient(135deg, rgba(255, 107, 107, 0.15), rgba(254, 202, 87, 0.15));
   border-color: #ff6b6b;
@@ -508,7 +564,7 @@
   text-shadow: 0 1px 1px rgba(255, 255, 255, 0.3);
 }
 
-/* ----- 海洋渐变 ----- */
+/* 海洋渐变 */
 .vp-doc .custom-block[data-color="ocean"] {
   background: linear-gradient(135deg, rgba(102, 126, 234, 0.12), rgba(118, 75, 162, 0.12));
   border-color: #667eea;
@@ -525,7 +581,7 @@
   color: #311b92;
 }
 
-/* ----- 森林渐变 ----- */
+/* 森林渐变 */
 .vp-doc .custom-block[data-color="forest"] {
   background: linear-gradient(135deg, rgba(17, 153, 142, 0.12), rgba(56, 239, 125, 0.12));
   border-color: #11998e;
@@ -542,7 +598,7 @@
   color: #004d40;
 }
 
-/* ----- 火焰渐变 ----- */
+/* 火焰渐变 */
 .vp-doc .custom-block[data-color="fire"] {
   background: linear-gradient(135deg, rgba(241, 39, 17, 0.12), rgba(245, 175, 25, 0.12));
   border-color: #f12711;
@@ -561,7 +617,7 @@
   text-shadow: 0 1px 1px rgba(255, 255, 255, 0.3);
 }
 
-/* ----- 天空渐变 ----- */
+/* 天空渐变 */
 .vp-doc .custom-block[data-color="sky"] {
   background: linear-gradient(135deg, rgba(33, 150, 243, 0.12), rgba(33, 203, 243, 0.12));
   border-color: #2196f3;
@@ -578,7 +634,7 @@
   color: #01579b;
 }
 
-/* ----- 玫瑰渐变 (高亮度) ----- */
+/* 玫瑰渐变 */
 .vp-doc .custom-block[data-color="rose"] {
   background: linear-gradient(135deg, rgba(238, 156, 167, 0.2), rgba(255, 221, 225, 0.25));
   border-color: #ee9ca7;
@@ -597,7 +653,7 @@
   text-shadow: 0 1px 1px rgba(255, 255, 255, 0.4);
 }
 
-/* ----- 薄荷渐变 ----- */
+/* 薄荷渐变 */
 .vp-doc .custom-block[data-color="mint"] {
   background: linear-gradient(135deg, rgba(0, 176, 155, 0.12), rgba(150, 201, 61, 0.12));
   border-color: #00b09b;
@@ -614,7 +670,9 @@
   color: #004d40;
 }
 
-/* ========== Details 折叠面板 (带展开动画) ========== */
+/* ================================================================
+   Details 折叠面板
+   ================================================================ */
 .vp-doc .custom-block.details {
   border: 1px solid #e0e0e0;
   background-color: #ffffff;
@@ -662,7 +720,7 @@
   mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m9 18 6-6-6-6'/%3E%3C/svg%3E") no-repeat center;
 }
 
-/* 箭头打开状态 - 由JS通过data属性控制 */
+/* 箭头打开状态 */
 .vp-doc .custom-block.details[data-arrow-open="true"] summary::before {
   transform: rotate(90deg);
 }
@@ -675,7 +733,7 @@
   background-color: #f0f0f0;
 }
 
-/* ===== 展开/收起动画 (由 JS Web Animations API 控制) ===== */
+/* 展开/收起动画 */
 .vp-doc .custom-block.details .details-content {
   display: grid;
   grid-template-rows: 0fr;
@@ -690,12 +748,10 @@
   min-height: 0;
 }
 
-/* 内容区域 - 只用 padding 控制左右间距 */
 .vp-doc .custom-block.details .details-inner {
   padding: 0 18px;
 }
 
-/* 默认关闭时隐藏 */
 .vp-doc .custom-block.details:not([open]) .details-inner {
   opacity: 0;
 }
@@ -704,7 +760,6 @@
   opacity: 1;
 }
 
-/* 上下间距用子元素 margin（margin 会随 grid 收缩） */
 .vp-doc .custom-block.details .details-inner>*:first-child {
   margin-top: 16px !important;
 }
@@ -713,12 +768,13 @@
   margin-bottom: 16px !important;
 }
 
-/* 兼容无 .details-content 包裹的旧结构 */
 .vp-doc .custom-block.details>*:not(summary):not(.details-content) {
   padding: 14px 18px;
 }
 
-/* ========== Details 颜色变体 ========== */
+/* ================================================================
+   Details 颜色变体
+   ================================================================ */
 
 /* 红色 */
 .vp-doc .custom-block.details[data-color="red"] {
@@ -947,7 +1003,9 @@
   color: #00796b;
 }
 
-/* ========== 暗色模式 ========== */
+/* ================================================================
+   暗色模式 - 默认容器
+   ================================================================ */
 .dark .vp-doc .custom-block.tip {
   background-color: var(--container-green-dark);
   border-color: #2e7d32;
@@ -1004,7 +1062,9 @@
   color: #ef9a9a;
 }
 
-/* 暗色模式 - 自定义颜色 */
+/* ================================================================
+   暗色模式 - 自定义颜色
+   ================================================================ */
 .dark .vp-doc .custom-block[data-color="red"] {
   background-color: var(--container-red-dark);
   border-color: #c62828;
@@ -1131,7 +1191,9 @@
   color: #b0bec5;
 }
 
-/* 暗色模式 - 渐变色 */
+/* ================================================================
+   暗色模式 - 渐变色
+   ================================================================ */
 .dark .vp-doc .custom-block[data-color="sunset"] {
   background: linear-gradient(135deg, rgba(255, 107, 107, 0.2), rgba(254, 202, 87, 0.2));
 }
@@ -1229,7 +1291,9 @@
   color: #c5e1a5;
 }
 
-/* 暗色模式 - Details */
+/* ================================================================
+   暗色模式 - Details
+   ================================================================ */
 .dark .vp-doc .custom-block.details {
   border-color: #424242;
   background-color: #1e1e1e;
@@ -1330,4 +1394,605 @@
 .dark .vp-doc .custom-block.details[data-color="mint"] summary {
   background: linear-gradient(135deg, rgba(0, 176, 155, 0.2), rgba(150, 201, 61, 0.2));
   color: #80cbc4;
+}
+
+/* ================================================================
+   AI & CC 许可声明 - 基础容器
+   ================================================================ */
+.vp-doc .license-block {
+  border-radius: var(--license-radius);
+  margin: 20px 0;
+  overflow: hidden;
+  transition: var(--license-transition);
+  position: relative;
+}
+
+.vp-doc .license-block:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+}
+
+/* ================================================================
+   AI 声明样式
+   ================================================================ */
+.vp-doc .ai-declaration {
+  background: linear-gradient(135deg, var(--license-ai-light) 0%, rgba(255, 255, 255, 0.9) 100%);
+  border: 1px solid var(--license-ai-primary);
+  border-left: 4px solid var(--license-ai-primary);
+}
+
+.vp-doc .ai-declaration::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 120px;
+  height: 120px;
+  background: radial-gradient(circle at top right, rgba(139, 92, 246, 0.1) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.vp-doc .ai-declaration:hover {
+  border-color: #7c3aed;
+  box-shadow: 0 12px 32px rgba(139, 92, 246, 0.2);
+}
+
+/* AI 图标容器 */
+.vp-doc .ai-declaration .license-icon {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, var(--license-ai-primary) 0%, #7c3aed 100%);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+}
+
+.vp-doc .ai-declaration .license-icon svg {
+  width: 26px;
+  height: 26px;
+}
+
+/* AI 类型徽章 */
+.vp-doc .ai-declaration .ai-type-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(135deg, var(--license-ai-primary) 0%, #7c3aed 100%);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
+}
+
+.vp-doc .ai-declaration .ai-type-badge svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* AI 模型徽章 */
+.vp-doc .ai-declaration .ai-model-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(139, 92, 246, 0.15);
+  color: var(--license-ai-text-light);
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  border: 1px solid rgba(139, 92, 246, 0.3);
+}
+
+.vp-doc .ai-declaration .ai-model-badge small {
+  opacity: 0.7;
+  font-size: 11px;
+  margin-left: 4px;
+}
+
+/* 媒体类型 */
+.vp-doc .ai-declaration .media-type {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--license-ai-text);
+  font-size: 13px;
+}
+
+.vp-doc .ai-declaration .media-type svg {
+  width: 14px;
+  height: 14px;
+  opacity: 0.8;
+}
+
+/* ================================================================
+   AI 声明 - 类型变体
+   ================================================================ */
+
+/* AI 辅助 - 蓝色 */
+.vp-doc .ai-declaration[data-type="assisted"] {
+  border-color: #3b82f6;
+}
+
+.vp-doc .ai-declaration[data-type="assisted"] .license-icon {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+}
+
+.vp-doc .ai-declaration[data-type="assisted"] .ai-type-badge {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+}
+
+.vp-doc .ai-declaration[data-type="assisted"]:hover {
+  border-color: #2563eb;
+  box-shadow: 0 12px 32px rgba(59, 130, 246, 0.2);
+}
+
+/* AI 编辑 - 橙色 */
+.vp-doc .ai-declaration[data-type="edited"] {
+  border-color: #f59e0b;
+}
+
+.vp-doc .ai-declaration[data-type="edited"] .license-icon {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+}
+
+.vp-doc .ai-declaration[data-type="edited"] .ai-type-badge {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+}
+
+.vp-doc .ai-declaration[data-type="edited"]:hover {
+  border-color: #d97706;
+  box-shadow: 0 12px 32px rgba(245, 158, 11, 0.2);
+}
+
+/* AI 翻译 - 青色 */
+.vp-doc .ai-declaration[data-type="translated"] {
+  border-color: #06b6d4;
+}
+
+.vp-doc .ai-declaration[data-type="translated"] .license-icon {
+  background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+}
+
+.vp-doc .ai-declaration[data-type="translated"] .ai-type-badge {
+  background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+}
+
+.vp-doc .ai-declaration[data-type="translated"]:hover {
+  border-color: #0891b2;
+  box-shadow: 0 12px 32px rgba(6, 182, 212, 0.2);
+}
+
+/* ================================================================
+   CC 声明样式
+   ================================================================ */
+.vp-doc .cc-declaration {
+  background: linear-gradient(135deg, var(--license-cc-light) 0%, rgba(255, 255, 255, 0.9) 100%);
+  border: 1px solid var(--license-cc-primary);
+  border-left: 4px solid var(--license-cc-primary);
+}
+
+.vp-doc .cc-declaration::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 120px;
+  height: 120px;
+  background: radial-gradient(circle at top right, rgba(5, 150, 105, 0.1) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.vp-doc .cc-declaration:hover {
+  border-color: #047857;
+  box-shadow: 0 12px 32px rgba(5, 150, 105, 0.2);
+}
+
+/* CC 图标容器 */
+.vp-doc .cc-declaration .license-icon {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, var(--license-cc-primary) 0%, #047857 100%);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+}
+
+.vp-doc .cc-declaration .license-icon svg {
+  width: 28px;
+  height: 28px;
+}
+
+/* CC 名称 */
+.vp-doc .cc-declaration .cc-name {
+  font-weight: 700;
+  color: var(--license-cc-text);
+  font-size: 15px;
+}
+
+/* CC 徽章 */
+.vp-doc .cc-declaration .cc-badges {
+  display: inline-flex;
+  gap: 4px;
+  margin-left: 8px;
+}
+
+.vp-doc .cc-declaration .cc-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 20px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  color: white;
+  cursor: help;
+  transition: transform 0.2s;
+}
+
+.vp-doc .cc-declaration .cc-badge:hover {
+  transform: scale(1.1);
+}
+
+.vp-doc .cc-declaration .cc-badge-by {
+  background: #f59e0b;
+}
+
+.vp-doc .cc-declaration .cc-badge-sa {
+  background: #3b82f6;
+}
+
+.vp-doc .cc-declaration .cc-badge-nc {
+  background: #ef4444;
+}
+
+.vp-doc .cc-declaration .cc-badge-nd {
+  background: #8b5cf6;
+}
+
+.vp-doc .cc-declaration .cc-badge-zero {
+  background: #6b7280;
+  width: 36px;
+}
+
+.vp-doc .cc-declaration .cc-badge-pd {
+  background: #10b981;
+  width: 28px;
+}
+
+/* CC 描述 */
+.vp-doc .cc-declaration .cc-description {
+  color: var(--license-cc-text);
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 0 0 12px 0;
+}
+
+/* CC 详情 */
+.vp-doc .cc-declaration .cc-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.vp-doc .cc-declaration .cc-permissions,
+.vp-doc .cc-declaration .cc-conditions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.vp-doc .cc-declaration .cc-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--license-cc-text);
+  opacity: 0.7;
+}
+
+.vp-doc .cc-declaration .cc-perm,
+.vp-doc .cc-declaration .cc-cond {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.vp-doc .cc-declaration .cc-perm-yes {
+  background: rgba(16, 185, 129, 0.15);
+  color: #059669;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.vp-doc .cc-declaration .cc-cond {
+  background: rgba(245, 158, 11, 0.15);
+  color: #d97706;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+/* CC0 和公共领域特殊样式 */
+.vp-doc .cc-declaration[data-license="cc0"],
+.vp-doc .cc-declaration[data-license="pd"] {
+  border-color: #6b7280;
+}
+
+.vp-doc .cc-declaration[data-license="cc0"] .license-icon,
+.vp-doc .cc-declaration[data-license="pd"] .license-icon {
+  background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+}
+
+.vp-doc .cc-declaration[data-license="cc0"]:hover,
+.vp-doc .cc-declaration[data-license="pd"]:hover {
+  border-color: #4b5563;
+  box-shadow: 0 12px 32px rgba(107, 114, 128, 0.2);
+}
+
+/* ================================================================
+   许可声明 - 通用样式
+   ================================================================ */
+
+/* Header */
+.vp-doc .license-block .license-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  position: relative;
+}
+
+/* Info */
+.vp-doc .license-block .license-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.vp-doc .license-block .license-title {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.vp-doc .license-block .license-subtitle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--vp-c-text-2);
+  flex-wrap: wrap;
+}
+
+.vp-doc .license-block .license-subtitle .separator {
+  opacity: 0.5;
+}
+
+/* Body */
+.vp-doc .license-block .license-body {
+  padding: 0 20px 16px 84px;
+}
+
+/* 外部链接按钮 */
+.vp-doc .license-block .license-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.05);
+  color: var(--vp-c-text-2);
+  transition: var(--license-transition);
+  flex-shrink: 0;
+  text-decoration: none;
+}
+
+.vp-doc .license-block .license-link:hover {
+  background: rgba(0, 0, 0, 0.1);
+  color: var(--vp-c-text-1);
+  transform: scale(1.05);
+}
+
+.vp-doc .license-block .license-link svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* 附加文本 */
+.vp-doc .license-block .license-text {
+  padding: 12px 20px;
+  background: rgba(0, 0, 0, 0.03);
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--vp-c-text-2);
+}
+
+.vp-doc .license-block .license-text code {
+  background: rgba(0, 0, 0, 0.06);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 13px;
+}
+
+.vp-doc .license-block .license-text a {
+  color: var(--vp-c-brand-1);
+  text-decoration: none;
+}
+
+.vp-doc .license-block .license-text a:hover {
+  text-decoration: underline;
+}
+
+/* ================================================================
+   许可声明 - 动画效果
+   ================================================================ */
+@keyframes licenseShine {
+  0% {
+    background-position: -100% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.vp-doc .license-block .license-icon {
+  position: relative;
+  overflow: hidden;
+}
+
+.vp-doc .license-block:hover .license-icon::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.3) 50%, transparent 100%);
+  background-size: 200% 100%;
+  animation: licenseShine 0.8s ease-out;
+}
+
+.vp-doc .ai-declaration .ai-type-badge,
+.vp-doc .ai-declaration .ai-model-badge {
+  transition: var(--license-transition);
+}
+
+.vp-doc .ai-declaration:hover .ai-type-badge {
+  transform: scale(1.02);
+}
+
+/* ================================================================
+   许可声明 - 暗色模式
+   ================================================================ */
+.dark .vp-doc .ai-declaration {
+  background: linear-gradient(135deg, var(--license-ai-dark) 0%, rgba(30, 27, 75, 0.9) 100%);
+}
+
+.dark .vp-doc .ai-declaration .ai-model-badge {
+  background: rgba(167, 139, 250, 0.2);
+  border-color: rgba(167, 139, 250, 0.3);
+  color: var(--license-ai-text-light);
+}
+
+.dark .vp-doc .ai-declaration .media-type {
+  color: var(--license-ai-text-light);
+}
+
+.dark .vp-doc .ai-declaration[data-type="assisted"] {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(30, 58, 138, 0.9) 100%);
+}
+
+.dark .vp-doc .ai-declaration[data-type="edited"] {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(120, 53, 15, 0.9) 100%);
+}
+
+.dark .vp-doc .ai-declaration[data-type="translated"] {
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.15) 0%, rgba(22, 78, 99, 0.9) 100%);
+}
+
+.dark .vp-doc .cc-declaration {
+  background: linear-gradient(135deg, var(--license-cc-dark) 0%, rgba(2, 44, 34, 0.9) 100%);
+}
+
+.dark .vp-doc .cc-declaration .cc-name {
+  color: var(--license-cc-text-light);
+}
+
+.dark .vp-doc .cc-declaration .cc-description {
+  color: var(--license-cc-text-light);
+}
+
+.dark .vp-doc .cc-declaration .cc-label {
+  color: var(--license-cc-text-light);
+}
+
+.dark .vp-doc .cc-declaration .cc-perm-yes {
+  background: rgba(16, 185, 129, 0.2);
+  color: #6ee7b7;
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+.dark .vp-doc .cc-declaration .cc-cond {
+  background: rgba(245, 158, 11, 0.2);
+  color: #fcd34d;
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
+.dark .vp-doc .cc-declaration[data-license="cc0"],
+.dark .vp-doc .cc-declaration[data-license="pd"] {
+  background: linear-gradient(135deg, rgba(107, 114, 128, 0.15) 0%, rgba(31, 41, 55, 0.9) 100%);
+}
+
+.dark .vp-doc .license-block .license-link {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.dark .vp-doc .license-block .license-link:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.dark .vp-doc .license-block .license-text {
+  background: rgba(255, 255, 255, 0.03);
+  border-top-color: rgba(255, 255, 255, 0.06);
+}
+
+.dark .vp-doc .license-block .license-text code {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* ================================================================
+   许可声明 - 响应式设计
+   ================================================================ */
+@media (max-width: 640px) {
+  .vp-doc .license-block .license-header {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .vp-doc .license-block .license-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .vp-doc .license-block .license-icon svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .vp-doc .license-block .license-body {
+    padding: 0 16px 12px 16px;
+  }
+
+  .vp-doc .license-block .license-title {
+    font-size: 14px;
+  }
+
+  .vp-doc .license-block .license-subtitle {
+    font-size: 12px;
+  }
+
+  .vp-doc .cc-declaration .cc-details {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .vp-doc .ai-declaration .ai-type-badge,
+  .vp-doc .ai-declaration .ai-model-badge {
+    font-size: 12px;
+    padding: 3px 10px;
+  }
 }
