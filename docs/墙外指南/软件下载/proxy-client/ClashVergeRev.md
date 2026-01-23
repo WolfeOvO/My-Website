@@ -1,11 +1,15 @@
 # Clash Verge Rev
 
-<ntags color="blue">Windows</ntags> <ntags color="yellow">Linux</ntags> <ntags color="gray">MacOS</ntags>
+<ntags color="blue">Windows</ntags> <ntags color="gray">MacOS</ntags> <ntags color="yellow">Linux</ntags>
 
-- GitHub 项目地址：[https://github.com/clash-verge-rev/clash-verge-rev](https://github.com/clash-verge-rev/clash-verge-rev)
-- 发布地址：见[下文](#发布面板)
+<lc url="https://github.com/clash-verge-rev/clash-verge-rev" />
+
 - Telegram 频道：[https://t.me/clash_verge_re](https://t.me/clash_verge_re)
 - Telegram 群组：[https://t.me/clash_verge_rev](https://t.me/clash_verge_rev)
+
+## 文档
+
+<lc url="https://www.clashverge.dev" />
 
 ## 下载
 
