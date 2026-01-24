@@ -20,6 +20,31 @@ const props = defineProps({
     showBothVersions: { type: Boolean, default: false }, // 同时显示两个版本的徽章
 })
 
+// SVG 图标组件
+const icons = {
+    tag: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>`,
+    flask: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6v7l4 9H5l4-9V3z"/><path d="M9 3h6"/><circle cx="12" cy="16" r="1.5"/><circle cx="9" cy="14" r="1"/><circle cx="15" cy="14" r="1"/></svg>`,
+    folder: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>`,
+    file: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>`,
+    close: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`,
+    package: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="16.5" y1="9.4" x2="7.5" y2="4.21"/><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>`,
+    arrowRight: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>`,
+    arrowLeft: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>`,
+    edit: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>`,
+    hardDrive: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="12" x2="2" y2="12"/><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/><line x1="6" y1="16" x2="6.01" y2="16"/><line x1="10" y1="16" x2="10.01" y2="16"/></svg>`,
+    download: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>`,
+    upload: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>`,
+    refresh: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>`,
+    clipboard: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>`,
+    link: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>`,
+    home: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>`,
+    list: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>`,
+    star: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`,
+    shield: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`,
+    key: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>`,
+    externalLink: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>`,
+}
+
 // 预定义渐变色
 const gradientPresets = [
     ['#667eea', '#764ba2'], ['#f093fb', '#f5576c'], ['#4facfe', '#00f2fe'],
@@ -74,7 +99,6 @@ const allReleases = ref([])
 // 当前活动的 release（根据切换状态）
 const release = computed(() => {
     if (props.showBothVersions) {
-        // 同时显示模式下，默认返回当前选中的版本
         return isPrerelease.value ? prereleaseRelease.value : stableRelease.value
     }
     return isPrerelease.value ? prereleaseRelease.value : stableRelease.value
@@ -174,7 +198,6 @@ const fetchRelease = async () => {
         loading.value = true
         error.value = null
 
-        // 始终获取所有 releases 以支持切换功能
         const res = await fetch(
             `https://api.github.com/repos/${props.owner}/${props.repo}/releases`,
             { headers: { 'Accept': 'application/vnd.github.v3+json' } }
@@ -189,13 +212,9 @@ const fetchRelease = async () => {
         const data = await res.json()
         allReleases.value = data
 
-        // 找到最新的稳定版（非 prerelease 且非 draft）
         stableRelease.value = data.find(r => !r.prerelease && !r.draft) || null
-
-        // 找到最新的预发布版
         prereleaseRelease.value = data.find(r => r.prerelease && !r.draft) || null
 
-        // 如果没有找到预发布版，但有稳定版中包含 alpha/beta/rc 等标记的
         if (!prereleaseRelease.value) {
             const possiblePrerelease = data.find(r => 
                 !r.draft && /alpha|beta|rc|preview|dev|nightly|canary/i.test(r.tag_name)
@@ -205,13 +224,11 @@ const fetchRelease = async () => {
             }
         }
 
-        // 设置初始选中状态
         if (props.prerelease && prereleaseRelease.value) {
             isPrerelease.value = true
         } else if (!props.prerelease && stableRelease.value) {
             isPrerelease.value = false
         } else {
-            // 回退逻辑：如果指定的版本类型不存在，使用另一个
             isPrerelease.value = !stableRelease.value && !!prereleaseRelease.value
         }
 
@@ -407,7 +424,7 @@ onMounted(fetchRelease)
                 @click="hasStableVersion && (isPrerelease = false)"
                 :disabled="!hasStableVersion"
             >
-                <span class="gh-toggle-icon">🏷️</span>
+                <span class="gh-toggle-icon" v-html="icons.tag"></span>
                 <span class="gh-toggle-text">Stable</span>
             </button>
             <button 
@@ -415,7 +432,7 @@ onMounted(fetchRelease)
                 @click="hasPrereleaseVersion && (isPrerelease = true)"
                 :disabled="!hasPrereleaseVersion"
             >
-                <span class="gh-toggle-icon">🧪</span>
+                <span class="gh-toggle-icon" v-html="icons.flask"></span>
                 <span class="gh-toggle-text">Pre-release</span>
             </button>
         </span>
@@ -425,7 +442,7 @@ onMounted(fetchRelease)
             <!-- Stable 徽章组 -->
             <span v-if="hasStableVersion" class="gh-version-group gh-stable-group">
                 <span class="gh-version-label">
-                    <span class="gh-label-icon">🏷️</span>
+                    <span class="gh-label-icon" v-html="icons.tag"></span>
                     <span>Stable</span>
                 </span>
                 <template v-if="showBadge">
@@ -469,7 +486,7 @@ onMounted(fetchRelease)
             <!-- Pre-release 徽章组 -->
             <span v-if="hasPrereleaseVersion" class="gh-version-group gh-prerelease-group">
                 <span class="gh-version-label gh-pre-label">
-                    <span class="gh-label-icon">🧪</span>
+                    <span class="gh-label-icon" v-html="icons.flask"></span>
                     <span>Pre-release</span>
                 </span>
                 <template v-if="showBadge">
@@ -499,7 +516,12 @@ onMounted(fetchRelease)
                 <button v-if="showButton && prereleaseMatchedAssets.length > 0" type="button"
                     :class="['gh-dl-btn', 'gh-dl-btn-pre', { disabled: loading || error }]"
                     :title="prereleaseFirstAsset?.name || ''" @click="handleVersionButtonClick($event, true)">
-                    <span class="gh-dl-label gh-dl-label-pre" :style="{ backgroundColor: '#d97706' }">{{ label }}</span>
+                    <span class="gh-dl-label gh-dl-label-pre" :style="{ backgroundColor: '#d97706' }">
+                        {{ label }}
+                        <span class="gh-btn-pre-tag">
+                            <span class="gh-btn-pre-icon" v-html="icons.flask"></span>
+                        </span>
+                    </span>
                     <span class="gh-dl-arch" :style="loading ? { backgroundColor: '#999' } : { background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)' }">
                         <template v-if="loading">···</template>
                         <template v-else>
@@ -536,10 +558,6 @@ onMounted(fetchRelease)
                         </span>
                     </span>
                 </a>
-                <!-- Pre-release 标识 -->
-                <span v-if="isPrerelease && !loading && !error" class="gh-pre-indicator" title="这是预发布版本">
-                    🧪
-                </span>
             </template>
 
             <!-- 下载按钮 -->
@@ -548,7 +566,10 @@ onMounted(fetchRelease)
                 :title="firstAsset?.name || error || '加载中...'" @click="handleButtonClick">
                 <span class="gh-dl-label" :style="{ backgroundColor: isPrerelease ? '#d97706' : btnLabelColor }">
                     {{ label }}
-                    <span v-if="isPrerelease" class="gh-btn-pre-tag">β</span>
+                    <!-- Pre-release 标识移到按钮内部 -->
+                    <span v-if="isPrerelease && !loading && !error" class="gh-btn-pre-tag">
+                        <span class="gh-btn-pre-icon" v-html="icons.flask"></span>
+                    </span>
                 </span>
                 <span class="gh-dl-arch"
                     :style="loading ? { backgroundColor: '#999' } : (error || matchedAssets.length === 0 ? { backgroundColor: '#f56c6c' } : (isPrerelease ? { background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)' } : archBgStyle))">
@@ -570,19 +591,23 @@ onMounted(fetchRelease)
                         <!-- 弹窗头部 -->
                         <div :class="['gh-modal-header', { 'gh-modal-header-pre': modalIsPrerelease }]">
                             <div class="gh-modal-title">
-                                <span v-if="showFileList">📁 选择文件 ({{ modalMatchedAssets.length }})</span>
-                                <span v-else>📄 文件详情</span>
+                                <span class="gh-modal-title-icon" v-html="showFileList ? icons.folder : icons.file"></span>
+                                <span v-if="showFileList">选择文件 ({{ modalMatchedAssets.length }})</span>
+                                <span v-else>文件详情</span>
                                 <!-- Pre-release 标记 -->
                                 <span v-if="modalIsPrerelease" class="gh-modal-pre-tag">
-                                    🧪 Pre-release
+                                    <span class="gh-modal-pre-icon" v-html="icons.flask"></span>
+                                    Pre-release
                                 </span>
                             </div>
-                            <button class="gh-modal-close" @click="closeModal">✕</button>
+                            <button class="gh-modal-close" @click="closeModal">
+                                <span v-html="icons.close"></span>
+                            </button>
                         </div>
 
                         <!-- 版本信息条 -->
                         <div :class="['gh-version-bar', { 'gh-version-bar-pre': modalIsPrerelease }]">
-                            <span class="gh-version-bar-icon">{{ modalIsPrerelease ? '🧪' : '🏷️' }}</span>
+                            <span class="gh-version-bar-icon" v-html="modalIsPrerelease ? icons.flask : icons.tag"></span>
                             <span class="gh-version-bar-text">
                                 {{ modalRelease?.name || modalRelease?.tag_name || 'Unknown' }}
                             </span>
@@ -594,7 +619,7 @@ onMounted(fetchRelease)
                             <div class="gh-file-list">
                                 <div v-for="asset in modalMatchedAssets" :key="asset.id" class="gh-file-item"
                                     @click="selectFile(asset)">
-                                    <div class="gh-file-icon">📦</div>
+                                    <div class="gh-file-icon" v-html="icons.package"></div>
                                     <div class="gh-file-info">
                                         <div class="gh-file-name">{{ asset.name }}</div>
                                         <div class="gh-file-meta">
@@ -603,7 +628,7 @@ onMounted(fetchRelease)
                                             <span>{{ formatDownloads(asset.download_count) }} 次下载</span>
                                         </div>
                                     </div>
-                                    <div class="gh-file-arrow">→</div>
+                                    <div class="gh-file-arrow" v-html="icons.arrowRight"></div>
                                 </div>
                             </div>
                         </div>
@@ -611,15 +636,22 @@ onMounted(fetchRelease)
                         <!-- 文件详情 -->
                         <div v-else-if="selectedAsset" class="gh-modal-body">
                             <div v-if="modalMatchedAssets.length > 1" class="gh-back-btn" @click="backToList">
-                                ← 返回列表
+                                <span class="gh-back-icon" v-html="icons.arrowLeft"></span>
+                                返回列表
                             </div>
 
                             <div class="gh-detail-section">
-                                <div class="gh-detail-title">📦 文件信息</div>
+                                <div class="gh-detail-title">
+                                    <span class="gh-detail-title-icon" v-html="icons.package"></span>
+                                    文件信息
+                                </div>
                                 <div class="gh-detail-grid">
                                     <div class="gh-detail-item"
                                         :style="{ backgroundColor: getRowColor(0).bg, borderColor: getRowColor(0).border }">
-                                        <div class="gh-detail-label">📝 文件名</div>
+                                        <div class="gh-detail-label">
+                                            <span class="gh-detail-label-icon" v-html="icons.edit"></span>
+                                            文件名
+                                        </div>
                                         <div class="gh-detail-value gh-copyable"
                                             @click="copyToClipboard(selectedAsset.name)">
                                             {{ selectedAsset.name }}
@@ -628,38 +660,59 @@ onMounted(fetchRelease)
                                     </div>
                                     <div class="gh-detail-item"
                                         :style="{ backgroundColor: getRowColor(1).bg, borderColor: getRowColor(1).border }">
-                                        <div class="gh-detail-label">💾 文件大小</div>
+                                        <div class="gh-detail-label">
+                                            <span class="gh-detail-label-icon" v-html="icons.hardDrive"></span>
+                                            文件大小
+                                        </div>
                                         <div class="gh-detail-value">{{ formatSize(selectedAsset.size) }}</div>
                                     </div>
                                     <div class="gh-detail-item"
                                         :style="{ backgroundColor: getRowColor(2).bg, borderColor: getRowColor(2).border }">
-                                        <div class="gh-detail-label">📥 下载次数</div>
+                                        <div class="gh-detail-label">
+                                            <span class="gh-detail-label-icon" v-html="icons.download"></span>
+                                            下载次数
+                                        </div>
                                         <div class="gh-detail-value">{{ selectedAsset.download_count.toLocaleString() }} 次</div>
                                     </div>
                                     <div class="gh-detail-item"
                                         :style="{ backgroundColor: getRowColor(3).bg, borderColor: getRowColor(3).border }">
-                                        <div class="gh-detail-label">📤 上传时间</div>
+                                        <div class="gh-detail-label">
+                                            <span class="gh-detail-label-icon" v-html="icons.upload"></span>
+                                            上传时间
+                                        </div>
                                         <div class="gh-detail-value">{{ formatTime(selectedAsset.created_at) }}</div>
                                     </div>
                                     <div class="gh-detail-item"
                                         :style="{ backgroundColor: getRowColor(4).bg, borderColor: getRowColor(4).border }">
-                                        <div class="gh-detail-label">🔄 更新时间</div>
+                                        <div class="gh-detail-label">
+                                            <span class="gh-detail-label-icon" v-html="icons.refresh"></span>
+                                            更新时间
+                                        </div>
                                         <div class="gh-detail-value">{{ formatTime(selectedAsset.updated_at) }}</div>
                                     </div>
                                     <div class="gh-detail-item"
                                         :style="{ backgroundColor: getRowColor(5).bg, borderColor: getRowColor(5).border }">
-                                        <div class="gh-detail-label">📋 Content-Type</div>
+                                        <div class="gh-detail-label">
+                                            <span class="gh-detail-label-icon" v-html="icons.clipboard"></span>
+                                            Content-Type
+                                        </div>
                                         <div class="gh-detail-value">{{ selectedAsset.content_type }}</div>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="gh-detail-section">
-                                <div class="gh-detail-title">🔗 相关链接</div>
+                                <div class="gh-detail-title">
+                                    <span class="gh-detail-title-icon" v-html="icons.link"></span>
+                                    相关链接
+                                </div>
                                 <div class="gh-detail-grid">
                                     <div class="gh-detail-item gh-detail-full"
                                         :style="{ backgroundColor: getRowColor(0).bg, borderColor: getRowColor(0).border }">
-                                        <div class="gh-detail-label">⬇️ 下载地址</div>
+                                        <div class="gh-detail-label">
+                                            <span class="gh-detail-label-icon" v-html="icons.download"></span>
+                                            下载地址
+                                        </div>
                                         <div class="gh-detail-value gh-copyable gh-url"
                                             @click="copyToClipboard(selectedAsset.browser_download_url)">
                                             {{ selectedAsset.browser_download_url }}
@@ -668,7 +721,10 @@ onMounted(fetchRelease)
                                     </div>
                                     <div class="gh-detail-item gh-detail-full"
                                         :style="{ backgroundColor: getRowColor(1).bg, borderColor: getRowColor(1).border }">
-                                        <div class="gh-detail-label">🏠 项目地址</div>
+                                        <div class="gh-detail-label">
+                                            <span class="gh-detail-label-icon" v-html="icons.home"></span>
+                                            项目地址
+                                        </div>
                                         <div class="gh-detail-value gh-copyable gh-url"
                                             @click="copyToClipboard(projectUrl)">
                                             {{ projectUrl }}
@@ -677,7 +733,10 @@ onMounted(fetchRelease)
                                     </div>
                                     <div class="gh-detail-item gh-detail-full"
                                         :style="{ backgroundColor: getRowColor(2).bg, borderColor: getRowColor(2).border }">
-                                        <div class="gh-detail-label">📋 发布列表</div>
+                                        <div class="gh-detail-label">
+                                            <span class="gh-detail-label-icon" v-html="icons.list"></span>
+                                            发布列表
+                                        </div>
                                         <div class="gh-detail-value gh-copyable gh-url"
                                             @click="copyToClipboard(releasesUrl)">
                                             {{ releasesUrl }}
@@ -686,7 +745,10 @@ onMounted(fetchRelease)
                                     </div>
                                     <div class="gh-detail-item gh-detail-full"
                                         :style="{ backgroundColor: getRowColor(3).bg, borderColor: getRowColor(3).border }">
-                                        <div class="gh-detail-label">🆕 最新发布</div>
+                                        <div class="gh-detail-label">
+                                            <span class="gh-detail-label-icon" v-html="icons.star"></span>
+                                            最新发布
+                                        </div>
                                         <div class="gh-detail-value gh-copyable gh-url"
                                             @click="copyToClipboard(latestUrl)">
                                             {{ latestUrl }}
@@ -697,11 +759,17 @@ onMounted(fetchRelease)
                             </div>
 
                             <div class="gh-detail-section">
-                                <div class="gh-detail-title">🔐 校验信息</div>
+                                <div class="gh-detail-title">
+                                    <span class="gh-detail-title-icon" v-html="icons.shield"></span>
+                                    校验信息
+                                </div>
                                 <div class="gh-detail-grid">
                                     <div class="gh-detail-item gh-detail-full"
                                         :style="{ backgroundColor: getRowColor(0).bg, borderColor: getRowColor(0).border }">
-                                        <div class="gh-detail-label">🔑 SHA256</div>
+                                        <div class="gh-detail-label">
+                                            <span class="gh-detail-label-icon" v-html="icons.key"></span>
+                                            SHA256
+                                        </div>
                                         <div v-if="getSHA256(selectedAsset.name)" class="gh-detail-value gh-copyable gh-hash"
                                             @click="copyToClipboard(getSHA256(selectedAsset.name))">
                                             {{ getSHA256(selectedAsset.name) }}
@@ -718,10 +786,11 @@ onMounted(fetchRelease)
                             <a v-if="selectedAsset" :href="selectedAsset.browser_download_url" 
                                :class="['gh-download-btn', { 'gh-download-btn-pre': modalIsPrerelease }]" 
                                target="_blank">
-                                <span class="gh-download-icon">⬇️</span>
+                                <span class="gh-download-icon" v-html="icons.download"></span>
                                 <span>下载文件</span>
                             </a>
                             <a :href="modalRelease?.html_url || releaseUrl" class="gh-github-btn" target="_blank">
+                                <span class="gh-github-icon" v-html="icons.externalLink"></span>
                                 在 GitHub 查看
                             </a>
                         </div>
@@ -738,7 +807,15 @@ onMounted(fetchRelease)
     align-items: center;
     gap: 0.5em;
     flex-wrap: wrap;
-    line-height: 1.8;  /* 增加行高 */
+    line-height: 1.8;
+}
+
+/* ========== SVG 图标通用样式 ========== */
+.gh-release :deep(svg) {
+    width: 1em;
+    height: 1em;
+    vertical-align: middle;
+    flex-shrink: 0;
 }
 
 /* ========== 版本切换开关 ========== */
@@ -787,7 +864,16 @@ onMounted(fetchRelease)
 }
 
 .gh-toggle-icon {
-    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 14px;
+    height: 14px;
+}
+
+.gh-toggle-icon :deep(svg) {
+    width: 14px;
+    height: 14px;
 }
 
 .gh-toggle-text {
@@ -825,7 +911,16 @@ onMounted(fetchRelease)
 }
 
 .gh-label-icon {
-    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 14px;
+    height: 14px;
+}
+
+.gh-label-icon :deep(svg) {
+    width: 14px;
+    height: 14px;
 }
 
 /* ========== 徽章样式 ========== */
@@ -876,17 +971,6 @@ onMounted(fetchRelease)
     box-shadow: 0 1px 3px rgba(245, 158, 11, 0.3);
 }
 
-.gh-pre-indicator {
-    font-size: 14px;
-    margin-left: 2px;
-    animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.6; }
-}
-
 /* ========== 下载按钮 ========== */
 .gh-dl-btn {
     display: inline-flex;
@@ -897,7 +981,7 @@ onMounted(fetchRelease)
     cursor: pointer;
     border: none;
     padding: 0;
-    margin: 0.2em 0.4em 0.2em 0;  /* 增加按钮间距和行间距 */
+    margin: 0.2em 0.4em 0.2em 0;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
     transition: all 0.2s;
     vertical-align: middle;
@@ -924,19 +1008,34 @@ onMounted(fetchRelease)
     font-weight: 500;
     position: relative;
     border-radius: 0.25em 0 0 0.25em;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25em;
 }
 
+/* Pre-release 标签样式 - 移到按钮内部 */
 .gh-btn-pre-tag {
-    position: absolute;
-    top: -0.15em;
-    right: -0.15em;
-    font-size: 0.65em;
-    font-weight: 700;
-    color: #fff;
-    background: #dc2626;
-    border-radius: 0.25em;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.25);
+    border-radius: 0.2em;
     padding: 0.1em 0.2em;
-    line-height: 1;
+    margin-left: 0.15em;
+}
+
+.gh-btn-pre-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 0.9em;
+    height: 0.9em;
+}
+
+.gh-btn-pre-icon :deep(svg) {
+    width: 0.9em;
+    height: 0.9em;
+    color: #fff;
 }
 
 .gh-dl-arch {
@@ -1009,10 +1108,27 @@ onMounted(fetchRelease)
     color: var(--vp-c-text-1, #1a202c);
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
+}
+
+.gh-modal-title-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    color: var(--vp-c-text-2, #64748b);
+}
+
+.gh-modal-title-icon :deep(svg) {
+    width: 20px;
+    height: 20px;
 }
 
 .gh-modal-pre-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
     font-size: 11px;
     font-weight: 600;
     color: #92400e;
@@ -1022,15 +1138,35 @@ onMounted(fetchRelease)
     border: 1px solid #fcd34d;
 }
 
+.gh-modal-pre-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 12px;
+    height: 12px;
+}
+
+.gh-modal-pre-icon :deep(svg) {
+    width: 12px;
+    height: 12px;
+}
+
 .gh-modal-close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     background: none;
     border: none;
-    padding: 6px 10px;
+    padding: 6px;
     border-radius: 6px;
     cursor: pointer;
-    font-size: 14px;
     color: var(--vp-c-text-2, #64748b);
     transition: all 0.2s;
+}
+
+.gh-modal-close :deep(svg) {
+    width: 16px;
+    height: 16px;
 }
 
 .gh-modal-close:hover {
@@ -1055,7 +1191,21 @@ onMounted(fetchRelease)
 }
 
 .gh-version-bar-icon {
-    font-size: 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    color: #166534;
+}
+
+.gh-version-bar-pre .gh-version-bar-icon {
+    color: #92400e;
+}
+
+.gh-version-bar-icon :deep(svg) {
+    width: 16px;
+    height: 16px;
 }
 
 .gh-version-bar-text {
@@ -1112,7 +1262,17 @@ onMounted(fetchRelease)
 }
 
 .gh-file-icon {
-    font-size: 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    color: var(--vp-c-text-2, #64748b);
+}
+
+.gh-file-icon :deep(svg) {
+    width: 20px;
+    height: 20px;
 }
 
 .gh-file-info {
@@ -1138,8 +1298,17 @@ onMounted(fetchRelease)
 }
 
 .gh-file-arrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
     color: var(--vp-c-text-3, #94a3b8);
-    font-size: 16px;
+}
+
+.gh-file-arrow :deep(svg) {
+    width: 16px;
+    height: 16px;
 }
 
 /* ========== 返回按钮 ========== */
@@ -1162,6 +1331,19 @@ onMounted(fetchRelease)
     color: var(--vp-c-brand, #3b82f6);
 }
 
+.gh-back-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 14px;
+    height: 14px;
+}
+
+.gh-back-icon :deep(svg) {
+    width: 14px;
+    height: 14px;
+}
+
 /* ========== 详情区域 ========== */
 .gh-detail-section {
     margin-bottom: 16px;
@@ -1172,12 +1354,29 @@ onMounted(fetchRelease)
 }
 
 .gh-detail-title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
     font-size: 13px;
     font-weight: 600;
     color: var(--vp-c-text-1, #1a202c);
     margin-bottom: 8px;
     padding-bottom: 6px;
     border-bottom: 1px solid var(--vp-c-divider, #e2e8f0);
+}
+
+.gh-detail-title-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    color: var(--vp-c-text-2, #64748b);
+}
+
+.gh-detail-title-icon :deep(svg) {
+    width: 16px;
+    height: 16px;
 }
 
 .gh-detail-grid {
@@ -1198,11 +1397,27 @@ onMounted(fetchRelease)
 }
 
 .gh-detail-label {
+    display: flex;
+    align-items: center;
+    gap: 4px;
     font-size: 10px;
     color: var(--vp-c-text-3, #94a3b8);
     text-transform: uppercase;
     letter-spacing: 0.3px;
     margin-bottom: 2px;
+}
+
+.gh-detail-label-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 12px;
+    height: 12px;
+}
+
+.gh-detail-label-icon :deep(svg) {
+    width: 12px;
+    height: 12px;
 }
 
 .gh-detail-value {
@@ -1300,10 +1515,23 @@ onMounted(fetchRelease)
 }
 
 .gh-download-icon {
-    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+}
+
+.gh-download-icon :deep(svg) {
+    width: 16px;
+    height: 16px;
 }
 
 .gh-github-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
     padding: 10px 16px;
     background: var(--vp-c-bg, #fff);
     color: var(--vp-c-text-1, #1a202c);
@@ -1318,6 +1546,19 @@ onMounted(fetchRelease)
 .gh-github-btn:hover {
     background: var(--vp-c-bg-mute, #f1f5f9);
     border-color: var(--vp-c-brand, #3b82f6);
+}
+
+.gh-github-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 14px;
+    height: 14px;
+}
+
+.gh-github-icon :deep(svg) {
+    width: 14px;
+    height: 14px;
 }
 
 /* ========== 动画 ========== */
@@ -1398,6 +1639,10 @@ onMounted(fetchRelease)
     border-bottom-color: #16a34a;
 }
 
+.dark .gh-version-bar-icon {
+    color: #bbf7d0;
+}
+
 .dark .gh-version-bar-tag {
     color: #bbf7d0;
     background: rgba(134, 239, 172, 0.1);
@@ -1406,6 +1651,10 @@ onMounted(fetchRelease)
 .dark .gh-version-bar-pre {
     background: linear-gradient(135deg, #78350f 0%, #92400e 100%);
     border-bottom-color: #b45309;
+}
+
+.dark .gh-version-bar-pre .gh-version-bar-icon {
+    color: #fef3c7;
 }
 
 .dark .gh-version-bar-pre .gh-version-bar-tag {
