@@ -65,4 +65,41 @@
 | :---: | :---: |
 | <gtl owner="KaringX" repo="karing" mode="button" label="安装包" arch="ARM" match="android_arm.apk" /> <gtl owner="KaringX" repo="karing" mode="button" label="安装包" arch="ARMv7" match="android_armeabi-v7a.apk" /> <gtl owner="KaringX" repo="karing" mode="button" label="安装包" arch="ARMv8" match="android_arm64-v8a.apk" /> | <gtl owner="KaringX" repo="karing" :prerelease="true" mode="button" label="安装包" arch="ARM" match="android_arm.apk" /> <gtl owner="KaringX" repo="karing" :prerelease="true" mode="button" label="安装包" arch="ARMv7" match="android_armeabi-v7a.apk" /> <gtl owner="KaringX" repo="karing" :prerelease="true" mode="button" label="安装包" arch="ARMv8" match="android_arm64-v8a.apk" />
 
+=== "苹果设备" @1
+
+=== "iOS (iPhone/iPad/TV)" @2
+
+::: tip
+- App Store 正式版和 TestFilght 测试版不可共存，请根据需要选择安装其中一个版本；
+- 如果您的账号无法正常下载应用，请尝试港区、美区等**非中国大陆地区账号**，具体内容详见[《Apple ID 账号获取》](/墙外指南/教程/AppleID)。
+:::
+
+- App Store 正式版下载：[https://apps.apple.com/us/app/karing/id6472431552](https://apps.apple.com/us/app/karing/id6472431552)
+- TestFlight 测试版下载：[https://testflight.apple.com/join/RLU59OsJ](https://testflight.apple.com/join/RLU59OsJ)
+
+=== "MacOS" @2
+
+- 正式版：[https://dot.karing.app/client.html?tag=macos-stable](https://dot.karing.app/client.html?tag=macos-stable)
+- 测试版：[https://dot.karing.app/client.html?tag=macos-beta](https://dot.karing.app/client.html?tag=macos-beta)
+
+| 正式版 | 测试版 |
+| :---: | :---: |
+| <gtl owner="KaringX" repo="karing" mode="button" label="安装包" arch="dmg" march="macos_universal.dmg" /> | <gtl owner="KaringX" repo="karing" :prerelease="true" mode="button" label="安装包" arch="dmg" march="macos_universal.dmg" />
+
+=== "Linux" @1
+
+- 正式版：[``deb`` 安装包](https://dot.karing.app/client.html?tag=linux-deb-stable)、[``rpm`` 安装包](https://dot.karing.app/client.html?tag=linux-rpm-stable)
+- 测试版：[``deb`` 安装包](https://dot.karing.app/client.html?tag=linux-deb-beta)、[``rpm`` 安装包](https://dot.karing.app/client.html?tag=linux-rpm-beta)
+
+| 正式版 | 测试版 |
+| :---: | :---: |
+| <gtl owner="KaringX" repo="karing" mode="button" label="安装包" arch="deb" match="linux_amd64.deb" /> <gtl owner="KaringX" repo="karing" mode="button" label="安装包" arch="rpm" match="linux_amd64.rpm" /> <gtl owner="KaringX" repo="karing" mode="button" label="安装包" arch="AppImage" match="linux_amd64.AppImage" /> | <gtl owner="KaringX" repo="karing" :prerelease="true" mode="button" label="安装包" arch="deb" match="linux_amd64.deb" /> <gtl owner="KaringX" repo="karing" :prerelease="true" mode="button" label="安装包" arch="rpm" match="linux_amd64.rpm" /> <gtl owner="KaringX" repo="karing" :prerelease="true" mode="button" label="安装包" arch="AppImage" match="linux_amd64.AppImage" /> |
+
 <!-- tabs:end -->
+
+## 发布面板
+
+| 发行版本 | 下载次数 | 下载地址 |
+| :---: | :---: | :---: |
+| Github Release 正式版 | <gtl owner="KaringX" repo="karing" mode="badge" :showVersion="false" /> | <gtl owner="KaringX" repo="karing" mode="badge" :showDownloads="false" /> |
+| Github Release 测试版 | <gtl owner="KaringX" repo="karing" mode="badge" :showVersion="false" prerelease /> | <gtl owner="KaringX" repo="karing" mode="badge" :showDownloads="false" prerelease /> |
