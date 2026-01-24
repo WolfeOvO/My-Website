@@ -1,95 +1,20 @@
 let gid = 0
 
 export function tabbed(md) {
-  // 1. 预处理：把 tab 语法转换成特殊标记（不是 HTML！）
   const origParse = md.parse.bind(md)
+  
   md.parse = (src, env) => {
     gid = 0
-    return origParse(preprocess(src), env)
+    const preprocessed = preprocess(src)
+    const tokens = origParse(preprocessed, env)
+    return wrapTabContent(tokens, md)
   }
-
-  // 2. 添加自定义 token 规则
-  md.block.ruler.before('html_block', 'vp_tabs', vpTabsRule, {
-    alt: ['paragraph', 'reference', 'blockquote']
-  })
-
-  // 3. 渲染器
-  md.renderer.rules.vp_tabs_open = (tokens, idx) => {
-    const token = tokens[idx]
-    return `<div class="vp-tabs" data-id="${token.meta.id}">\n` +
-           `<div class="vp-tabs-nav">\n` +
-           token.meta.labels.map((label, i) => 
-             `<button class="vp-tabs-tab${i === 0 ? ' active' : ''}" data-i="${i}">${esc(label)}</button>`
-           ).join('\n') + '\n' +
-           `</div>\n`
-  }
-
-  md.renderer.rules.vp_tabs_close = () => `</div>\n`
-
-  md.renderer.rules.vp_tab_open = (tokens, idx) => {
-    const token = tokens[idx]
-    return `<div class="vp-tabs-panel${token.meta.index === 0 ? ' active' : ''}" data-i="${token.meta.index}">\n`
-  }
-
-  md.renderer.rules.vp_tab_close = () => `</div>\n`
 }
 
-// 特殊标记的正则
-const TABS_OPEN_RE = /^:::vp-tabs\s+id="([^"]+)"\s+labels="([^"]+)"$/
-const TABS_CLOSE_RE = /^:::\/vp-tabs$/
-const TAB_OPEN_RE = /^:::vp-tab\s+index="(\d+)"$/
-const TAB_CLOSE_RE = /^:::\/vp-tab$/
-
-function vpTabsRule(state, startLine, endLine, silent) {
-  const startPos = state.bMarks[startLine] + state.tShift[startLine]
-  const maxPos = state.eMarks[startLine]
-  const lineText = state.src.slice(startPos, maxPos)
-
-  // 检查 tabs 开始
-  let match = lineText.match(TABS_OPEN_RE)
-  if (match) {
-    if (silent) return true
-    const token = state.push('vp_tabs_open', 'div', 1)
-    token.meta = { id: match[1], labels: match[2].split('|') }
-    token.map = [startLine, startLine + 1]
-    token.block = true
-    state.line = startLine + 1
-    return true
-  }
-
-  // 检查 tabs 结束
-  if (TABS_CLOSE_RE.test(lineText)) {
-    if (silent) return true
-    const token = state.push('vp_tabs_close', 'div', -1)
-    token.block = true
-    state.line = startLine + 1
-    return true
-  }
-
-  // 检查 tab 开始
-  match = lineText.match(TAB_OPEN_RE)
-  if (match) {
-    if (silent) return true
-    const token = state.push('vp_tab_open', 'div', 1)
-    token.meta = { index: parseInt(match[1]) }
-    token.map = [startLine, startLine + 1]
-    token.block = true
-    state.line = startLine + 1
-    return true
-  }
-
-  // 检查 tab 结束
-  if (TAB_CLOSE_RE.test(lineText)) {
-    if (silent) return true
-    const token = state.push('vp_tab_close', 'div', -1)
-    token.block = true
-    state.line = startLine + 1
-    return true
-  }
-
-  return false
-}
-
+/**
+ * 预处理：把 tab 语法转成 HTML 注释标记
+ * 这些注释不会被 Vue 解析，也不会打断 markdown 解析
+ */
 function preprocess(src) {
   const lines = src.split('\n')
   const out = []
@@ -99,7 +24,6 @@ function preprocess(src) {
     if (lines[i].trim() === '<!-- tabs:start -->') {
       i++
       
-      // 收集 tabs 信息
       const items = []
       let currentItem = null
       
@@ -127,14 +51,12 @@ function preprocess(src) {
         items.push(currentItem)
       }
       
-      // 跳过 <!-- tabs:end -->
       if (i < lines.length && lines[i].trim() === '<!-- tabs:end -->') {
         i++
       }
       
-      // 生成特殊标记（不是 HTML！）
       if (items.length > 0) {
-        out.push(...buildNestedMarkers(items, 0, items.length, 1))
+        out.push(...buildMarkers(items, 0, items.length, 1))
       }
     } else {
       out.push(lines[i])
@@ -150,7 +72,7 @@ function cleanLines(arr) {
   while (arr.length && !arr.at(-1)?.trim()) arr.pop()
 }
 
-function buildNestedMarkers(items, start, end, targetLevel) {
+function buildMarkers(items, start, end, targetLevel) {
   const tabs = []
   let i = start
   
@@ -162,7 +84,6 @@ function buildNestedMarkers(items, start, end, targetLevel) {
         childMarkers: []
       }
       
-      // 找嵌套范围
       let childStart = i + 1
       let childEnd = childStart
       while (childEnd < end && items[childEnd].level > targetLevel) {
@@ -170,7 +91,7 @@ function buildNestedMarkers(items, start, end, targetLevel) {
       }
       
       if (childEnd > childStart) {
-        tab.childMarkers = buildNestedMarkers(items, childStart, childEnd, targetLevel + 1)
+        tab.childMarkers = buildMarkers(items, childStart, childEnd, targetLevel + 1)
       }
       
       tabs.push(tab)
@@ -183,31 +104,119 @@ function buildNestedMarkers(items, start, end, targetLevel) {
   if (tabs.length === 0) return []
   
   const id = `t${gid++}`
-  const labels = tabs.map(t => t.label).join('|')
+  const labels = tabs.map(t => t.label)
   const result = []
   
-  // 输出特殊标记（这些会被 vpTabsRule 识别）
-  result.push(`:::vp-tabs id="${id}" labels="${labels}"`)
+  // 使用特殊格式的 HTML 注释作为标记
+  result.push(`<!--VPT:TABS_OPEN:${id}:${JSON.stringify(labels)}-->`)
   
   tabs.forEach((tab, index) => {
-    result.push(`:::vp-tab index="${index}"`)
+    result.push(`<!--VPT:TAB_OPEN:${index}-->`)
     
-    // 内容（不在开头加空行，避免生成空段落）
     if (tab.contentLines.length > 0) {
       result.push(...tab.contentLines)
     }
     
-    // 嵌套的 tabs
     if (tab.childMarkers.length > 0) {
       result.push(...tab.childMarkers)
     }
     
-    result.push(`:::/vp-tab`)
+    result.push(`<!--VPT:TAB_CLOSE-->`)
   })
   
-  result.push(`:::/vp-tabs`)
+  result.push(`<!--VPT:TABS_CLOSE-->`)
   
   return result
+}
+
+/**
+ * 在 token 级别处理：找到注释标记，替换成真正的 HTML token
+ */
+function wrapTabContent(tokens, md) {
+  const result = []
+  
+  for (let i = 0; i < tokens.length; i++) {
+    const token = tokens[i]
+    
+    // 检查是否是包含我们标记的 html_block
+    if (token.type === 'html_block') {
+      const content = token.content.trim()
+      
+      // TABS_OPEN
+      const tabsOpenMatch = content.match(/^<!--VPT:TABS_OPEN:([^:]+):(.+?)-->$/)
+      if (tabsOpenMatch) {
+        const id = tabsOpenMatch[1]
+        const labels = JSON.parse(tabsOpenMatch[2])
+        
+        const newToken = createToken(md, 'html_block', '', 0)
+        newToken.content = `<div class="vp-tabs" data-id="${id}">\n` +
+          `<div class="vp-tabs-nav">\n` +
+          labels.map((label, j) => 
+            `<button class="vp-tabs-tab${j === 0 ? ' active' : ''}" data-i="${j}">${esc(label)}</button>`
+          ).join('\n') + '\n' +
+          `</div>\n`
+        result.push(newToken)
+        continue
+      }
+      
+      // TABS_CLOSE
+      if (content === '<!--VPT:TABS_CLOSE-->') {
+        const newToken = createToken(md, 'html_block', '', 0)
+        newToken.content = `</div>\n`
+        result.push(newToken)
+        continue
+      }
+      
+      // TAB_OPEN
+      const tabOpenMatch = content.match(/^<!--VPT:TAB_OPEN:(\d+)-->$/)
+      if (tabOpenMatch) {
+        const index = parseInt(tabOpenMatch[1])
+        const newToken = createToken(md, 'html_block', '', 0)
+        newToken.content = `<div class="vp-tabs-panel${index === 0 ? ' active' : ''}" data-i="${index}">\n`
+        result.push(newToken)
+        continue
+      }
+      
+      // TAB_CLOSE
+      if (content === '<!--VPT:TAB_CLOSE-->') {
+        const newToken = createToken(md, 'html_block', '', 0)
+        newToken.content = `</div>\n`
+        result.push(newToken)
+        continue
+      }
+    }
+    
+    result.push(token)
+  }
+  
+  return result
+}
+
+function createToken(md, type, tag, nesting) {
+  // 使用 markdown-it 的 Token 构造函数
+  const Token = md.core.State.prototype.Token || 
+                (tokens => tokens[0]?.constructor)(md.parse('x', {}))
+  
+  if (Token) {
+    return new Token(type, tag, nesting)
+  }
+  
+  // 回退：手动创建 token 对象
+  return {
+    type,
+    tag,
+    nesting,
+    attrs: null,
+    map: null,
+    level: 0,
+    children: null,
+    content: '',
+    markup: '',
+    info: '',
+    meta: null,
+    block: true,
+    hidden: false
+  }
 }
 
 function esc(s) {
@@ -215,7 +224,7 @@ function esc(s) {
 }
 
 // ══════════════════════════════════════════════════════════════
-// 客户端（保持不变）
+// 客户端
 // ══════════════════════════════════════════════════════════════
 export function injectTabs() {
   if (typeof window === 'undefined' || window.__VPT__) return
@@ -230,7 +239,7 @@ export function injectTabs() {
 .vp-tabs-tab.active::after { content: ''; position: absolute; bottom: -1px; left: 8px; right: 8px; height: 2px; background: var(--vp-c-brand-1); }
 .vp-tabs-panel { display: none; padding: 16px 0 0; }
 .vp-tabs-panel.active { display: block; }
-.vp-tabs-panel > *:first-child { margin-top: 0 !important; }
+.vp-tabs-panel > *:first-child { margin-top: 0 !important; border-top: none !important; padding-top: 0 !important; }
 .vp-tabs-panel > *:last-child { margin-bottom: 0 !important; }
 .vp-tabs .vp-tabs { margin: 16px 0 0; }
 </style>`)
@@ -252,7 +261,6 @@ export function injectTabs() {
     tabs.querySelectorAll(':scope > .vp-tabs-panel').forEach(p => p.classList.toggle('active', p.dataset.i === idx))
     sessionStorage.setItem(key, label)
 
-    // 同步页面中其他相同key的tab组
     document.querySelectorAll('.vp-tabs').forEach(t => {
       if (t === tabs || getKey(t) !== key) return
       t.querySelectorAll(':scope > .vp-tabs-nav > .vp-tabs-tab').forEach(b => b.classList.toggle('active', b.textContent === label))
