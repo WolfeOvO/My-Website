@@ -14,7 +14,6 @@ export default defineConfig({
   lastUpdated: true,
 
   markdown: {
-    // ✅ 合并成一个 config 函数
     config(md) {
       md.use(tabsMarkdownPlugin)
       md.use(tabbed)
