@@ -33,4 +33,4 @@ Android 移动端展示：
 
 | 系统 | 下载 |
 | :--: | :--: |
-| Windows | <gtl icon="android" owner="chen08209" repo="FlClash" mode="button" label="APK" arch="ARMv8" arch-color="#228242" match=android-arm64-v8a.apk" />
+| Windows | <gtl icon="android" owner="chen08209" repo="FlClash" mode="button" label="APK" arch="ARMv8" arch-color="#228242" match="android-arm64-v8a.apk" />
