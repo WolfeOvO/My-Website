@@ -41,7 +41,7 @@ export default {
 
       // 监听 Spoiler (黑幕) 点击事件
       document.addEventListener('click', e => {
-        const target = e.target.closest('.spoiler-inline')
+        const target = e.target.closest('.spoiler')
         if (target) {
           target.classList.toggle('revealed')
         }

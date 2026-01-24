@@ -57,15 +57,31 @@ const gradientPresets = [
     ['#96fbc4', '#f9f586'], ['#37ecba', '#72afd3'],
 ]
 
-// 详情区域的颜色配置
-const detailColors = [
-    { bg: '#f0f7ff', border: '#c6deff' },
-    { bg: '#f0fdf4', border: '#bbf7d0' },
-    { bg: '#fefce8', border: '#fef08a' },
-    { bg: '#fdf2f8', border: '#fbcfe8' },
-    { bg: '#f5f3ff', border: '#ddd6fe' },
-    { bg: '#fff7ed', border: '#fed7aa' },
+// 详情区域的颜色配置（包含自适应的文字/图标颜色）
+const detailColorsLight = [
+    { bg: '#f0f7ff', border: '#c6deff', label: '#3b82f6', text: '#1e40af' },  // 蓝色系
+    { bg: '#f0fdf4', border: '#bbf7d0', label: '#22c55e', text: '#166534' },  // 绿色系
+    { bg: '#fefce8', border: '#fef08a', label: '#eab308', text: '#a16207' },  // 黄色系
+    { bg: '#fdf2f8', border: '#fbcfe8', label: '#ec4899', text: '#9d174d' },  // 粉色系
+    { bg: '#f5f3ff', border: '#ddd6fe', label: '#8b5cf6', text: '#5b21b6' },  // 紫色系
+    { bg: '#fff7ed', border: '#fed7aa', label: '#f97316', text: '#c2410c' },  // 橙色系
 ]
+
+// 深色模式的颜色配置
+const detailColorsDark = [
+    { bg: '#1e3a5f', border: '#2563eb', label: '#60a5fa', text: '#93c5fd' },  // 蓝色系
+    { bg: '#14532d', border: '#16a34a', label: '#4ade80', text: '#86efac' },  // 绿色系
+    { bg: '#422006', border: '#ca8a04', label: '#facc15', text: '#fde047' },  // 黄色系
+    { bg: '#500724', border: '#db2777', label: '#f472b6', text: '#fbcfe8' },  // 粉色系
+    { bg: '#2e1065', border: '#7c3aed', label: '#a78bfa', text: '#c4b5fd' },  // 紫色系
+    { bg: '#431407', border: '#ea580c', label: '#fb923c', text: '#fdba74' },  // 橙色系
+]
+
+// 检测深色模式
+const isDark = ref(false)
+
+// 获取当前主题的颜色
+const detailColors = computed(() => isDark.value ? detailColorsDark : detailColorsLight)
 
 const hashString = (str) => {
     let hash = 0
@@ -409,10 +425,30 @@ const getSHA256 = (assetName) => {
 
 // 获取行颜色
 const getRowColor = (index) => {
-    return detailColors[index % detailColors.length]
+    return detailColors.value[index % detailColors.value.length]
 }
 
-onMounted(fetchRelease)
+// 检测并监听深色模式变化
+const checkDarkMode = () => {
+    isDark.value = document.documentElement.classList.contains('dark') ||
+                   document.body.classList.contains('dark') ||
+                   window.matchMedia('(prefers-color-scheme: dark)').matches
+}
+
+onMounted(() => {
+    fetchRelease()
+    
+    // 初始检测
+    checkDarkMode()
+    
+    // 监听 class 变化
+    const observer = new MutationObserver(checkDarkMode)
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] })
+    observer.observe(document.body, { attributes: true, attributeFilter: ['class'] })
+    
+    // 监听系统主题变化
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', checkDarkMode)
+})
 </script>
 
 <template>
@@ -647,7 +683,7 @@ onMounted(fetchRelease)
                                 </div>
                                 <div class="gh-detail-grid">
                                     <div class="gh-detail-item"
-                                        :style="{ backgroundColor: getRowColor(0).bg, borderColor: getRowColor(0).border }">
+                                        :style="{ backgroundColor: getRowColor(0).bg, borderColor: getRowColor(0).border, '--label-color': getRowColor(0).label, '--text-color': getRowColor(0).text }">
                                         <div class="gh-detail-label">
                                             <span class="gh-detail-label-icon" v-html="icons.edit"></span>
                                             文件名
@@ -659,7 +695,7 @@ onMounted(fetchRelease)
                                         </div>
                                     </div>
                                     <div class="gh-detail-item"
-                                        :style="{ backgroundColor: getRowColor(1).bg, borderColor: getRowColor(1).border }">
+                                        :style="{ backgroundColor: getRowColor(1).bg, borderColor: getRowColor(1).border, '--label-color': getRowColor(1).label, '--text-color': getRowColor(1).text }">
                                         <div class="gh-detail-label">
                                             <span class="gh-detail-label-icon" v-html="icons.hardDrive"></span>
                                             文件大小
@@ -667,7 +703,7 @@ onMounted(fetchRelease)
                                         <div class="gh-detail-value">{{ formatSize(selectedAsset.size) }}</div>
                                     </div>
                                     <div class="gh-detail-item"
-                                        :style="{ backgroundColor: getRowColor(2).bg, borderColor: getRowColor(2).border }">
+                                        :style="{ backgroundColor: getRowColor(2).bg, borderColor: getRowColor(2).border, '--label-color': getRowColor(2).label, '--text-color': getRowColor(2).text }">
                                         <div class="gh-detail-label">
                                             <span class="gh-detail-label-icon" v-html="icons.download"></span>
                                             下载次数
@@ -675,7 +711,7 @@ onMounted(fetchRelease)
                                         <div class="gh-detail-value">{{ selectedAsset.download_count.toLocaleString() }} 次</div>
                                     </div>
                                     <div class="gh-detail-item"
-                                        :style="{ backgroundColor: getRowColor(3).bg, borderColor: getRowColor(3).border }">
+                                        :style="{ backgroundColor: getRowColor(3).bg, borderColor: getRowColor(3).border, '--label-color': getRowColor(3).label, '--text-color': getRowColor(3).text }">
                                         <div class="gh-detail-label">
                                             <span class="gh-detail-label-icon" v-html="icons.upload"></span>
                                             上传时间
@@ -683,7 +719,7 @@ onMounted(fetchRelease)
                                         <div class="gh-detail-value">{{ formatTime(selectedAsset.created_at) }}</div>
                                     </div>
                                     <div class="gh-detail-item"
-                                        :style="{ backgroundColor: getRowColor(4).bg, borderColor: getRowColor(4).border }">
+                                        :style="{ backgroundColor: getRowColor(4).bg, borderColor: getRowColor(4).border, '--label-color': getRowColor(4).label, '--text-color': getRowColor(4).text }">
                                         <div class="gh-detail-label">
                                             <span class="gh-detail-label-icon" v-html="icons.refresh"></span>
                                             更新时间
@@ -691,7 +727,7 @@ onMounted(fetchRelease)
                                         <div class="gh-detail-value">{{ formatTime(selectedAsset.updated_at) }}</div>
                                     </div>
                                     <div class="gh-detail-item"
-                                        :style="{ backgroundColor: getRowColor(5).bg, borderColor: getRowColor(5).border }">
+                                        :style="{ backgroundColor: getRowColor(5).bg, borderColor: getRowColor(5).border, '--label-color': getRowColor(5).label, '--text-color': getRowColor(5).text }">
                                         <div class="gh-detail-label">
                                             <span class="gh-detail-label-icon" v-html="icons.clipboard"></span>
                                             Content-Type
@@ -708,7 +744,7 @@ onMounted(fetchRelease)
                                 </div>
                                 <div class="gh-detail-grid">
                                     <div class="gh-detail-item gh-detail-full"
-                                        :style="{ backgroundColor: getRowColor(0).bg, borderColor: getRowColor(0).border }">
+                                        :style="{ backgroundColor: getRowColor(0).bg, borderColor: getRowColor(0).border, '--label-color': getRowColor(0).label, '--text-color': getRowColor(0).text }">
                                         <div class="gh-detail-label">
                                             <span class="gh-detail-label-icon" v-html="icons.download"></span>
                                             下载地址
@@ -720,7 +756,7 @@ onMounted(fetchRelease)
                                         </div>
                                     </div>
                                     <div class="gh-detail-item gh-detail-full"
-                                        :style="{ backgroundColor: getRowColor(1).bg, borderColor: getRowColor(1).border }">
+                                        :style="{ backgroundColor: getRowColor(1).bg, borderColor: getRowColor(1).border, '--label-color': getRowColor(1).label, '--text-color': getRowColor(1).text }">
                                         <div class="gh-detail-label">
                                             <span class="gh-detail-label-icon" v-html="icons.home"></span>
                                             项目地址
@@ -732,7 +768,7 @@ onMounted(fetchRelease)
                                         </div>
                                     </div>
                                     <div class="gh-detail-item gh-detail-full"
-                                        :style="{ backgroundColor: getRowColor(2).bg, borderColor: getRowColor(2).border }">
+                                        :style="{ backgroundColor: getRowColor(2).bg, borderColor: getRowColor(2).border, '--label-color': getRowColor(2).label, '--text-color': getRowColor(2).text }">
                                         <div class="gh-detail-label">
                                             <span class="gh-detail-label-icon" v-html="icons.list"></span>
                                             发布列表
@@ -744,7 +780,7 @@ onMounted(fetchRelease)
                                         </div>
                                     </div>
                                     <div class="gh-detail-item gh-detail-full"
-                                        :style="{ backgroundColor: getRowColor(3).bg, borderColor: getRowColor(3).border }">
+                                        :style="{ backgroundColor: getRowColor(3).bg, borderColor: getRowColor(3).border, '--label-color': getRowColor(3).label, '--text-color': getRowColor(3).text }">
                                         <div class="gh-detail-label">
                                             <span class="gh-detail-label-icon" v-html="icons.star"></span>
                                             最新发布
@@ -765,7 +801,7 @@ onMounted(fetchRelease)
                                 </div>
                                 <div class="gh-detail-grid">
                                     <div class="gh-detail-item gh-detail-full"
-                                        :style="{ backgroundColor: getRowColor(0).bg, borderColor: getRowColor(0).border }">
+                                        :style="{ backgroundColor: getRowColor(0).bg, borderColor: getRowColor(0).border, '--label-color': getRowColor(0).label, '--text-color': getRowColor(0).text }">
                                         <div class="gh-detail-label">
                                             <span class="gh-detail-label-icon" v-html="icons.key"></span>
                                             SHA256
@@ -1401,7 +1437,7 @@ onMounted(fetchRelease)
     align-items: center;
     gap: 4px;
     font-size: 10px;
-    color: var(--vp-c-text-3, #94a3b8);
+    color: var(--label-color, var(--vp-c-text-3, #94a3b8));
     text-transform: uppercase;
     letter-spacing: 0.3px;
     margin-bottom: 2px;
@@ -1413,6 +1449,7 @@ onMounted(fetchRelease)
     justify-content: center;
     width: 12px;
     height: 12px;
+    color: inherit;
 }
 
 .gh-detail-label-icon :deep(svg) {
@@ -1422,7 +1459,7 @@ onMounted(fetchRelease)
 
 .gh-detail-value {
     font-size: 12px;
-    color: var(--vp-c-text-1, #1a202c);
+    color: var(--text-color, var(--vp-c-text-1, #1a202c));
     word-break: break-all;
     line-height: 1.4;
 }
@@ -1445,7 +1482,7 @@ onMounted(fetchRelease)
     top: 50%;
     transform: translateY(-50%);
     font-size: 9px;
-    color: var(--vp-c-brand, #3b82f6);
+    color: var(--label-color, var(--vp-c-brand, #3b82f6));
     opacity: 0;
     transition: opacity 0.2s;
 }
@@ -1592,10 +1629,7 @@ onMounted(fetchRelease)
     background: rgba(0, 0, 0, 0.7);
 }
 
-.dark .gh-detail-item {
-    background: var(--vp-c-bg-soft, #1e293b) !important;
-    border-color: var(--vp-c-divider, #334155) !important;
-}
+/* 深色模式下的 detail-item 颜色由 JS 动态计算 */
 
 .dark .gh-version-toggle {
     background: var(--vp-c-bg-mute, #1e293b);
