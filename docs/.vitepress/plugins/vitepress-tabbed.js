@@ -188,16 +188,13 @@ function buildNestedMarkers(items, start, end, targetLevel) {
   
   // 输出特殊标记（这些会被 vpTabsRule 识别）
   result.push(`:::vp-tabs id="${id}" labels="${labels}"`)
-  result.push('')  // 空行让内容被正常解析
   
   tabs.forEach((tab, index) => {
     result.push(`:::vp-tab index="${index}"`)
-    result.push('')  // 关键：空行让 Markdown 内容正常解析！
     
-    // 内容
+    // 内容（不在开头加空行，避免生成空段落）
     if (tab.contentLines.length > 0) {
       result.push(...tab.contentLines)
-      result.push('')
     }
     
     // 嵌套的 tabs
@@ -206,11 +203,9 @@ function buildNestedMarkers(items, start, end, targetLevel) {
     }
     
     result.push(`:::/vp-tab`)
-    result.push('')
   })
   
   result.push(`:::/vp-tabs`)
-  result.push('')
   
   return result
 }

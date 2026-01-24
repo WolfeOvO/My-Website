@@ -51,7 +51,7 @@ export const sidebar = {
       base: '/墙外指南/推荐机场/',
       collapsed: false,
       items: [
-        { text: 'Telegram 频道推荐', link: 'Telegram频道推荐' },
+        { text: 'Telegram 墙外频道推荐', link: 'gfw-telegram' },
         {
           text: '2026 年',
           collapsed: true,

@@ -1,4 +1,4 @@
-# Telegram 频道推荐
+# Telegram 墙外频道推荐
 
 ## 一个朋友
 
