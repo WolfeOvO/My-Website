@@ -16,7 +16,7 @@ Clash Mi 是一款跨平台的 Clash/Mihomo 图形化客户端，支持 Windows�
 
 - **内置 Mihomo 内核**：基于最新且持续更新的 Mihomo (Clash.Meta) 内核，内核及客户端均持续更新维护，放心使用；
 - **操作简单**：支持 MetaCubeX 的推荐配置, 内核基于 yaml 配置运行，小白使用机场订阅即可使用；
-- **自带 [ZashBoard 面板](https://github.com/Zephyruso/zashboard)**：Web面板，或许你更加熟悉。
+- **自带 [ZashBoard 面板](https://github.com/Zephyruso/zashboard)**：Web 面板，或许你更加熟悉。
 
 ## 下载
 

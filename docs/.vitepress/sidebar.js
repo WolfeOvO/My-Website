@@ -72,6 +72,7 @@ export const sidebar = {
             { text: '合集（一定要先读完我再下载！）', link: 'client' },
             { text: 'Clash', link: 'Clash' },
             { text: 'Karing', link: 'Karing' },
+            { text: 'FlClash', link: 'FlClash' },
             { text: 'Clash Mi', link: 'ClashMi' },
             { text: 'Clash Verge Rev', link: 'ClashVergeRev' },
             { text: 'Clash Meta for Android', link: 'ClashMetaforAndroid' }

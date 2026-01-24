@@ -148,7 +148,7 @@ Windows NT 内核设计之初是为了支持 RISC 工作站的。以下是 Windo
 以下是从操作系统内核开发角度的对比：
 
 | 特性 | x86 (Legacy) | x64 (Mainstream) | ARM64 (Modern) | IA-64 (Itanium) - 已死 |
-| :--- | :--- | :--- | :--- | :--- |
+| :--: | :--: | :--: | :--: | :--: |
 | **指令集类型** | CISC (变长指令) | CISC (变长指令) | RISC (定长指令 4字节) | EPIC (显式并行) |
 | **字节序 (Endianness)** | Little-Endian | Little-Endian | Bi-Endian (Windows 强制使用 Little-Endian) | Little-Endian |
 | **内存页大小 (Page)** | 4KB (支持 4MB 大页) | 4KB (支持 2MB/1GB 大页) | 4KB (支持 64KB 等多级) | 8KB / 16KB 等 |

@@ -2,6 +2,7 @@
 import { ref, onMounted, computed, watch } from 'vue'
 
 const props = defineProps({
+    // === 核心参数 (保持原始顺序) ===
     owner: { type: String, required: true },
     repo: { type: String, required: true },
     prerelease: { type: Boolean, default: false },
@@ -12,16 +13,18 @@ const props = defineProps({
     label: { type: String, default: '下载' },
     arch: { type: String, default: '' },
     match: { type: String, default: '' },
-    labelColor: { type: String, default: '' },
+    labelColor: { type: String, default: '' }, // 现在可以传入颜色值，如 #333
     archColor: { type: String, default: '' },
     gradient: { type: Boolean, default: true },
-    // 新增 props
-    showToggle: { type: Boolean, default: false },      // 显示版本切换开关
-    showBothVersions: { type: Boolean, default: false }, // 同时显示两个版本的徽章
+    // === 新增功能参数 ===
+    showToggle: { type: Boolean, default: false },
+    showBothVersions: { type: Boolean, default: false },
+    icon: { type: String, default: '' }, // 支持 'android', 'windows', 'apple' 等或 SVG 代码
 })
 
-// SVG 图标组件
+// === SVG 图标库 (扩充了经典 OS 图标) ===
 const icons = {
+    // 原有图标
     tag: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>`,
     flask: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6v7l4 9H5l4-9V3z"/><path d="M9 3h6"/><circle cx="12" cy="16" r="1.5"/><circle cx="9" cy="14" r="1"/><circle cx="15" cy="14" r="1"/></svg>`,
     folder: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>`,
@@ -43,6 +46,16 @@ const icons = {
     shield: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`,
     key: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>`,
     externalLink: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>`,
+    
+    // === 新增：OS 与经典图标 (使用 fill="currentColor" 以跟随文字颜色) ===
+    android: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M17.523 15.3414C17.523 16.7299 16.4251 17.8636 15.061 17.8636C13.6969 17.8636 12.599 16.7299 12.599 15.3414C12.599 13.953 13.6969 12.8193 15.061 12.8193C16.4251 12.8193 17.523 13.953 17.523 15.3414ZM8.93897 15.3414C8.93897 16.7299 7.84107 17.8636 6.47697 17.8636C5.11288 17.8636 4.01498 16.7299 4.01498 15.3414C4.01498 13.953 5.11288 12.8193 6.47697 12.8193C7.84107 12.8193 8.93897 13.953 8.93897 15.3414ZM18.7892 8.71804L20.893 5.07471C21.0028 4.88556 20.9398 4.63968 20.7443 4.52623C20.5552 4.41279 20.3093 4.48212 20.1959 4.67128L18.0642 8.36496C16.3243 7.57065 14.2894 7.09783 12 7.09783C9.71065 7.09783 7.67571 7.57065 5.93583 8.36496L3.80415 4.67128C3.6907 4.48212 3.44482 4.41279 3.25567 4.52623C3.06021 4.63968 2.99719 4.88556 3.10703 5.07471L5.21081 8.71804C2.2661 10.332 0.179688 13.3417 0.00945282 16.9213H24C23.8203 13.3417 21.7339 10.332 18.7892 8.71804Z"/></svg>`,
+    apple: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M17.464 7.016a5.558 5.558 0 0 0 1.36-2.905 5.578 5.578 0 0 0-2.827 1.448c-1.124 1.15-2.083 2.955-1.574 5.378a5.522 5.522 0 0 1 3.041-3.92zM12.923 8.94c-1.632 0-2.864.912-4.148.912-1.306 0-2.736-.888-4.524-.865-2.33.024-4.502 1.369-5.69 3.435-2.45 4.25-.63 10.51 1.752 13.974 1.168 1.683 2.548 3.553 4.363 3.483 1.752-.07 2.407-1.12 4.525-1.12 2.099 0 2.682 1.12 4.524 1.144 1.868.024 3.065-1.682 4.2-3.343 1.332-1.938 1.868-3.81 1.892-3.903-.047-.024-3.643-1.378-3.69-5.503-.046-3.435 2.803-5.093 2.943-5.187-1.611-2.358-4.08-2.615-4.945-2.639-1.12-.117-2.195.677-3.197.677z"/></svg>`,
+    windows: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M0 3.449L9.671 2.11v9.337H0V3.449zm10.95-1.597L24 0v11.402H10.95V1.852zm0 10.669H24V24l-13.05-1.832v-9.648zM0 12.566h9.671v8.834L0 20.106v-7.54z"/></svg>`,
+    linux: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 20.52c3.55 0 4.65-2.63 3.46-5.22-.38-.85-1.05-1.84-2.02-3.23.95 2.12 1.84 2.84 2.21 2.84.95 0 2.8-3.27 2.12-6.59-.28-1.37-1.28-2.16-1.5-3.56-.16-1.05.18-2.37-1.28-3.46C13.89.5 13.13 2 12.03 2S10.27.5 9.09 1.3C7.5 2.39 7.84 3.71 7.68 4.76c-.22 1.4-1.22 2.19-1.5 3.56-.68 3.32 1.17 6.59 2.12 6.59.37 0 1.26-.72 2.21-2.84-.97 1.39-1.64 2.38-2.02 3.23-1.19 2.59-.09 5.22 3.51 5.22zm0 1.4c-4.42 0-7.39-2.64-7.39-7.33 0-2.34 1.15-4.57 2.05-6.38.38-.76.76-1.52.88-2.09.13-.61.08-1.24-.15-1.83-.82-2.12.28-3.54 1.32-4.32L9 2.2c0-.14.2-.34.42-.5C10.55.85 11.23 0 12 0s1.55.85 2.58 1.7c.22.16.42.36.42.5l.28-2.23c1.04.78 2.14 2.2 1.32 4.32-.23.59-.28 1.22-.15 1.83.12.57.5 1.33.88 2.09.9 1.81 2.05 4.04 2.05 6.38 0 4.69-2.97 7.33-7.38 7.33z"/></svg>`,
+    ubuntu: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12,0A12,12,0,1,0,24,12,12.01,12.01,0,0,0,12,0Zm0,3.31a1.94,1.94,0,1,1-1.94,1.94A1.94,1.94,0,0,1,12,3.31Zm-4.9,2.83A8.67,8.67,0,0,1,12,4.64v2.7a5.91,5.91,0,0,0-1.89.86,2.79,2.79,0,0,1,0,5.59A5.88,5.88,0,0,0,12,16.66v2.7a8.67,8.67,0,0,1-4.9-1.5,1.94,1.94,0,1,1,0-11.72ZM12,20.69a1.94,1.94,0,1,1,1.94-1.94A1.94,1.94,0,0,1,12,20.69Zm4.9-2.83a1.94,1.94,0,1,1,0-11.72,8.67,8.67,0,0,1,0,11.72Z"/></svg>`,
+    debian: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M10.286 1.804c-3.134.344-5.32 1.706-7.14 4.45C1.83 8.324 1.48 11.23 2.185 14.16c.947 3.93 4.14 7.55 7.828 8.874 1.954.7 3.5.83 5.485.456 2.316-.43 4.24-1.63 5.66-3.527 2.017-2.7 2.37-6.22 1.002-9.28-1.52-3.41-4.59-5.46-8.28-5.55-.42-.01-.77.01-.77.04 0 .04.4.15.89.26 5.86 1.23 8.35 8.1 4.54 12.54-1.91 2.22-5.11 3.2-8.08 2.47-3.99-.98-6.1-5.71-4.04-9.05 1.58-2.57 5.14-3.69 7.78-2.46.73.34 1.63 1.03 2.01 1.53 1.05 1.4 1.13 3.63.17 4.96-.92 1.28-2.78 1.4-3.87.25-.91-.97-.48-2.73.71-2.91 1.14-.17 1.74.83 1.02 1.7-.27.32-.23.36.19.22.95-.33.8-2.02-.27-2.61-1.3-.73-3.11.23-3.14 1.67-.03 1.34 1.18 2.59 2.5 2.58 1.97 0 3.56-1.92 3.19-3.84-.33-1.69-1.97-3.05-3.81-3.15-3.79-.21-7.05 2.65-6.71 5.91.24 2.22 2.04 4.19 4.35 4.76 2.52.62 5.09.07 7.02-1.5 2.34-1.91 3.23-5.54 2.01-8.21-1.25-2.73-3.94-4.54-7.3-4.9-1.53-.16-3.68-.07-4.96.2z"/></svg>`,
+    rpm: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12,0A12,12,0,1,0,24,12,12.01,12.01,0,0,0,12,0Zm6.62,7c-.36,0-.6.12-.76.38a2.53,2.53,0,0,0-.24,1.15c0,1.52.82,2.39,2.44,2.59l.73.08v2.46l-1.07-.11a5.61,5.61,0,0,1-2.66-.88l-1.42,1.55a4.41,4.41,0,0,0,.68,2.78,2.2,2.2,0,0,0,1.83.9,2.39,2.39,0,0,0,1.64-.78V20a3.65,3.65,0,0,1-2,.6c-2.45,0-4.14-1.78-4.14-4.38a5.2,5.2,0,0,1,.69-2.58l-2.22-.24a3.86,3.86,0,0,1-2.9,1.4,2.54,2.54,0,0,1-1.93-1,4.71,4.71,0,0,1-.83-3.12,6.58,6.58,0,0,1,1.18-4.15A4,4,0,0,1,10.74,4.4c2.51,0,4.2,1.82,4.2,4.52a4.91,4.91,0,0,1-.39,1.88l2.25.24c.05-1.16.48-1.89,1.29-2.2Zm-8.49,6.71c-.75,0-1.23-.62-1.23-1.61,0-1.55,1-2.47,2.54-2.33l1.19.13A3,3,0,0,0,12.8,8.87c0-1.44-.75-2.28-2.18-2.28a2,2,0,0,0-1.63.85,4.79,4.79,0,0,0-.81,2.83,6.34,6.34,0,0,0,.62,3Zm10.43,2.76a.71.71,0,0,1-.58.33.68.68,0,0,1-.54-.25,1.71,1.71,0,0,1-.28-1l1.39.14A3.89,3.89,0,0,1,20.56,16.51Z"/></svg>`,
+    appimage: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M7.749 9.387 11.968 1.4l4.248 8.006zM22.6 13.568l-3.376 7.42-7.227-3.95zM4.776 20.988l-3.376-7.42 8.257 1.54zM12 11.23l2.843 5.385-6.52.88z"/></svg>`
 }
 
 // 预定义渐变色
@@ -57,7 +70,7 @@ const gradientPresets = [
     ['#96fbc4', '#f9f586'], ['#37ecba', '#72afd3'],
 ]
 
-// 详情区域的颜色配置（包含自适应的文字/图标颜色）
+// 详情区域的颜色配置
 const detailColorsLight = [
     { bg: '#f0f7ff', border: '#c6deff', label: '#3b82f6', text: '#1e40af' },  // 蓝色系
     { bg: '#f0fdf4', border: '#bbf7d0', label: '#22c55e', text: '#166534' },  // 绿色系
@@ -92,10 +105,18 @@ const hashString = (str) => {
     return Math.abs(hash)
 }
 
+// 自动渐变逻辑
 const getGradient = computed(() => {
     const uniqueKey = `${props.label}-${props.arch}-${props.match}`
     const preset = gradientPresets[hashString(uniqueKey) % gradientPresets.length]
     return `linear-gradient(135deg, ${preset[0]} 0%, ${preset[1]} 100%)`
+})
+
+// 解析图标：优先匹配内置 icons key，如果没有则认为是 SVG 字符串
+const resolvedIcon = computed(() => {
+    if (!props.icon) return null
+    const lowerKey = props.icon.toLowerCase()
+    return icons[lowerKey] || props.icon
 })
 
 // 状态
@@ -273,8 +294,15 @@ const computedTagLabel = computed(() => {
 const tagBgColor = computed(() => isPrerelease.value ? '#e6a23c' : '#67c23a')
 const version = computed(() => release.value?.tag_name || 'N/A')
 const releaseUrl = computed(() => release.value?.html_url || `https://github.com/${props.owner}/${props.repo}/releases`)
-const btnLabelColor = computed(() => props.labelColor || '#555')
 
+// 左侧标签颜色：优先使用 props.labelColor，否则默认深灰色(匹配截图)，如果是 Pre-release 则是橙色
+const computedLabelBg = computed(() => {
+    if (props.labelColor) return props.labelColor
+    if (isPrerelease.value && !props.showBothVersions) return '#d97706'
+    return '#444c56' // 默认深灰，匹配扁平风格
+})
+
+// 右侧 Arch 背景：优先使用 archColor，否则使用 gradient
 const archBgStyle = computed(() => {
     if (props.archColor) return { backgroundColor: props.archColor }
     if (props.gradient) return { background: getGradient.value }
@@ -508,7 +536,10 @@ onMounted(() => {
                 <button v-if="showButton && stableMatchedAssets.length > 0" type="button"
                     :class="['gh-dl-btn', { disabled: loading || error }]"
                     :title="stableFirstAsset?.name || ''" @click="handleVersionButtonClick($event, false)">
-                    <span class="gh-dl-label" :style="{ backgroundColor: btnLabelColor }">{{ label }}</span>
+                    <span class="gh-dl-label" :style="{ backgroundColor: props.labelColor || '#444c56' }">
+                        <span v-if="resolvedIcon" class="gh-btn-icon" v-html="resolvedIcon"></span>
+                        {{ label }}
+                    </span>
                     <span class="gh-dl-arch" :style="loading ? { backgroundColor: '#999' } : archBgStyle">
                         <template v-if="loading">···</template>
                         <template v-else>
@@ -553,6 +584,7 @@ onMounted(() => {
                     :class="['gh-dl-btn', 'gh-dl-btn-pre', { disabled: loading || error }]"
                     :title="prereleaseFirstAsset?.name || ''" @click="handleVersionButtonClick($event, true)">
                     <span class="gh-dl-label gh-dl-label-pre" :style="{ backgroundColor: '#d97706' }">
+                        <span v-if="resolvedIcon" class="gh-btn-icon" v-html="resolvedIcon"></span>
                         {{ label }}
                         <span class="gh-btn-pre-tag">
                             <span class="gh-btn-pre-icon" v-html="icons.flask"></span>
@@ -600,7 +632,8 @@ onMounted(() => {
             <button v-if="showButton" type="button"
                 :class="['gh-dl-btn', { disabled: loading || error || matchedAssets.length === 0, 'gh-dl-btn-pre': isPrerelease }]"
                 :title="firstAsset?.name || error || '加载中...'" @click="handleButtonClick">
-                <span class="gh-dl-label" :style="{ backgroundColor: isPrerelease ? '#d97706' : btnLabelColor }">
+                <span class="gh-dl-label" :style="{ backgroundColor: computedLabelBg }">
+                    <span v-if="resolvedIcon" class="gh-btn-icon" v-html="resolvedIcon"></span>
                     {{ label }}
                     <!-- Pre-release 标识移到按钮内部 -->
                     <span v-if="isPrerelease && !loading && !error" class="gh-btn-pre-tag">
@@ -619,7 +652,7 @@ onMounted(() => {
             </button>
         </template>
 
-        <!-- 弹窗 -->
+        <!-- 弹窗 (保持原逻辑) -->
         <Teleport to="body">
             <Transition name="modal">
                 <div v-if="showModal" class="gh-modal-overlay" @click.self="closeModal">
@@ -839,7 +872,8 @@ onMounted(() => {
 
 <style scoped>
 .gh-release {
-    display: inline-flex;
+    display: inline-flex; /* 关键：这让组件像文字一样，可以被父级的 text-align 控制 */
+    vertical-align: middle; /* 关键：与文字垂直对齐 */
     align-items: center;
     gap: 0.5em;
     flex-wrap: wrap;
@@ -1046,7 +1080,22 @@ onMounted(() => {
     border-radius: 0.25em 0 0 0.25em;
     display: inline-flex;
     align-items: center;
-    gap: 0.25em;
+    gap: 0.4em; /* 增加图标和文字间距 */
+}
+
+/* 按钮内部图标样式 */
+.gh-btn-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.1em;
+    height: 1.1em;
+}
+
+.gh-btn-icon :deep(svg) {
+    width: 100%;
+    height: 100%;
+    /* color: inherit; -> svg fill="currentColor" 会自动继承文字白色 */
 }
 
 /* Pre-release 标签样式 - 移到按钮内部 */
@@ -1122,6 +1171,7 @@ onMounted(() => {
     flex-direction: column;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
     overflow: hidden;
+    text-align: left; /* 弹窗内部强制左对齐，防止继承外部 center */
 }
 
 .gh-modal-header {
