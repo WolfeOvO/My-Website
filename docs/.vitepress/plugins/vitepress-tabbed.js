@@ -1,36 +1,32 @@
 let gid = 0
 
 export function tabbed(md) {
-  const origParse = md.parse.bind(md)
-  
+  const orig = md.parse.bind(md)
   md.parse = (src, env) => {
     gid = 0
-    const preprocessed = preprocess(src)
-    const tokens = origParse(preprocessed, env)
-    return wrapTabContent(tokens, md)
+    return orig(preprocess(src), env)
   }
 }
 
-/**
- * 预处理：把 tab 语法转成 HTML 注释标记
- * 这些注释不会被 Vue 解析，也不会打断 markdown 解析
- */
 function preprocess(src) {
   const lines = src.split('\n')
   const out = []
   let i = 0
 
   while (i < lines.length) {
+    // 检测 tabs 开始
     if (lines[i].trim() === '<!-- tabs:start -->') {
       i++
       
-      const items = []
+      // 收集这组 tabs 的所有标记和内容
+      const items = []  // { label, level, contentLines }
       let currentItem = null
       
       while (i < lines.length && lines[i].trim() !== '<!-- tabs:end -->') {
         const tabMatch = lines[i].match(/^=== "([^"]+)"(?: @(\d+))?\s*$/)
         
         if (tabMatch) {
+          // 保存之前的 item
           if (currentItem) {
             cleanLines(currentItem.contentLines)
             items.push(currentItem)
@@ -46,17 +42,20 @@ function preprocess(src) {
         i++
       }
       
+      // 保存最后一个 item
       if (currentItem) {
         cleanLines(currentItem.contentLines)
         items.push(currentItem)
       }
       
+      // 跳过 <!-- tabs:end -->
       if (i < lines.length && lines[i].trim() === '<!-- tabs:end -->') {
         i++
       }
       
+      // 构建嵌套结构并渲染
       if (items.length > 0) {
-        out.push(...buildMarkers(items, 0, items.length, 1))
+        out.push(buildNestedTabs(items, 0, items.length, 1))
       }
     } else {
       out.push(lines[i])
@@ -72,7 +71,7 @@ function cleanLines(arr) {
   while (arr.length && !arr.at(-1)?.trim()) arr.pop()
 }
 
-function buildMarkers(items, start, end, targetLevel) {
+function buildNestedTabs(items, start, end, targetLevel) {
   const tabs = []
   let i = start
   
@@ -80,10 +79,12 @@ function buildMarkers(items, start, end, targetLevel) {
     if (items[i].level === targetLevel) {
       const tab = {
         label: items[i].label,
-        contentLines: items[i].contentLines.slice(),
-        childMarkers: []
+        contentBefore: [],  // 子 tabs 之前的内容
+        contentAfter: [],   // 子 tabs 之后的内容（一般没有）
+        childrenHtml: ''
       }
       
+      // 找这个 tab 下的嵌套 tabs 范围
       let childStart = i + 1
       let childEnd = childStart
       while (childEnd < end && items[childEnd].level > targetLevel) {
@@ -91,7 +92,21 @@ function buildMarkers(items, start, end, targetLevel) {
       }
       
       if (childEnd > childStart) {
-        tab.childMarkers = buildMarkers(items, childStart, childEnd, targetLevel + 1)
+        // 有嵌套的 tabs
+        // 找到第一个子 tab 的位置，它之前的内容属于父 tab
+        let firstChildIdx = childStart
+        while (firstChildIdx < childEnd && items[firstChildIdx].level !== targetLevel + 1) {
+          firstChildIdx++
+        }
+        
+        // 当前 tab 自己的内容（在子 tabs 之前）
+        tab.contentBefore = items[i].contentLines.slice()
+        
+        // 递归构建子 tabs
+        tab.childrenHtml = buildNestedTabs(items, childStart, childEnd, targetLevel + 1)
+      } else {
+        // 没有嵌套，所有内容都是当前 tab 的
+        tab.contentBefore = items[i].contentLines.slice()
       }
       
       tabs.push(tab)
@@ -101,122 +116,32 @@ function buildMarkers(items, start, end, targetLevel) {
     }
   }
   
-  if (tabs.length === 0) return []
+  if (tabs.length === 0) return ''
   
-  const id = `t${gid++}`
-  const labels = tabs.map(t => t.label)
-  const result = []
-  
-  // 使用特殊格式的 HTML 注释作为标记
-  result.push(`<!--VPT:TABS_OPEN:${id}:${JSON.stringify(labels)}-->`)
-  
-  tabs.forEach((tab, index) => {
-    result.push(`<!--VPT:TAB_OPEN:${index}-->`)
-    
-    if (tab.contentLines.length > 0) {
-      result.push(...tab.contentLines)
-    }
-    
-    if (tab.childMarkers.length > 0) {
-      result.push(...tab.childMarkers)
-    }
-    
-    result.push(`<!--VPT:TAB_CLOSE-->`)
+  // 渲染这一层
+  let html = `<div class="vp-tabs" data-id="t${gid++}">\n`
+  html += `<div class="vp-tabs-nav">\n`
+  tabs.forEach((t, j) => {
+    html += `<button class="vp-tabs-tab${j ? '' : ' active'}" data-i="${j}">${esc(t.label)}</button>\n`
   })
-  
-  result.push(`<!--VPT:TABS_CLOSE-->`)
-  
-  return result
-}
-
-/**
- * 在 token 级别处理：找到注释标记，替换成真正的 HTML token
- */
-function wrapTabContent(tokens, md) {
-  const result = []
-  
-  for (let i = 0; i < tokens.length; i++) {
-    const token = tokens[i]
-    
-    // 检查是否是包含我们标记的 html_block
-    if (token.type === 'html_block') {
-      const content = token.content.trim()
-      
-      // TABS_OPEN
-      const tabsOpenMatch = content.match(/^<!--VPT:TABS_OPEN:([^:]+):(.+?)-->$/)
-      if (tabsOpenMatch) {
-        const id = tabsOpenMatch[1]
-        const labels = JSON.parse(tabsOpenMatch[2])
-        
-        const newToken = createToken(md, 'html_block', '', 0)
-        newToken.content = `<div class="vp-tabs" data-id="${id}">\n` +
-          `<div class="vp-tabs-nav">\n` +
-          labels.map((label, j) => 
-            `<button class="vp-tabs-tab${j === 0 ? ' active' : ''}" data-i="${j}">${esc(label)}</button>`
-          ).join('\n') + '\n' +
-          `</div>\n`
-        result.push(newToken)
-        continue
-      }
-      
-      // TABS_CLOSE
-      if (content === '<!--VPT:TABS_CLOSE-->') {
-        const newToken = createToken(md, 'html_block', '', 0)
-        newToken.content = `</div>\n`
-        result.push(newToken)
-        continue
-      }
-      
-      // TAB_OPEN
-      const tabOpenMatch = content.match(/^<!--VPT:TAB_OPEN:(\d+)-->$/)
-      if (tabOpenMatch) {
-        const index = parseInt(tabOpenMatch[1])
-        const newToken = createToken(md, 'html_block', '', 0)
-        newToken.content = `<div class="vp-tabs-panel${index === 0 ? ' active' : ''}" data-i="${index}">\n`
-        result.push(newToken)
-        continue
-      }
-      
-      // TAB_CLOSE
-      if (content === '<!--VPT:TAB_CLOSE-->') {
-        const newToken = createToken(md, 'html_block', '', 0)
-        newToken.content = `</div>\n`
-        result.push(newToken)
-        continue
-      }
+  html += `</div>\n`
+  tabs.forEach((t, j) => {
+    // ✅ 关键修改：只用一个换行，不要空行
+    html += `<div class="vp-tabs-panel${j ? '' : ' active'}" data-i="${j}">\n`
+    // 先渲染内容（在子 tabs 之前）
+    const beforeContent = t.contentBefore.join('\n').trim()
+    if (beforeContent) {
+      html += beforeContent + '\n'
     }
-    
-    result.push(token)
-  }
+    // 再渲染子 tabs
+    if (t.childrenHtml) {
+      html += t.childrenHtml + '\n'
+    }
+    html += `</div>\n`
+  })
+  html += `</div>\n`
   
-  return result
-}
-
-function createToken(md, type, tag, nesting) {
-  // 使用 markdown-it 的 Token 构造函数
-  const Token = md.core.State.prototype.Token || 
-                (tokens => tokens[0]?.constructor)(md.parse('x', {}))
-  
-  if (Token) {
-    return new Token(type, tag, nesting)
-  }
-  
-  // 回退：手动创建 token 对象
-  return {
-    type,
-    tag,
-    nesting,
-    attrs: null,
-    map: null,
-    level: 0,
-    children: null,
-    content: '',
-    markup: '',
-    info: '',
-    meta: null,
-    block: true,
-    hidden: false
-  }
+  return html
 }
 
 function esc(s) {
@@ -261,6 +186,7 @@ export function injectTabs() {
     tabs.querySelectorAll(':scope > .vp-tabs-panel').forEach(p => p.classList.toggle('active', p.dataset.i === idx))
     sessionStorage.setItem(key, label)
 
+    // 同步页面中其他相同key的tab组
     document.querySelectorAll('.vp-tabs').forEach(t => {
       if (t === tabs || getKey(t) !== key) return
       t.querySelectorAll(':scope > .vp-tabs-nav > .vp-tabs-tab').forEach(b => b.classList.toggle('active', b.textContent === label))
