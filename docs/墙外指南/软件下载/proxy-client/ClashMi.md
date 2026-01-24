@@ -2,12 +2,22 @@
 
 <ntags color="blue">Windows</ntags> <ntags color="green">Android</ntags> <ntags color="gray">iOS</ntags> <ntags color="gray">MacOS</ntags> <ntags color="yellow">Linux</ntags> 
 
-
 <lc url="https://github.com/KaringX/clashmi" />
 
 ## 文档
 
 <lc url="https://clashmi.app/" />
+
+<lc url="https://github.com/KaringX/clashmi/blob/main/README.md" />
+
+## 介绍
+
+Clash Mi 是一款跨平台的 Clash/Mihomo 图形化客户端，支持 Windows、Android、iOS、MacOS 和 Linux 多种操作系统，致力于为用户提供简洁易用且功能强大的代理工具。
+
+- **内置 Mihomo 内核**：基于最新且持续更新的 Mihomo (Clash.Meta) 内核，内核及客户端均持续更新维护，放心使用；
+- **操作简单**：支持 MetaCubeX 的推荐配置, 内核基于 yaml 配置运行，小白使用机场订阅即可使用；
+- **自带 [ZashBoard 面板](https://github.com/Zephyruso/zashboard)**：Web面板，或许你更加熟悉。
+
 
 ## 下载
 
@@ -79,3 +89,10 @@
 | 正式版 | 测试版 |
 | :---: | :---: |
 | <gtl owner="KaringX" repo="clashmi" mode="button" label="安装包" arch="deb" match="linux_amd64.deb" /> <gtl owner="KaringX" repo="clashmi" mode="button" label="安装包" arch="rpm" match="linux_amd64.rpm" /> <gtl owner="KaringX" repo="clashmi" mode="button" label="安装包" arch="AppImage" match="linux_amd64.AppImage" /> | <gtl owner="KaringX" repo="clashmi" :prerelease="true" mode="button" label="安装包" arch="deb" match="linux_amd64.deb" /> <gtl owner="KaringX" repo="clashmi" :prerelease="true" mode="button" label="安装包" arch="rpm" match="linux_amd64.rpm" /> <gtl owner="KaringX" repo="clashmi" :prerelease="true" mode="button" label="安装包" arch="AppImage" match="linux_amd64.AppImage" /> |
+
+## 发布面板
+
+| 发行版本 | 下载次数 | 下载地址 |
+| :---: | :---: | :---: |
+| Github Release 正式版 | <gtl owner="KaringX" repo="clashmi" mode="badge" :showVersion="false" /> | <gtl owner="KaringX" repo="clashmi" mode="badge" :showDownloads="false" /> |
+| Github Release 测试版 | <gtl owner="KaringX" repo="clashmi" mode="badge" :showVersion="false" prerelease /> | <gtl owner="KaringX" repo="clashmi" mode="badge" :showDownloads="false" prerelease /> |

@@ -41,8 +41,8 @@ export const sidebar = {
       text: '教程',
       base: '/墙外指南/教程/',
       items: [
-        { text:'Apple ID 账号获取', link: 'AppleID' },
-        { text: '加速 GitHub 下载', link: '加速GitHub下载' }
+        { text: '加速 GitHub 下载', link: '加速GitHub下载' },
+        { text: 'Apple ID 账号获取', link: 'AppleID' }
       ]
     },
     {
@@ -70,6 +70,7 @@ export const sidebar = {
           items: [
             { text: '合集（一定要先读完我再下载！）', link: 'client' },
             { text: 'Clash', link: 'Clash' },
+            { text: 'Karing', link: 'Karing' },
             { text: 'Clash Mi', link: 'ClashMi' },
             { text: 'Clash Verge Rev', link: 'ClashVergeRev' },
             { text: 'Clash Meta for Android', link: 'ClashMetaforAndroid' }
