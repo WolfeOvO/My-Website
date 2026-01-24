@@ -92,7 +92,7 @@ sudo apt install -y ./Clash.Verge_x.x.x-_xxx.deb
 | ARM64 | <gtl owner="clash-verge-rev" repo="clash-verge-rev" mode="button" label="安装包" arch="ARM64" match="aarch64.rpm" /> |
 | ARMv7 | <gtl owner="clash-verge-rev" repo="clash-verge-rev" mode="button" label="安装包" arch="ARMv7" match="armhfp.rpm" /> |
 
-下载上方 ``.rpm`` 包后使用 ``dnf`` 或 ``yum`` 安装：
+下载上方 RPM 包后使用 ``dnf`` 或 ``yum`` 安装：
 
 ``` Bash
 sudo dnf install ./Clash.Verge_x.x.x-_xxx.rpm

@@ -83,12 +83,12 @@ Clash Mi 是一款跨平台的 Clash/Mihomo 图形化客户端，支持 Windows�
 服务管理基于 ``systemd``，安装前确认下。
 :::
 
-- 正式版：[``deb`` 安装包](https://dot.clashmi.app/client.html?tag=linux-deb-stable)、[``rpm`` 安装包](https://dot.clashmi.app/client.html?tag=linux-rpm-stable)
-- 测试版：[``deb`` 安装包](https://dot.clashmi.app/client.html?tag=linux-deb-beta)、[``rpm`` 安装包](https://dot.clashmi.app/client.html?tag=linux-rpm-beta)
+- 正式版：[``Deb`` 安装包](https://dot.clashmi.app/client.html?tag=linux-deb-stable)、[``rpm`` 安装包](https://dot.clashmi.app/client.html?tag=linux-rpm-stable)
+- 测试版：[``Deb`` 安装包](https://dot.clashmi.app/client.html?tag=linux-deb-beta)、[``rpm`` 安装包](https://dot.clashmi.app/client.html?tag=linux-rpm-beta)
 
 | 正式版 | 测试版 |
 | :---: | :---: |
-| <gtl owner="KaringX" repo="clashmi" mode="button" label="安装包" arch="deb" match="linux_amd64.deb" /> <gtl owner="KaringX" repo="clashmi" mode="button" label="安装包" arch="rpm" match="linux_amd64.rpm" /> <gtl owner="KaringX" repo="clashmi" mode="button" label="安装包" arch="AppImage" match="linux_amd64.AppImage" /> | <gtl owner="KaringX" repo="clashmi" :prerelease="true" mode="button" label="安装包" arch="deb" match="linux_amd64.deb" /> <gtl owner="KaringX" repo="clashmi" :prerelease="true" mode="button" label="安装包" arch="rpm" match="linux_amd64.rpm" /> <gtl owner="KaringX" repo="clashmi" :prerelease="true" mode="button" label="安装包" arch="AppImage" match="linux_amd64.AppImage" /> |
+| <gtl owner="KaringX" repo="clashmi" mode="button" label="安装包" arch="Deb" match="linux_amd64.deb" /> <gtl owner="KaringX" repo="clashmi" mode="button" label="安装包" arch="rpm" match="linux_amd64.rpm" /> <gtl owner="KaringX" repo="clashmi" mode="button" label="安装包" arch="AppImage" match="linux_amd64.AppImage" /> | <gtl owner="KaringX" repo="clashmi" :prerelease="true" mode="button" label="安装包" arch="Deb" match="linux_amd64.deb" /> <gtl owner="KaringX" repo="clashmi" :prerelease="true" mode="button" label="安装包" arch="rpm" match="linux_amd64.rpm" /> <gtl owner="KaringX" repo="clashmi" :prerelease="true" mode="button" label="安装包" arch="AppImage" match="linux_amd64.AppImage" /> |
 
 <!-- tabs:end -->
 

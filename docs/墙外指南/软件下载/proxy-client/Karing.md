@@ -88,12 +88,12 @@
 
 === "Linux" @1
 
-- 正式版：[``deb`` 安装包](https://dot.karing.app/client.html?tag=linux-deb-stable)、[``rpm`` 安装包](https://dot.karing.app/client.html?tag=linux-rpm-stable)
-- 测试版：[``deb`` 安装包](https://dot.karing.app/client.html?tag=linux-deb-beta)、[``rpm`` 安装包](https://dot.karing.app/client.html?tag=linux-rpm-beta)
+- 正式版：[``Deb`` 安装包](https://dot.karing.app/client.html?tag=linux-deb-stable)、[``RPM`` 安装包](https://dot.karing.app/client.html?tag=linux-rpm-stable)
+- 测试版：[``Deb`` 安装包](https://dot.karing.app/client.html?tag=linux-deb-beta)、[``RPM`` 安装包](https://dot.karing.app/client.html?tag=linux-rpm-beta)
 
 | 正式版 | 测试版 |
 | :---: | :---: |
-| <gtl owner="KaringX" repo="karing" mode="button" label="安装包" arch="deb" match="linux_amd64.deb" /> <gtl owner="KaringX" repo="karing" mode="button" label="安装包" arch="rpm" match="linux_amd64.rpm" /> <gtl owner="KaringX" repo="karing" mode="button" label="安装包" arch="AppImage" match="linux_amd64.AppImage" /> | <gtl owner="KaringX" repo="karing" :prerelease="true" mode="button" label="安装包" arch="deb" match="linux_amd64.deb" /> <gtl owner="KaringX" repo="karing" :prerelease="true" mode="button" label="安装包" arch="rpm" match="linux_amd64.rpm" /> <gtl owner="KaringX" repo="karing" :prerelease="true" mode="button" label="安装包" arch="AppImage" match="linux_amd64.AppImage" /> |
+| <gtl owner="KaringX" repo="karing" mode="button" label="安装包" arch="Deb" match="linux_amd64.deb" /> <gtl owner="KaringX" repo="karing" mode="button" label="安装包" arch="RPM" match="linux_amd64.rpm" /> <gtl owner="KaringX" repo="karing" mode="button" label="安装包" arch="AppImage" match="linux_amd64.AppImage" /> | <gtl owner="KaringX" repo="karing" :prerelease="true" mode="button" label="安装包" arch="Deb" match="linux_amd64.deb" /> <gtl owner="KaringX" repo="karing" :prerelease="true" mode="button" label="安装包" arch="RPM" match="linux_amd64.rpm" /> <gtl owner="KaringX" repo="karing" :prerelease="true" mode="button" label="安装包" arch="AppImage" match="linux_amd64.AppImage" /> |
 
 <!-- tabs:end -->
 
