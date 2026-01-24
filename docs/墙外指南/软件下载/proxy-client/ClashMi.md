@@ -18,7 +18,6 @@ Clash Mi 是一款跨平台的 Clash/Mihomo 图形化客户端，支持 Windows�
 - **操作简单**：支持 MetaCubeX 的推荐配置, 内核基于 yaml 配置运行，小白使用机场订阅即可使用；
 - **自带 [ZashBoard 面板](https://github.com/Zephyruso/zashboard)**：Web面板，或许你更加熟悉。
 
-
 ## 下载
 
 ::: details 系统要求
@@ -31,7 +30,9 @@ Clash Mi 是一款跨平台的 Clash/Mihomo 图形化客户端，支持 Windows�
 
 作者已[自行提供](https://clashmi.app/download)所有下载链接。
 
-### Windows
+<!-- tabs:start -->
+
+=== "Windows" @1
 
 - 正式版：[安装包](https://dot.clashmi.app/client.html?tag=windows-installer-stable)、[压缩包](https://dot.clashmi.app/client.html?tag=windows-zip-stable)
 - 测试版：[安装包](https://dot.clashmi.app/client.html?tag=windows-installer-beta)、[压缩包](https://dot.clashmi.app/client.html?tag=windows-zip-beta)
@@ -41,7 +42,7 @@ Clash Mi 是一款跨平台的 Clash/Mihomo 图形化客户端，支持 Windows�
 | <gtl owner="KaringX" repo="clashmi" mode="button" label="安装包" arch="exe" match="windows_x64.exe" /> <gtl owner="KaringX" repo="clashmi" mode="button" label="压缩包" arch="zip" match="windows_x64.zip" /> | <gtl owner="KaringX" repo="clashmi" :prerelease="true" mode="button" label="安装包" arch="exe" match="windows_x64.exe" /> <gtl owner="KaringX" repo="clashmi" :prerelease="true" mode="button" label="压缩包" arch="zip" match="windows_x64.zip" /> |
 
 
-### Android/HarmonyOS
+=== "Android/HarmonyOS" @1
 
 ::: tip
 小米/MIUI 用户如遇无法安装的情况，可尝试先关网或打开`飞行模式`和关闭``安全守护``-``增强防护``再安装。
@@ -56,7 +57,9 @@ Clash Mi 是一款跨平台的 Clash/Mihomo 图形化客户端，支持 Windows�
 
 ||~~听作者说 ARMv7 架构的包可以装在电视上😁~~||
 
-### iOS (iPhone/iPad)
+=== "苹果设备" @1
+
+=== "iOS (iPhone/iPad)" @2
 
 ::: tip
 - App Store 正式版和 TestFilght 测试版不可共存，请根据需要选择安装其中一个版本；
@@ -66,7 +69,7 @@ Clash Mi 是一款跨平台的 Clash/Mihomo 图形化客户端，支持 Windows�
 - App Store 正式版下载：[https://apps.apple.com/us/app/clash-mi/id6744321968](https://apps.apple.com/us/app/clash-mi/id6744321968)
 - TestFlight 测试版下载：[https://testflight.apple.com/join/bjHXktB3](https://testflight.apple.com/join/bjHXktB3)
 
-### MacOS
+=== "MacOS" @2
 
 - 正式版：[https://dot.clashmi.app/client.html?tag=macos-stable](https://dot.clashmi.app/client.html?tag=macos-stable)
 - 测试版：[https://dot.clashmi.app/client.html?tag=macos-beta](https://dot.clashmi.app/client.html?tag=macos-beta)
@@ -75,7 +78,7 @@ Clash Mi 是一款跨平台的 Clash/Mihomo 图形化客户端，支持 Windows�
 | :---: | :---: |
 | <gtl owner="KaringX" repo="clashmi" mode="button" label="安装包" arch="dmg" match="macos_universal.dmg" /> | <gtl owner="KaringX" repo="clashmi" :prerelease="true" mode="button" label="安装包" arch="dmg" match="macos_universal.dmg" /> |
 
-### Linux
+=== "Linux" @1
 
 ::: tip
 **Debian 系/Ubuntu/Arch 系/Fedora**​ 推荐命令行工具，纵享丝滑。详见[《😼优雅地部署、使用基于 Clash/Mihomo 的代理环境》](https://github.com/nelvko/clash-for-linux-install?tab=readme-ov-file)。
@@ -89,6 +92,8 @@ Clash Mi 是一款跨平台的 Clash/Mihomo 图形化客户端，支持 Windows�
 | 正式版 | 测试版 |
 | :---: | :---: |
 | <gtl owner="KaringX" repo="clashmi" mode="button" label="安装包" arch="deb" match="linux_amd64.deb" /> <gtl owner="KaringX" repo="clashmi" mode="button" label="安装包" arch="rpm" match="linux_amd64.rpm" /> <gtl owner="KaringX" repo="clashmi" mode="button" label="安装包" arch="AppImage" match="linux_amd64.AppImage" /> | <gtl owner="KaringX" repo="clashmi" :prerelease="true" mode="button" label="安装包" arch="deb" match="linux_amd64.deb" /> <gtl owner="KaringX" repo="clashmi" :prerelease="true" mode="button" label="安装包" arch="rpm" match="linux_amd64.rpm" /> <gtl owner="KaringX" repo="clashmi" :prerelease="true" mode="button" label="安装包" arch="AppImage" match="linux_amd64.AppImage" /> |
+
+<!-- tabs:end -->
 
 ## 发布面板
 

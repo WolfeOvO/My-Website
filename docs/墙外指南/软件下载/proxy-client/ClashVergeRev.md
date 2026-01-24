@@ -197,14 +197,14 @@ yay -S clash-verge-rev-autobuild-bin # 测试版
   +--- locales                      #语言包
   \--- clash-verge-service.exe      #服务模式主程序
   \--- Country.mmdb
-  \--- enableLoopback.exe           #解除UWP应用网络回环限制工具
+  \--- enableLoopback.exe           #解除 UWP 应用网络回环限制工具
   \--- geoip.dat
   \--- geosite.dat
   \--- install-service.exe          #服务模式安装程序
   \--- sysproxy.exe                 #系统代理程序
   \--- uninstall-service.exe        #服务模式卸载程序
 \--- clash-verge.exe                #主程序
-\--- verge-mihomo.exe               #Mihomo核心程序
+\--- verge-mihomo.exe               #Mihomo 核心程序
 \--- verge-mihomo-alpha.exe         #Mihomo Alpha 版本
 ```
 

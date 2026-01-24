@@ -27,3 +27,27 @@
 - *计划支持所有平台。*
 
 ## 下载
+
+::: details 系统要求
+- **Windows** 10 及以上且仅支持 ARM64；
+- **Android** 8 及以上且为 ARMv7 或 ARMv8 架构；
+- **iOS** 15 及以上；
+- **TVOS** 17 及以上；
+- **MacOS** 12 及以上，Apple M 或 Inter 芯片均可；
+- **Linux** 所有发型版本但仅支持 ARM64 架构。
+:::
+
+作者已[自行提供](https://clashmi.app/download)所有下载链接。
+
+<!-- tabs:start -->
+
+=== "Windows" @1
+
+- 正式版：[安装包](https://dot.karing.app/client.html?tag=windows-installer-stable)、[压缩包](https://dot.karing.app/client.html?tag=windows-zip-stable)
+- 测试版：[安装包](https://dot.karing.app/client.html?tag=windows-installer-beta)、[压缩包](https://dot.karing.app/client.html?tag=windows-zip-beta)
+
+| 正式版 | 测试版 |
+| :---: | :---: |
+| <gtl owner="KaringX" repo="clashmi" mode="button" label="安装包" arch="exe" match="windows_x64.exe" />
+
+<!-- tabs:end -->
