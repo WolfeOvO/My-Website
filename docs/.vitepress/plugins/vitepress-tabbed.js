@@ -172,10 +172,8 @@ export function injectTabs() {
 .vp-tabs-tab:hover { color: var(--vp-c-text-1); }
 .vp-tabs-tab.active { color: var(--vp-c-brand-1); }
 .vp-tabs-tab.active::after { content: ''; position: absolute; bottom: -1px; left: 8px; right: 8px; height: 2px; background: var(--vp-c-brand-1); }
-.vp-tabs-panel { display: none; padding: 16px 0 0; }
+.vp-tabs-panel { display: none; padding-top: 16px; }
 .vp-tabs-panel.active { display: block; }
-.vp-tabs-panel > *:first-child { margin-top: 0 !important; border-top: none !important; padding-top: 0 !important; }
-.vp-tabs-panel > *:last-child { margin-bottom: 0 !important; }
 .vp-tabs .vp-tabs { margin: 16px 0 0; }
 </style>`)
 
