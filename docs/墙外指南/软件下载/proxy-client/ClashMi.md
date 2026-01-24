@@ -41,7 +41,6 @@ Clash Mi 是一款跨平台的 Clash/Mihomo 图形化客户端，支持 Windows�
 | :---: | :---: |
 | <gtl owner="KaringX" repo="clashmi" mode="button" label="安装包" arch="exe" match="windows_x64.exe" /> <gtl owner="KaringX" repo="clashmi" mode="button" label="压缩包" arch="zip" match="windows_x64.zip" /> | <gtl owner="KaringX" repo="clashmi" :prerelease="true" mode="button" label="安装包" arch="exe" match="windows_x64.exe" /> <gtl owner="KaringX" repo="clashmi" :prerelease="true" mode="button" label="压缩包" arch="zip" match="windows_x64.zip" /> |
 
-
 === "Android/HarmonyOS" @1
 
 ::: tip

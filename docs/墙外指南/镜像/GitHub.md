@@ -91,7 +91,7 @@ curl -O [复制一键生成的链接]
 ## GitHub Proxy 代理加速
 
 ::: details 介绍
-重要通知:  由于本站经常被 GFW 封锁，以防万一请收藏[最新地址发布站](https://ghproxy.link/)。
+重要通知：由于本站经常被 GFW 封锁，以防万一请收藏[最新地址发布站](https://ghproxy.link/)。
 
 特别鸣谢：感谢所有[打赏](https://ghfast.top/donate)过的用户，你们的支持将会给本站提供更稳定的服务。
 :::

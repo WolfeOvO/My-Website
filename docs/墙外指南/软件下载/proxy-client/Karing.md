@@ -48,6 +48,11 @@
 
 | 正式版 | 测试版 |
 | :---: | :---: |
-| <gtl owner="KaringX" repo="clashmi" mode="button" label="安装包" arch="exe" match="windows_x64.exe" />
+| <gtl owner="KaringX" repo="clashmi" mode="button" label="安装包" arch="exe" match="windows_x64.exe" /> <gtl owner="KaringX" repo="clashmi" mode="button" label="安装包" arch="exe" match="windows_x64.zip" /> | <gtl owner="KaringX" repo="clashmi" :prerelease="true" mode="button" label="安装包" arch="exe" match="windows_x64.exe" /> <gtl owner="KaringX" repo="clashmi" :prerelease="true" mode="button" label="安装包" arch="exe" match="windows_x64.zip" />
+
+=== "Android/HarmonyOS" @1
+
+- 正式版：[ARMv7](https://dot.karing.app/client.html?tag=android-armv7a-stable)、[ARMv8](https://dot.karing.app/client.html?tag=android-stable)
+- 测试版：[ARMv7](https://dot.karing.app/client.html?tag=android-armv7a-beta)、[ARMv8](https://dot.karing.app/client.html?tag=android-beta)
 
 <!-- tabs:end -->

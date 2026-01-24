@@ -16,7 +16,8 @@ export const sidebar = {
         { text: '9 - 图片资源', link: '9-图片资源' },
         { text: '10 - 网页浏览器', link: '10-网页浏览器' },
         { text: '11 - 维基媒体', link: '11-维基媒体' },
-        { text: '12 - 工具箱', link: '12-工具箱' }
+        { text: '12 - 工具箱', link: '12-工具箱' },
+        {text: '13 - Telegram 频道推荐', link: '13-TG频道推荐' }
       ]
     }
   ],
@@ -33,8 +34,8 @@ export const sidebar = {
       text: '镜像',
       base: '/墙外指南/镜像/',
       items: [
-        { text: 'Wikipedia 维基百科', link: 'Wikipedia' },
-        { text: 'GitHub 代理', link: 'GitHub' }
+        { text: 'GitHub 代理', link: 'GitHub' },
+        { text: 'Wikipedia 维基百科', link: 'Wikipedia' }
       ]
     },
     {
