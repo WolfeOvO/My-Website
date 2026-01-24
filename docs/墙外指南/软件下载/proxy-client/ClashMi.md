@@ -23,10 +23,10 @@
 
 ### Windows
 
-- 稳定版：[安装包](https://dot.clashmi.app/client.html?tag=windows-installer-stable)、[压缩包](https://dot.clashmi.app/client.html?tag=windows-zip-stable)
+- 正式版：[安装包](https://dot.clashmi.app/client.html?tag=windows-installer-stable)、[压缩包](https://dot.clashmi.app/client.html?tag=windows-zip-stable)
 - 测试版：[安装包](https://dot.clashmi.app/client.html?tag=windows-installer-beta)、[压缩包](https://dot.clashmi.app/client.html?tag=windows-zip-beta)
 
-| 稳定版 | 测试版 |
+| 正式版 | 测试版 |
 | :---: | :---: |
 | <gtl owner="KaringX" repo="clashmi" mode="button" label="安装包" arch="exe" match="windows_x64.exe" /> <gtl owner="KaringX" repo="clashmi" mode="button" label="压缩包" arch="zip" match="windows_x64.zip" /> | <gtl owner="KaringX" repo="clashmi" :prerelease="true" mode="button" label="安装包" arch="exe" match="windows_x64.exe" /> <gtl owner="KaringX" repo="clashmi" :prerelease="true" mode="button" label="压缩包" arch="zip" match="windows_x64.zip" /> |
 
@@ -37,11 +37,45 @@
 小米/MIUI 用户如遇无法安装的情况，可尝试先关网或打开`飞行模式`和关闭``安全守护``-``增强防护``再安装。
 :::
 
-- 稳定版：[ARMv8](https://dot.clashmi.app/client.html?tag=android-stable)、[ARMv7](https://dot.clashmi.app/client.html?tag=android-armv7a-stable)
+- 正式版：[ARMv8](https://dot.clashmi.app/client.html?tag=android-stable)、[ARMv7](https://dot.clashmi.app/client.html?tag=android-armv7a-stable)
 - 测试版：[ARMv8](https://dot.clashmi.app/client.html?tag=android-beta)、[ARMv7](https://dot.clashmi.app/client.html?tag=android-armv7a-beta)
 
-| 稳定版 | 测试版 |
+| 正式版 | 测试版 |
 | :---: | :---: |
 | <gtl owner="KaringX" repo="clashmi" mode="button" label="安装包" arch="ARM" match="android_arm.apk" /> <gtl owner="KaringX" repo="clashmi" mode="button" label="安装包" arch="ARMv7" match="android_armeabi-v7a.apk" /> <gtl owner="KaringX" repo="clashmi" mode="button" label="安装包" arch="ARMv8" match="android_arm64-v8a.apk" /> | <gtl owner="KaringX" repo="clashmi" :prerelease="true" mode="button" label="安装包" arch="ARM" match="android_arm.apk" /> <gtl owner="KaringX" repo="clashmi" :prerelease="true" mode="button" label="安装包" arch="ARMv7" match="android_armeabi-v7a.apk" /> <gtl owner="KaringX" repo="clashmi" :prerelease="true" mode="button" label="安装包" arch="ARMv8" match="android_arm64-v8a.apk" /> |
 
-|| ~~听作者说 ARMv7 架构的包可以装在电视上😁~~ ||
+||~~听作者说 ARMv7 架构的包可以装在电视上😁~~||
+
+### iOS (iPhone/iPad)
+
+::: tip
+- App Store 正式版和 TestFilght 测试版不可共存，请根据需要选择安装其中一个版本；
+- 如果您的账号无法正常下载应用，请尝试港区、美区等**非中国大陆地区账号**，具体内容详见[《Apple ID 账号获取》](/墙外指南/教程/AppleID)。
+:::
+
+- App Store 正式版下载：[https://apps.apple.com/us/app/clash-mi/id6744321968](https://apps.apple.com/us/app/clash-mi/id6744321968)
+- TestFlight 测试版下载：[https://testflight.apple.com/join/bjHXktB3](https://testflight.apple.com/join/bjHXktB3)
+
+### MacOS
+
+- 正式版：[https://dot.clashmi.app/client.html?tag=macos-stable](https://dot.clashmi.app/client.html?tag=macos-stable)
+- 测试版：[https://dot.clashmi.app/client.html?tag=macos-beta](https://dot.clashmi.app/client.html?tag=macos-beta)
+
+| 正式版 | 测试版 |
+| :---: | :---: |
+| <gtl owner="KaringX" repo="clashmi" mode="button" label="安装包" arch="dmg" match="macos_universal.dmg" /> | <gtl owner="KaringX" repo="clashmi" :prerelease="true" mode="button" label="安装包" arch="dmg" match="macos_universal.dmg" /> |
+
+### Linux
+
+::: tip
+**Debian 系/Ubuntu/Arch 系/Fedora**​ 推荐命令行工具，纵享丝滑。详见《[😼优雅地部署、使用基于 Clash/Mihomo 的代理环境](https://github.com/nelvko/clash-for-linux-install?tab=readme-ov-file)》。
+
+服务管理基于 ``systemd``，安装前确认下。
+:::
+
+- 正式版：[``deb`` 安装包](https://dot.clashmi.app/client.html?tag=linux-deb-stable)、[``rpm`` 安装包](https://dot.clashmi.app/client.html?tag=linux-rpm-stable)
+- 测试版：[``deb`` 安装包](https://dot.clashmi.app/client.html?tag=linux-deb-beta)、[``rpm`` 安装包](https://dot.clashmi.app/client.html?tag=linux-rpm-beta)
+
+| 正式版 | 测试版 |
+| :---: | :---: |
+| <gtl owner="KaringX" repo="clashmi" mode="button" label="安装包" arch="deb" match="linux_arm64.deb" /> <gtl owner="KaringX" repo="clashmi" mode="button" label="安装包" arch="rpm" match="linux_arm64.rpm" /> <gtl owner="KaringX" repo="clashmi" mode="button" label="安装包" arch="AppImage" match="linux_amd64.AppImage" /> | <gtl owner="KaringX" repo="clashmi" :prerelease="true" mode="button" label="安装包" arch="deb" match="linux_arm64.deb" /> <gtl owner="KaringX" repo="clashmi" :prerelease="true" mode="button" label="安装包" arch="rpm" match="linux_arm64.rpm" /> <gtl owner="KaringX" repo="clashmi" :prerelease="true" mode="button" label="安装包" arch="AppImage" match="linux_amd64.AppImage" /> |

@@ -41,6 +41,7 @@ export const sidebar = {
       text: '教程',
       base: '/墙外指南/教程/',
       items: [
+        { text:'Apple ID 账号获取', link: 'AppleID' },
         { text: '加速 GitHub 下载', link: '加速GitHub下载' }
       ]
     },

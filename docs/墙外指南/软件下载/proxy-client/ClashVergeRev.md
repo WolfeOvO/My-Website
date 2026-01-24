@@ -69,7 +69,7 @@ scoop install extras/clash-verge-rev
 === "Debian/Ubuntu/Deepin" @2
 
 ::: warning
-Ubuntu 24.04 需要安装额外依赖，详见[常见问题](https://www.clashverge.dev/faq/linux.html)。
+Ubuntu 24.04 需要安装额外依赖，详见[《常见问题》](https://www.clashverge.dev/faq/linux.html)。
 :::
 
 | 系统架构 | 下载地址 |
