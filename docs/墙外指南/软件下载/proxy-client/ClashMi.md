@@ -54,8 +54,6 @@ Clash Mi 是一款跨平台的 Clash/Mihomo 图形化客户端，支持 Windows�
 | :---: | :---: |
 | <gtl owner="KaringX" repo="clashmi" mode="button" label="安装包" arch="ARM" match="android_arm.apk" /> <gtl owner="KaringX" repo="clashmi" mode="button" label="安装包" arch="ARMv7" match="android_armeabi-v7a.apk" /> <gtl owner="KaringX" repo="clashmi" mode="button" label="安装包" arch="ARMv8" match="android_arm64-v8a.apk" /> | <gtl owner="KaringX" repo="clashmi" :prerelease="true" mode="button" label="安装包" arch="ARM" match="android_arm.apk" /> <gtl owner="KaringX" repo="clashmi" :prerelease="true" mode="button" label="安装包" arch="ARMv7" match="android_armeabi-v7a.apk" /> <gtl owner="KaringX" repo="clashmi" :prerelease="true" mode="button" label="安装包" arch="ARMv8" match="android_arm64-v8a.apk" /> |
 
-||~~听作者说 ARMv7 架构的包可以装在电视上😁~~||
-
 === "苹果设备" @1
 
 === "iOS (iPhone/iPad)" @2

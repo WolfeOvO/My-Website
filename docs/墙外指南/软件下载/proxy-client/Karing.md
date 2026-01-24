@@ -37,7 +37,7 @@
 - **Linux** 所有发型版本但仅支持 ARM64 架构。
 :::
 
-作者已[自行提供](https://clashmi.app/download)所有下载链接。
+作者已[自行提供](https://karing.app/download/)所有下载链接。
 
 <!-- tabs:start -->
 
@@ -48,11 +48,21 @@
 
 | 正式版 | 测试版 |
 | :---: | :---: |
-| <gtl owner="KaringX" repo="clashmi" mode="button" label="安装包" arch="exe" match="windows_x64.exe" /> <gtl owner="KaringX" repo="clashmi" mode="button" label="安装包" arch="exe" match="windows_x64.zip" /> | <gtl owner="KaringX" repo="clashmi" :prerelease="true" mode="button" label="安装包" arch="exe" match="windows_x64.exe" /> <gtl owner="KaringX" repo="clashmi" :prerelease="true" mode="button" label="安装包" arch="exe" match="windows_x64.zip" />
+| <gtl owner="KaringX" repo="karing" mode="button" label="安装包" arch="exe" match="windows_x64.exe" /> <gtl owner="KaringX" repo="karing" mode="button" label="安装包" arch="zip" match="windows_x64.zip" /> | <gtl owner="KaringX" repo="karing" :prerelease="true" mode="button" label="安装包" arch="exe" match="windows_x64.exe" /> <gtl owner="KaringX" repo="karing" :prerelease="true" mode="button" label="安装包" arch="zip" match="windows_x64.zip" />
 
 === "Android/HarmonyOS" @1
 
+::: tip
+- 小米/MIUI 用户如遇无法安装的情况，可尝试先关网或打开`飞行模式`和关闭``安全守护``-``增强防护``再安装；
+- 鸿蒙/HarmonyOS 可参考教程[《HarmonyOS 安装 Karing》](https://karing.app/blog/case/harmonyos)。
+:::
+
 - 正式版：[ARMv7](https://dot.karing.app/client.html?tag=android-armv7a-stable)、[ARMv8](https://dot.karing.app/client.html?tag=android-stable)
 - 测试版：[ARMv7](https://dot.karing.app/client.html?tag=android-armv7a-beta)、[ARMv8](https://dot.karing.app/client.html?tag=android-beta)
+- APKPure 下载：[https://apkpure.com/p/com.nebula.karing](https://apkpure.com/p/com.nebula.karing)
+
+| 正式版 | 测试版 |
+| :---: | :---: |
+| <gtl owner="KaringX" repo="karing" mode="button" label="安装包" arch="ARM" match="android_arm.apk" /> <gtl owner="KaringX" repo="karing" mode="button" label="安装包" arch="ARMv7" match="android_armeabi-v7a.apk" /> <gtl owner="KaringX" repo="karing" mode="button" label="安装包" arch="ARMv8" match="android_arm64-v8a.apk" /> | <gtl owner="KaringX" repo="karing" :prerelease="true" mode="button" label="安装包" arch="ARM" match="android_arm.apk" /> <gtl owner="KaringX" repo="karing" :prerelease="true" mode="button" label="安装包" arch="ARMv7" match="android_armeabi-v7a.apk" /> <gtl owner="KaringX" repo="karing" :prerelease="true" mode="button" label="安装包" arch="ARMv8" match="android_arm64-v8a.apk" />
 
 <!-- tabs:end -->
