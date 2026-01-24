@@ -188,7 +188,7 @@ yay -S clash-verge-rev-autobuild-bin # 测试版
 
 ### 源代码编译安装
 
-编译构建指南请转到[构建](https://github.com/clash-verge-rev/clash-verge-rev/blob/main/CONTRIBUTING.md)。
+编译构建指南请转到[《构建》](https://github.com/clash-verge-rev/clash-verge-rev/blob/main/CONTRIBUTING.md)。
 
 请注意区分以下文件清单（以用户量比较多的 Windows 为例）：
 
@@ -210,7 +210,7 @@ yay -S clash-verge-rev-autobuild-bin # 测试版
 
 ### 安装问题
 
-如果安装和使用过程中遇到了问题，请参考文档中的《[常见问题](https://www.clashverge.dev/faq/windows.html)》进行处理。
+如果安装和使用过程中遇到了问题，请参考文档中的[《常见问题》](https://www.clashverge.dev/faq/windows.html)进行处理。
 
 ## 发布面板
 

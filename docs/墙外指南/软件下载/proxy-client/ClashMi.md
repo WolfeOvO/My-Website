@@ -68,7 +68,7 @@
 ### Linux
 
 ::: tip
-**Debian 系/Ubuntu/Arch 系/Fedora**​ 推荐命令行工具，纵享丝滑。详见《[😼优雅地部署、使用基于 Clash/Mihomo 的代理环境](https://github.com/nelvko/clash-for-linux-install?tab=readme-ov-file)》。
+**Debian 系/Ubuntu/Arch 系/Fedora**​ 推荐命令行工具，纵享丝滑。详见[《😼优雅地部署、使用基于 Clash/Mihomo 的代理环境》](https://github.com/nelvko/clash-for-linux-install?tab=readme-ov-file)。
 
 服务管理基于 ``systemd``，安装前确认下。
 :::
@@ -78,4 +78,4 @@
 
 | 正式版 | 测试版 |
 | :---: | :---: |
-| <gtl owner="KaringX" repo="clashmi" mode="button" label="安装包" arch="deb" match="linux_arm64.deb" /> <gtl owner="KaringX" repo="clashmi" mode="button" label="安装包" arch="rpm" match="linux_arm64.rpm" /> <gtl owner="KaringX" repo="clashmi" mode="button" label="安装包" arch="AppImage" match="linux_amd64.AppImage" /> | <gtl owner="KaringX" repo="clashmi" :prerelease="true" mode="button" label="安装包" arch="deb" match="linux_arm64.deb" /> <gtl owner="KaringX" repo="clashmi" :prerelease="true" mode="button" label="安装包" arch="rpm" match="linux_arm64.rpm" /> <gtl owner="KaringX" repo="clashmi" :prerelease="true" mode="button" label="安装包" arch="AppImage" match="linux_amd64.AppImage" /> |
+| <gtl owner="KaringX" repo="clashmi" mode="button" label="安装包" arch="deb" match="linux_amd64.deb" /> <gtl owner="KaringX" repo="clashmi" mode="button" label="安装包" arch="rpm" match="linux_amd64.rpm" /> <gtl owner="KaringX" repo="clashmi" mode="button" label="安装包" arch="AppImage" match="linux_amd64.AppImage" /> | <gtl owner="KaringX" repo="clashmi" :prerelease="true" mode="button" label="安装包" arch="deb" match="linux_amd64.deb" /> <gtl owner="KaringX" repo="clashmi" :prerelease="true" mode="button" label="安装包" arch="rpm" match="linux_amd64.rpm" /> <gtl owner="KaringX" repo="clashmi" :prerelease="true" mode="button" label="安装包" arch="AppImage" match="linux_amd64.AppImage" /> |
