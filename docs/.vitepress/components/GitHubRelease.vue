@@ -1006,18 +1006,16 @@ onMounted(() => {
 </template>
 
 <style scoped>
-/* ============================================
-   SVG 图标清晰度修复 - 解决 em 单位导致的发虚问题
-   
-   原理：
-   1. translateZ(0) 触发 GPU 加速，创建独立合成层
-   2. backface-visibility: hidden 优化渲染
-   3. shape-rendering: geometricPrecision 优化 SVG 几何精度
-   
-   使用方法：将以下样式添加或替换到你的 Vue 组件 <style> 中
-   ============================================ */
+.gh-release {
+    display: inline-flex;
+    vertical-align: middle;
+    align-items: center;
+    gap: 0.5em;
+    flex-wrap: wrap;
+    line-height: 1.8;
+}
 
-/* ========== 全局 SVG 样式 ========== */
+/* ========== SVG 图标通用样式 ========== */
 .gh-release :deep(svg) {
     width: 1em;
     height: 1em;
@@ -1025,28 +1023,221 @@ onMounted(() => {
     flex-shrink: 0;
     color: inherit;
     fill: currentColor;
-    /* 🔧 渲染优化 - 解决发虚问题 */
+    /* 新增渲染优化 */
     shape-rendering: geometricPrecision;
     -webkit-transform: translateZ(0);
     transform: translateZ(0);
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
 }
 
-/* ========== 按钮图标容器 ========== */
-.gh-btn-icon {
+/* ========== 版本切换开关 ========== */
+.gh-version-toggle {
+    display: inline-flex;
+    background: var(--vp-c-bg-soft, #f1f5f9);
+    border-radius: 8px;
+    padding: 3px;
+    gap: 2px;
+    margin-right: 8px;
+}
+
+.gh-toggle-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    border: none;
+    background: transparent;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--vp-c-text-2, #64748b);
+    transition: all 0.2s;
+}
+
+.gh-toggle-btn:hover:not(.disabled) {
+    background: var(--vp-c-bg-mute, #e2e8f0);
+}
+
+.gh-toggle-btn.active {
+    background: #fff;
+    color: var(--vp-c-text-1, #1a202c);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.gh-toggle-btn.active.gh-toggle-pre {
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    color: #92400e;
+}
+
+.gh-toggle-btn.disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.gh-toggle-icon {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 1em;
-    height: 1em;
-    flex-shrink: 0;
+    width: 14px;
+    height: 14px;
+}
+
+.gh-toggle-icon :deep(svg) {
+    width: 14px;
+    height: 14px;
+}
+
+.gh-toggle-text {
+    font-size: 11px;
+}
+
+/* ========== 版本组（同时显示模式） ========== */
+.gh-version-group {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 8px;
+    background: var(--vp-c-bg-soft, #f8fafc);
+    border-radius: 8px;
+    margin-right: 8px;
+}
+
+.gh-prerelease-group {
+    background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+}
+
+.gh-version-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--vp-c-text-2, #64748b);
+    padding-right: 6px;
+    border-right: 1px solid var(--vp-c-divider, #e2e8f0);
+}
+
+.gh-pre-label {
+    color: #d97706;
+}
+
+.gh-label-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 14px;
+    height: 14px;
+}
+
+.gh-label-icon :deep(svg) {
+    width: 14px;
+    height: 14px;
+}
+
+/* ========== 徽章样式 ========== */
+.gh-badge-link {
+    text-decoration: none;
+}
+
+.gh-badge {
+    display: inline-flex;
+    border-radius: 4px;
+    overflow: hidden;
+    font-size: 12px;
     line-height: 1;
-    /* 🔧 GPU 加速 */
-    -webkit-transform: translateZ(0);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    vertical-align: middle;
+}
+
+.gh-badge-label {
+    padding: 4px 6px;
+    color: #fff;
+    font-weight: 500;
+}
+
+.gh-badge-value {
+    padding: 4px 6px;
+    background: #f1f5f9;
+    color: #475569;
+    font-weight: 500;
+}
+
+.gh-stable-label {
+    background: #67c23a;
+}
+
+.gh-prerelease-label {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+}
+
+.gh-release-label {
+    background: #409eff;
+}
+
+.gh-pre-release-label {
+    background: linear-gradient(135deg, #fb923c 0%, #f97316 100%);
+}
+
+.gh-prerelease-badge {
+    box-shadow: 0 1px 3px rgba(245, 158, 11, 0.3);
+}
+
+/* ========== 下载按钮 ========== */
+.gh-dl-btn {
+    display: inline-flex;
+    border-radius: 0.25em;
+    overflow: visible;
+    font-size: inherit;
+    line-height: 1;
+    cursor: pointer;
+    border: none;
+    padding: 0;
+    margin: 0.2em 0.4em 0.2em 0;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s;
+    vertical-align: middle;
+    position: relative;
+}
+
+.gh-dl-btn:hover:not(.disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.gh-dl-btn.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.gh-dl-btn-pre {
+    box-shadow: 0 1px 3px rgba(217, 119, 6, 0.3);
+}
+
+.gh-dl-label {
+    padding: 0.25em 0.5em;
+    color: #fff;
+    font-weight: 500;
+    position: relative;
+    border-radius: 0.25em 0 0 0.25em;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center; /* 确保内容居中 */
+    gap: 0.35em;
+    line-height: 1.4; /* 稳定行高 */
+}
+
+/* 按钮内部图标样式 */
+.gh-btn-icon {
+    display: inline-flex; /* 允许 Flex 布局 */
+    align-items: center;  /* 垂直居中 */
+    justify-content: center; /* 水平居中 */
+    width: round(1em, 1px);  /* 将 1em 四舍五入到最近的整数像素 */
+    height: round(1em, 1px);
+    flex-shrink: 0; /* 禁止被挤压变形 */
+    line-height: 1;
     transform: translateZ(0);
-    -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
 }
 
 .gh-btn-icon :deep(svg) {
@@ -1054,64 +1245,109 @@ onMounted(() => {
     height: 100%;
     color: inherit;
     fill: currentColor;
-    display: block;
-    /* 🔧 SVG 渲染优化 */
-    shape-rendering: geometricPrecision;
+    display: block; /* 消除 SVG 底部默认间隙 */
 }
 
-/* ========== 切换按钮图标 ========== */
-.gh-toggle-icon {
+/* Pre-release 标签样式 - 移到按钮内部 */
+.gh-btn-pre-tag {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 14px;
-    height: 14px;
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
+    background: rgba(255, 255, 255, 0.25);
+    border-radius: 0.2em;
+    padding: 0.1em 0.2em;
+    margin-left: 0.15em;
 }
 
-.gh-toggle-icon :deep(svg) {
-    width: 14px;
-    height: 14px;
-    shape-rendering: geometricPrecision;
-}
-
-/* ========== 版本标签图标 ========== */
-.gh-label-icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 14px;
-    height: 14px;
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
-}
-
-.gh-label-icon :deep(svg) {
-    width: 14px;
-    height: 14px;
-    shape-rendering: geometricPrecision;
-}
-
-/* ========== Pre-release 标签图标 ========== */
 .gh-btn-pre-icon {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     width: 0.9em;
     height: 0.9em;
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
 }
 
 .gh-btn-pre-icon :deep(svg) {
     width: 0.9em;
     height: 0.9em;
     color: #fff;
-    shape-rendering: geometricPrecision;
 }
 
-/* ========== 弹窗标题图标 ========== */
+.gh-dl-arch {
+    padding: 0.25em 0.5em;
+    color: #fff;
+    font-weight: 500;
+    position: relative;
+    border-radius: 0 0.25em 0.25em 0;
+    line-height: 1.4; /* 保持与 Label 一致 */
+}
+
+.gh-multi-badge {
+    position: absolute;
+    top: -0.4em;
+    right: -0.4em;
+    background: #ef4444;
+    color: #fff;
+    font-size: 0.7em;
+    font-weight: 600;
+    padding: 0.15em 0.35em;
+    border-radius: 0.7em;
+    line-height: 1;
+    min-width: 1.2em;
+    text-align: center;
+    box-shadow: 0 1px 3px rgba(239, 68, 68, 0.4);
+    z-index: 1;
+}
+
+/* ========== 弹窗样式 ========== */
+.gh-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    padding: 20px;
+    backdrop-filter: blur(4px);
+}
+
+.gh-modal {
+    background: var(--vp-c-bg, #fff);
+    border-radius: 16px;
+    width: 100%;
+    max-width: 500px;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    text-align: left; /* 弹窗内部强制左对齐，防止继承外部 center */
+}
+
+.gh-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--vp-c-divider, #e2e8f0);
+    background: var(--vp-c-bg-soft, #f8fafc);
+}
+
+.gh-modal-header-pre {
+    background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+    border-bottom-color: #fde68a;
+}
+
+.gh-modal-title {
+    font-weight: 600;
+    font-size: 16px;
+    color: var(--vp-c-text-1, #1a202c);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
 .gh-modal-title-icon {
     display: inline-flex;
     align-items: center;
@@ -1119,34 +1355,78 @@ onMounted(() => {
     width: 20px;
     height: 20px;
     color: var(--vp-c-text-2, #64748b);
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
 }
 
 .gh-modal-title-icon :deep(svg) {
     width: 20px;
     height: 20px;
-    shape-rendering: geometricPrecision;
 }
 
-/* ========== 弹窗 Pre-release 图标 ========== */
+.gh-modal-pre-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #92400e;
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    padding: 3px 8px;
+    border-radius: 12px;
+    border: 1px solid #fcd34d;
+}
+
 .gh-modal-pre-icon {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     width: 12px;
     height: 12px;
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
 }
 
 .gh-modal-pre-icon :deep(svg) {
     width: 12px;
     height: 12px;
-    shape-rendering: geometricPrecision;
 }
 
-/* ========== 版本信息栏图标 ========== */
+.gh-modal-close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    padding: 6px;
+    border-radius: 6px;
+    cursor: pointer;
+    color: var(--vp-c-text-2, #64748b);
+    transition: all 0.2s;
+}
+
+.gh-modal-close :deep(svg) {
+    width: 16px;
+    height: 16px;
+}
+
+.gh-modal-close:hover {
+    background: var(--vp-c-bg-mute, #e2e8f0);
+    color: var(--vp-c-text-1, #1a202c);
+}
+
+/* ========== 版本信息条 ========== */
+.gh-version-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+    border-bottom: 1px solid #bbf7d0;
+    font-size: 13px;
+}
+
+.gh-version-bar-pre {
+    background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+    border-bottom-color: #fde68a;
+}
+
 .gh-version-bar-icon {
     display: inline-flex;
     align-items: center;
@@ -1154,17 +1434,70 @@ onMounted(() => {
     width: 16px;
     height: 16px;
     color: #166534;
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
+}
+
+.gh-version-bar-pre .gh-version-bar-icon {
+    color: #92400e;
 }
 
 .gh-version-bar-icon :deep(svg) {
     width: 16px;
     height: 16px;
-    shape-rendering: geometricPrecision;
 }
 
-/* ========== 文件图标 ========== */
+.gh-version-bar-text {
+    flex: 1;
+    font-weight: 500;
+    color: var(--vp-c-text-1, #1a202c);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.gh-version-bar-tag {
+    font-size: 11px;
+    font-weight: 600;
+    color: #166534;
+    background: rgba(22, 163, 74, 0.1);
+    padding: 2px 8px;
+    border-radius: 10px;
+}
+
+.gh-version-bar-pre .gh-version-bar-tag {
+    color: #92400e;
+    background: rgba(217, 119, 6, 0.1);
+}
+
+.gh-modal-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px 20px;
+}
+
+/* ========== 文件列表 ========== */
+.gh-file-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.gh-file-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    background: var(--vp-c-bg-soft, #f8fafc);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 1px solid transparent;
+}
+
+.gh-file-item:hover {
+    background: var(--vp-c-bg-mute, #f1f5f9);
+    border-color: var(--vp-c-brand, #3b82f6);
+}
+
 .gh-file-icon {
     display: inline-flex;
     align-items: center;
@@ -1172,17 +1505,35 @@ onMounted(() => {
     width: 20px;
     height: 20px;
     color: var(--vp-c-text-2, #64748b);
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
 }
 
 .gh-file-icon :deep(svg) {
     width: 20px;
     height: 20px;
-    shape-rendering: geometricPrecision;
 }
 
-/* ========== 箭头图标 ========== */
+.gh-file-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.gh-file-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--vp-c-text-1, #1a202c);
+    word-break: break-word;
+    overflow-wrap: break-word;
+    line-height: 1.4;
+}
+
+.gh-file-meta {
+    font-size: 11px;
+    color: var(--vp-c-text-3, #94a3b8);
+    margin-top: 2px;
+    display: flex;
+    gap: 4px;
+}
+
 .gh-file-arrow {
     display: inline-flex;
     align-items: center;
@@ -1190,34 +1541,67 @@ onMounted(() => {
     width: 16px;
     height: 16px;
     color: var(--vp-c-text-3, #94a3b8);
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
 }
 
 .gh-file-arrow :deep(svg) {
     width: 16px;
     height: 16px;
-    shape-rendering: geometricPrecision;
 }
 
-/* ========== 返回按钮图标 ========== */
+/* ========== 返回按钮 ========== */
+.gh-back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 10px;
+    margin-bottom: 12px;
+    background: var(--vp-c-bg-soft, #f8fafc);
+    border-radius: 6px;
+    font-size: 12px;
+    color: var(--vp-c-text-2, #64748b);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.gh-back-btn:hover {
+    background: var(--vp-c-bg-mute, #f1f5f9);
+    color: var(--vp-c-brand, #3b82f6);
+}
+
 .gh-back-icon {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     width: 14px;
     height: 14px;
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
 }
 
 .gh-back-icon :deep(svg) {
     width: 14px;
     height: 14px;
-    shape-rendering: geometricPrecision;
 }
 
-/* ========== 详情标题图标 ========== */
+/* ========== 详情区域 ========== */
+.gh-detail-section {
+    margin-bottom: 16px;
+}
+
+.gh-detail-section:last-child {
+    margin-bottom: 0;
+}
+
+.gh-detail-title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--vp-c-text-1, #1a202c);
+    margin-bottom: 8px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--vp-c-divider, #e2e8f0);
+}
+
 .gh-detail-title-icon {
     display: inline-flex;
     align-items: center;
@@ -1225,17 +1609,41 @@ onMounted(() => {
     width: 16px;
     height: 16px;
     color: var(--vp-c-text-2, #64748b);
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
 }
 
 .gh-detail-title-icon :deep(svg) {
     width: 16px;
     height: 16px;
-    shape-rendering: geometricPrecision;
 }
 
-/* ========== 详情标签图标 ========== */
+.gh-detail-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+}
+
+.gh-detail-item {
+    background: var(--vp-c-bg-soft, #f8fafc);
+    padding: 8px 10px;
+    border-radius: 6px;
+    border: 1px solid transparent;
+}
+
+.gh-detail-full {
+    grid-column: span 2;
+}
+
+.gh-detail-label {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 10px;
+    color: var(--label-color, var(--vp-c-text-3, #94a3b8));
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    margin-bottom: 2px;
+}
+
 .gh-detail-label-icon {
     display: inline-flex;
     align-items: center;
@@ -1243,56 +1651,286 @@ onMounted(() => {
     width: 12px;
     height: 12px;
     color: inherit;
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
 }
 
 .gh-detail-label-icon :deep(svg) {
     width: 12px;
     height: 12px;
-    shape-rendering: geometricPrecision;
 }
 
-/* ========== 下载按钮图标 ========== */
+.gh-detail-value {
+    font-size: 12px;
+    color: var(--text-color, var(--vp-c-text-1, #1a202c));
+    word-break: break-all;
+    line-height: 1.4;
+}
+
+.gh-copyable {
+    cursor: pointer;
+    position: relative;
+    padding-right: 50px;
+    transition: background 0.2s;
+    border-radius: 4px;
+}
+
+.gh-copyable:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.gh-copy-hint {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 9px;
+    color: var(--label-color, var(--vp-c-brand, #3b82f6));
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.gh-copyable:hover .gh-copy-hint {
+    opacity: 1;
+}
+
+.gh-url {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 11px;
+}
+
+.gh-hash {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 10px;
+}
+
+.gh-na {
+    color: var(--vp-c-text-3, #94a3b8);
+    font-style: italic;
+}
+
+/* ========== 弹窗底部 ========== */
+.gh-modal-footer {
+    display: flex;
+    gap: 10px;
+    padding: 14px 20px;
+    border-top: 1px solid var(--vp-c-divider, #e2e8f0);
+    background: var(--vp-c-bg-soft, #f8fafc);
+}
+
+.gh-modal-footer-pre {
+    background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+    border-top-color: #fde68a;
+}
+
+.gh-download-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 16px;
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    color: #fff;
+    font-weight: 600;
+    font-size: 13px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.2s;
+    box-shadow: 0 4px 14px rgba(59, 130, 246, 0.4);
+}
+
+.gh-download-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.5);
+}
+
+.gh-download-btn-pre {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    box-shadow: 0 4px 14px rgba(217, 119, 6, 0.4);
+}
+
+.gh-download-btn-pre:hover {
+    box-shadow: 0 6px 20px rgba(217, 119, 6, 0.5);
+}
+
 .gh-download-icon {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     width: 16px;
     height: 16px;
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
 }
 
 .gh-download-icon :deep(svg) {
     width: 16px;
     height: 16px;
-    shape-rendering: geometricPrecision;
 }
 
-/* ========== GitHub 按钮图标 ========== */
+.gh-github-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 16px;
+    background: var(--vp-c-bg, #fff);
+    color: var(--vp-c-text-1, #1a202c);
+    font-weight: 500;
+    font-size: 13px;
+    border-radius: 8px;
+    text-decoration: none;
+    border: 1px solid var(--vp-c-divider, #e2e8f0);
+    transition: all 0.2s;
+}
+
+.gh-github-btn:hover {
+    background: var(--vp-c-bg-mute, #f1f5f9);
+    border-color: var(--vp-c-brand, #3b82f6);
+}
+
 .gh-github-icon {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     width: 14px;
     height: 14px;
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
 }
 
 .gh-github-icon :deep(svg) {
     width: 14px;
     height: 14px;
-    shape-rendering: geometricPrecision;
 }
 
-/* ========== 关闭按钮图标 ========== */
-.gh-modal-close :deep(svg) {
-    width: 16px;
-    height: 16px;
-    shape-rendering: geometricPrecision;
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
+/* ========== 动画 ========== */
+.modal-enter-active,
+.modal-leave-active {
+    transition: opacity 0.25s ease;
+}
+
+.modal-enter-active .gh-modal,
+.modal-leave-active .gh-modal {
+    transition: transform 0.25s ease;
+}
+
+.modal-enter-from,
+.modal-leave-to {
+    opacity: 0;
+}
+
+.modal-enter-from .gh-modal,
+.modal-leave-to .gh-modal {
+    transform: scale(0.95) translateY(10px);
+}
+
+/* ========== 深色模式 ========== */
+.dark .gh-badge,
+.dark .gh-dl-btn {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.dark .gh-modal-overlay {
+    background: rgba(0, 0, 0, 0.7);
+}
+
+/* 深色模式下的 detail-item 颜色由 JS 动态计算 */
+
+.dark .gh-version-toggle {
+    background: var(--vp-c-bg-mute, #1e293b);
+}
+
+.dark .gh-toggle-btn.active {
+    background: var(--vp-c-bg, #0f172a);
+    color: var(--vp-c-text-1, #f1f5f9);
+}
+
+.dark .gh-toggle-btn.active.gh-toggle-pre {
+    background: linear-gradient(135deg, #78350f 0%, #92400e 100%);
+    color: #fef3c7;
+}
+
+.dark .gh-version-group {
+    background: var(--vp-c-bg-mute, #1e293b);
+}
+
+.dark .gh-prerelease-group {
+    background: linear-gradient(135deg, #78350f 0%, #451a03 100%);
+}
+
+.dark .gh-pre-label {
+    color: #fcd34d;
+}
+
+.dark .gh-modal-header-pre {
+    background: linear-gradient(135deg, #78350f 0%, #451a03 100%);
+    border-bottom-color: #92400e;
+}
+
+.dark .gh-modal-pre-tag {
+    background: linear-gradient(135deg, #92400e 0%, #78350f 100%);
+    color: #fef3c7;
+    border-color: #b45309;
+}
+
+.dark .gh-version-bar {
+    background: linear-gradient(135deg, #14532d 0%, #166534 100%);
+    border-bottom-color: #16a34a;
+}
+
+.dark .gh-version-bar-icon {
+    color: #bbf7d0;
+}
+
+.dark .gh-version-bar-tag {
+    color: #bbf7d0;
+    background: rgba(134, 239, 172, 0.1);
+}
+
+.dark .gh-version-bar-pre {
+    background: linear-gradient(135deg, #78350f 0%, #92400e 100%);
+    border-bottom-color: #b45309;
+}
+
+.dark .gh-version-bar-pre .gh-version-bar-icon {
+    color: #fef3c7;
+}
+
+.dark .gh-version-bar-pre .gh-version-bar-tag {
+    color: #fef3c7;
+    background: rgba(253, 224, 71, 0.1);
+}
+
+.dark .gh-modal-footer-pre {
+    background: linear-gradient(135deg, #78350f 0%, #451a03 100%);
+    border-top-color: #92400e;
+}
+
+/* ========== 响应式 ========== */
+@media (max-width: 640px) {
+    .gh-modal {
+        max-height: 90vh;
+        border-radius: 12px;
+    }
+
+    .gh-detail-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .gh-detail-full {
+        grid-column: span 1;
+    }
+
+    .gh-modal-footer {
+        flex-direction: column;
+    }
+
+    .gh-version-toggle {
+        flex-wrap: wrap;
+    }
+
+    .gh-toggle-text {
+        display: none;
+    }
+
+    .gh-version-group {
+        flex-wrap: wrap;
+    }
 }
 </style>
