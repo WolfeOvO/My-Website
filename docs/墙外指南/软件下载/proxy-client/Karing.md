@@ -22,7 +22,7 @@
     - 支持局域网内同步；
     - 支持WebDAV；
     - 支持 zip 文件导入/导出；
-- 内置支持[魔改版 sing-box](https://github.com/KaringX/sing-box) 核心；
+- 内置支持[魔改版 Sing-box](https://github.com/KaringX/sing-box) 核心；
 - 增加新手模式，配置更简单；
 - *计划支持所有平台。*
 
