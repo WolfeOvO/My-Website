@@ -12,7 +12,7 @@
 - Clash Meta Wiki：[https://docs.metacubex.one/](https://docs.metacubex.one/)
 - 历史归档 1：[https://clash-meta.gitbook.io/clash.meta-wiki-old-1/](https://clash-meta.gitbook.io/clash.meta-wiki-old-1/)
 - 历史归档 2：[https://clash-meta.gitbook.io/clash.meta-wiki-older/](https://clash-meta.gitbook.io/clash.meta-wiki-older/)
-- 迁移后文档：详见[《合集》](client.md#客户端导航)
+- 迁移后文档：详见[《合集》](client#客户端导航)
 
 ::: details 非官方文档
 - Clash Meta for Android 介绍、教程、APK下载-CMFA/CFA - Clash Meta for Android：[https://clashmetaforandroid.com/](https://clashmetaforandroid.com/)
