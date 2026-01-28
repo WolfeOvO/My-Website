@@ -46,7 +46,7 @@ export default defineConfig({
     
     footer: {
       message: '2010.9.15 wzy❤️ | 使用 VitePress 搭建，遵循 MIT 协议开源',
-      copyright: 'Copyright © 2026 Wolfe Group    All Rights Reserved.'
+      copyright: 'Copyright © 2026 Wolfe Group'
     },
 
     outline: {
@@ -64,8 +64,9 @@ export default defineConfig({
 
     socialLinks: [
       { icon: 'github', link: 'https://github.com/WolfeOvO' },
-      { icon: 'twitter', link: 'https://x.com/_WolfeOvO_' }
-    ],
+      { icon: 'twitter', link: 'https://x.com/_WolfeOvO_' },
+      { icon: 'telegram', link: 'https://t.me/WolfesMind' }
+      ],
 
     lastUpdated: {
       text: '最后更新',
@@ -92,7 +93,7 @@ export default defineConfig({
             displayDetails: '显示详细列表',
             resetButtonTitle: '清除查询条件',
             backButtonTitle: '关闭搜索',
-            noResultsText: '无法在标题或正文中找到相关结果，请更改关键词再试',
+            noResultsText: '无法在标题或正文中找到：',
             footer: {
               selectText: '选中',   // 对应 "to select"
               navigateText: '选择', // 对应 "to navigate"
