@@ -13,6 +13,9 @@ hero:
       text: 访问项目仓库
       link: https://github.com/WolfeOvO/wolfeovo.github.io
 
+image:
+  src: /media/icon/icon.svg
+
 features:
   - title: 储物间
     details: 存放各种杂七杂八的资源

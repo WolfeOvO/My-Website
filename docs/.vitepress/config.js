@@ -12,6 +12,7 @@ export default defineConfig({
   description: "Wolfe 的小破站，始于 2026/1/11",
   ignoreDeadLinks: true,
   lastUpdated: true,
+  head: [['link', { rel: 'icon', href: '/media/icon/icon.svg' }]],
 
   markdown: {
     config(md) {
