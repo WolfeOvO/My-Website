@@ -90,7 +90,7 @@ export const sidebar = {
           items: [
             { 
               text: '1 月',
-              base: '博客文章/2026/2026-1/',
+              base: '/blog/2026/2026-1/',
               collapsed: true,
               items: [
                 { text: '为 Windows 10 和 11 打补丁以显示 Unicode 国旗表情 🇨🇳', link: 'unicode-flags-for-windows' }
