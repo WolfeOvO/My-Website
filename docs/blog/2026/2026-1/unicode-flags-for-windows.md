@@ -28,13 +28,13 @@
 ### 🔹 步骤 2：安装字体
 
 - 打开包含字体的文件夹（例如：`E:\FontEmoji`）
-- 右键点击 `.ttf` 文件→选择**安装**
-- 📌 如果没有“安装”选项→用字体查看器打开→ 点击右上角的“安装”按钮
+- 右键点击 `.ttf` 文件 → 选择 **安装**
+- 📌 如果没有“安装”选项 → 用字体查看器打开 → 点击右上角的“安装”按钮
 
 ### 🔹 步骤 3：将字体复制到系统字体目录（如有需要）
 
 - 以管理员身份打开 PowerShell  
- →按 `Win` 键，输入 `powershell`，右键→**以管理员身份运行**
+  → 按 `Win` 键，输入 `powershell`，右键 → **以管理员身份运行**
 
 - 输入以下命令：
 
@@ -47,7 +47,7 @@ Copy-Item "E:\FontEmoji\Segoe.UI.Emoji.with.Twemoji.Flags.ttf" -Destination "$en
 ### 🔹 步骤 4：修改注册表，让 Windows 识别新字体
 
 1. 打开注册表编辑器  
-  →按 `Win + R`→输入 `regedit`→回车
+   → 按 `Win + R` → 输入 `regedit` → 回车
 
 2. 导航到以下路径：
 
@@ -61,20 +61,20 @@ HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Fonts
 Segoe UI Emoji (TrueType)
 ```
 
-- 如果存在→双击→修改为：
+- 如果存在 → 双击 → 修改为：
 
 ```
 seguiemj_1_33_mod.ttf
 ```
 
-- 如果不存在→右键→`新建 > 字符串值`
+- 如果不存在 → 右键 → `新建 > 字符串值`
 
   - 名称：`Segoe UI Emoji (TrueType)`  
   - 值：`Segoe.UI.Emoji.with.Twemoji.Flags.ttf`
 
 ### 🔹 步骤 5：重启电脑
 
-- 修改完成后→**重启电脑**以应用新字体
+- 修改完成后 → **重启电脑** 以应用新字体
 
 ### 🔹 步骤 6：测试国旗表情
 

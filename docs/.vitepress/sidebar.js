@@ -81,7 +81,7 @@ export const sidebar = {
       ]
     }
   ],
-  '/博客文章/': [
+  '/blog/': [
     {
       items: [
         {

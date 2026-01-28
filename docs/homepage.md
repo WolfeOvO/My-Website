@@ -26,6 +26,6 @@
 - [墙外指南](/墙外指南/墙外指南目录)
 
 ## 📄 博客文章
-- [为 Windows 10 和 11 打补丁以显示 Unicode 国旗表情 🇨🇳](/blog/unicode-flags-for-windows)
+- [为 Windows 10 和 11 打补丁以显示 Unicode 国旗表情 🇨🇳](/blog/2026/2026-1/unicode-flags-for-windows)
 
 ||~~如果看到了这段话就说明作者没删掉我，嘻嘻🤭~~||
