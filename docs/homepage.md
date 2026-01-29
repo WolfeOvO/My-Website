@@ -30,7 +30,7 @@
 
 ||~~如果看到了这段话就说明作者没删掉我，嘻嘻🤭~~||
 
-<DownloadCard
+<dc
   name="MyApp v1.2.3"
   ext="zip"
   typeName="压缩包"
