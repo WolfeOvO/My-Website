@@ -30,3 +30,16 @@
 <lc url="https://t.me/ffqchannel" />
 
 [FFQ.LA](https://www.ffq.la/) 翻翻墙机场导航机场评测频道，尽可能的推荐最稳定的 SS/Vmess/Trojan 等机场。
+
+## Bronya 的小屋
+
+<lc url="https://t.me/Bronyaspeed" />
+
+欢迎送测！
+
+投稿机器人：[@Bronya01Bot](https://t.me/Bronya01Bot)
+群组：[https://t.me/Bronya_02](https://t.me/Bronya_02)
+
+请给我钱，谢谢喵~
+- Tron：||TDdtJmMUs3QM4wvGeED5UpGwtDDv1XhhzQ||
+- Polygon：||0x7DcFc2B1eEb96aF36C43755F9a39bB6cC6A0ffff||

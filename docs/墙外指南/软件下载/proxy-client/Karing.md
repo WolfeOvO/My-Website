@@ -1,6 +1,6 @@
 # Karing
 
-<ntags color="blue">Windows</ntags> <ntags color="green">Android</ntags> <ntags color="gray">iOS</ntags> <ntags color="gray">TVOS</ntags> <ntags color="gray">MacOS</ntags> <ntags color="yellow">Linux</ntags> 
+<nt color="blue">Windows</nt> <nt color="green">Android</nt> <nt color="gray">iOS</nt> <nt color="gray">TVOS</nt> <nt color="gray">MacOS</nt> <nt color="yellow">Linux</nt> 
 
 <lc url="https://github.com/KaringX/karing/" />
 

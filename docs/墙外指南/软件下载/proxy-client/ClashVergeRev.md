@@ -1,6 +1,6 @@
 # Clash Verge Rev
 
-<ntags color="blue">Windows</ntags> <ntags color="gray">MacOS</ntags> <ntags color="yellow">Linux</ntags>
+<nt color="blue">Windows</nt> <nt color="gray">MacOS</nt> <nt color="yellow">Linux</nt>
 
 <lc url="https://github.com/clash-verge-rev/clash-verge-rev" />
 

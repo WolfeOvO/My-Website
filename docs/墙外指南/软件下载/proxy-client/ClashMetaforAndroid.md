@@ -1,6 +1,6 @@
 # Clash Meta for Android
 
-<ntags color="green">Android</ntags>
+<nt color="green">Android</nt>
 
 <lc url="https://github.com/MetaCubeX/ClashMetaforAndroid" />
 

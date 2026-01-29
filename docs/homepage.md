@@ -29,3 +29,15 @@
 - [为 Windows 10 和 11 打补丁以显示 Unicode 国旗表情 🇨🇳](/blog/2026/2026-1/unicode-flags-for-windows)
 
 ||~~如果看到了这段话就说明作者没删掉我，嘻嘻🤭~~||
+
+<dc
+  url="https://example.com/xxx/file.zip"
+  name="MyApp v1.2.3"
+  ext="zip"
+  typeName="压缩包"
+  size="12.3 MB"
+  channelName="GitHub Releases"
+  channelIcon="github"
+  color="cyan"
+  downloadLabel="立即下载"
+/>

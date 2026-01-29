@@ -8,6 +8,7 @@ import GitHubRelease from '../components/GitHubRelease.vue'
 import notionTags from '../components/notionTags.vue'
 import linkCard from '../components/linkCard.vue'
 import sidebar from '../components/sidebarDirectory.vue'
+import downloadCard from '../components/downloadCard.vue'
 
 // 插件
 import { enhanceAppWithTabs } from 'vitepress-plugin-tabs/client'
@@ -24,9 +25,10 @@ export default {
     
     // 注册组件
     app.component('gtl', GitHubRelease)
-    app.component('ntags', notionTags)
+    app.component('nt', notionTags)
     app.component('lc', linkCard)
     app.component('sidebar', sidebar)
+    app.component('dc', DownloadCard)
   },
   
   setup() {
