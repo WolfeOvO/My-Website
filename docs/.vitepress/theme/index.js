@@ -28,7 +28,7 @@ export default {
     app.component('nt', notionTags)
     app.component('lc', linkCard)
     app.component('sidebar', sidebar)
-    app.component('dc', DownloadCard)
+    app.component('dc', downloadCard)
   },
   
   setup() {
