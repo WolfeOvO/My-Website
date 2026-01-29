@@ -30,16 +30,12 @@
 
 ||~~如果看到了这段话就说明作者没删掉我，嘻嘻🤭~~||
 
-<dc
+<DownloadCard
   name="MyApp v1.2.3"
   ext="zip"
   typeName="压缩包"
   size="12.3 MB"
-  color="cyan"  <!-- 你若只用 6 色就改成 blue/green/yellow/pink/purple/orange -->
+  color="blue"
   :defaultIndex="0"
-  :channels="[
-    { name: 'GitHub Releases', icon: 'github', url: 'https://github.com/xxx/releases/download/v1.2.3/file.zip' },
-    { name: 'OneDrive',       icon: 'onedrive', url: 'https://1drv.ms/u/s!xxxx' },
-    { name: 'Gitee',          icon: 'gitee', url: 'https://gitee.com/xxx/releases/download/v1.2.3/file.zip' }
-  ]"
+  :channels="[{ name: 'GitHub Releases', icon: 'github', url: 'https://github.com/xxx/releases/download/v1.2.3/file.zip' }, { name: 'OneDrive', icon: 'onedrive', url: 'https://1drv.ms/u/s!xxxx' }, { name: 'Gitee', icon: 'gitee', url: 'https://gitee.com/xxx/releases/download/v1.2.3/file.zip' }]"
 />
